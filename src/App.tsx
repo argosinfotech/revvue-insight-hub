@@ -1,10 +1,18 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import DashboardLayout from "@/components/DashboardLayout";
+
+// Pages
+import Login from "@/pages/Login";
+import Dashboard from "@/pages/Dashboard";
+import Hotels from "@/pages/Hotels";
+import Investors from "@/pages/Investors";
+import Billing from "@/pages/Billing";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +23,89 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          
+          <Route 
+            path="/dashboard" 
+            element={
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            } 
+          />
+          
+          <Route 
+            path="/hotels" 
+            element={
+              <DashboardLayout>
+                <Hotels />
+              </DashboardLayout>
+            } 
+          />
+          
+          <Route 
+            path="/investors" 
+            element={
+              <DashboardLayout>
+                <Investors />
+              </DashboardLayout>
+            } 
+          />
+          
+          <Route 
+            path="/billing" 
+            element={
+              <DashboardLayout>
+                <Billing />
+              </DashboardLayout>
+            } 
+          />
+          
+          {/* Additional routes will be added here */}
+          <Route 
+            path="/activity" 
+            element={
+              <DashboardLayout>
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold mb-4">Activity Logs</h1>
+                    <p className="text-muted-foreground">This page is under construction.</p>
+                  </div>
+                </div>
+              </DashboardLayout>
+            } 
+          />
+          
+          <Route 
+            path="/notifications" 
+            element={
+              <DashboardLayout>
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold mb-4">Notifications Settings</h1>
+                    <p className="text-muted-foreground">This page is under construction.</p>
+                  </div>
+                </div>
+              </DashboardLayout>
+            } 
+          />
+          
+          <Route 
+            path="/settings" 
+            element={
+              <DashboardLayout>
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold mb-4">Admin Settings</h1>
+                    <p className="text-muted-foreground">This page is under construction.</p>
+                  </div>
+                </div>
+              </DashboardLayout>
+            } 
+          />
+          
+          {/* Catch-all route for 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
