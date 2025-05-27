@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { ArrowLeft, Check, Building2, Phone, User } from "lucide-react";
+import { ArrowLeft, Check, Building2, Phone, User, Mail, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PackageData {
@@ -46,6 +46,9 @@ const PortfolioManagerSignup = () => {
     lastName: "",
     organizationName: "",
     phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     selectedPackage: ""
   });
 
@@ -71,6 +74,31 @@ const PortfolioManagerSignup = () => {
     
     if (!formData.phoneNumber.trim()) {
       toast.error("Phone number is required");
+      return;
+    }
+    
+    if (!formData.email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+    
+    if (!formData.email.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    
+    if (!formData.password.trim()) {
+      toast.error("Password is required");
+      return;
+    }
+    
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
       return;
     }
     
@@ -279,6 +307,60 @@ const PortfolioManagerSignup = () => {
                     <p className="text-xs text-muted-foreground">
                       Phone number must be unique across all accounts
                     </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address *</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        className="pl-10"
+                        placeholder="john@company.com"
+                        maxLength={100}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password *</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        id="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className="pl-10"
+                        placeholder="••••••••"
+                        minLength={6}
+                        required
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Password must be at least 6 characters long
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        className="pl-10"
+                        placeholder="••••••••"
+                        minLength={6}
+                        required
+                      />
+                    </div>
                   </div>
                 </form>
               </CardContent>

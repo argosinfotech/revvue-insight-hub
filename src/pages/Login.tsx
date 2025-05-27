@@ -21,10 +21,17 @@ const Login = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // For demo purposes, simple validation
+      // For demo purposes, simple validation with role-based routing
       if (email === "admin@example.com" && password === "password") {
-        toast.success("Login successful");
+        toast.success("Admin login successful");
         navigate("/dashboard");
+      } else if (email === "manager@example.com" && password === "password") {
+        toast.success("Portfolio Manager login successful");
+        navigate("/portfolio-hotels");
+      } else if (email.includes("@") && password.length >= 6) {
+        // Generic Portfolio Manager login (for registered users)
+        toast.success("Portfolio Manager login successful");
+        navigate("/portfolio-hotels");
       } else {
         toast.error("Invalid email or password");
       }
@@ -48,7 +55,7 @@ const Login = () => {
 
         <div className="bg-white p-8 rounded-lg shadow-md border">
           <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-            Admin Login
+            Login
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
@@ -56,7 +63,7 @@ const Login = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@example.com"
+                placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -93,6 +100,15 @@ const Login = () => {
           </form>
           
           <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600 mb-2">
+              <strong>Demo Accounts:</strong>
+            </p>
+            <p className="text-xs text-gray-500 mb-1">
+              Admin: admin@example.com / password
+            </p>
+            <p className="text-xs text-gray-500 mb-4">
+              Portfolio Manager: manager@example.com / password
+            </p>
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
               <Link 
