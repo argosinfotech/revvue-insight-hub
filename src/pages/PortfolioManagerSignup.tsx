@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ const availablePackages: PackageData[] = [
 ];
 
 const PortfolioManagerSignup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -83,16 +85,10 @@ const PortfolioManagerSignup = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      toast.success("Registration successful! We'll contact you soon.");
+      toast.success("Registration successful! Welcome to RevVue Insight Hub.");
       
-      // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        organizationName: "",
-        phoneNumber: "",
-        selectedPackage: ""
-      });
+      // Redirect to portfolio manager hotels page
+      navigate("/portfolio-hotels");
     } catch (error) {
       toast.error("Registration failed. Please try again.");
     } finally {

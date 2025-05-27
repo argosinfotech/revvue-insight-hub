@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,7 @@ import Investors from "@/pages/Investors";
 import Billing from "@/pages/Billing";
 import NotFound from "@/pages/NotFound";
 import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
+import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,7 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/portfolio-signup" element={<PortfolioManagerSignup />} />
+          <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
           
           <Route 
             path="/dashboard" 
