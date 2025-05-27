@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import { Building2, Search, Filter, MoreVertical, Trash2, Edit, Eye, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -27,7 +27,14 @@ import {
   DialogTitle, 
   DialogTrigger 
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -85,6 +92,19 @@ const Hotels = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedHotelId, setSelectedHotelId] = useState<number | null>(null);
   const [viewHotelId, setViewHotelId] = useState<number | null>(null);
+  const [isAddHotelOpen, setIsAddHotelOpen] = useState(false);
+  const [hotelForm, setHotelForm] = useState({
+    hotelName: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    hotelPicture: null as File | null,
+    contactNo: "",
+    contactFirstName: "",
+    contactLastName: ""
+  });
 
   const filteredHotels = hotels.filter(hotel => 
     hotel.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -104,6 +124,84 @@ const Hotels = () => {
 
   const selectedHotel = hotels.find(h => h.id === viewHotelId);
 
+  const handleFormChange = (field: string, value: string) => {
+    setHotelForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setHotelForm(prev => ({
+      ...prev,
+      hotelPicture: file
+    }));
+  };
+
+  const handleAddHotel = () => {
+    // Validation
+    if (!hotelForm.hotelName.trim()) {
+      toast.error("Hotel Name is required");
+      return;
+    }
+    if (hotelForm.hotelName.length > 100) {
+      toast.error("Hotel Name must be 100 characters or less");
+      return;
+    }
+    if (!hotelForm.address1.trim()) {
+      toast.error("Address 1 is required");
+      return;
+    }
+    if (hotelForm.address1.length > 100) {
+      toast.error("Address 1 must be 100 characters or less");
+      return;
+    }
+    if (hotelForm.address2.length > 50) {
+      toast.error("Address 2 must be 50 characters or less");
+      return;
+    }
+    if (!hotelForm.city.trim()) {
+      toast.error("City is required");
+      return;
+    }
+    if (!hotelForm.state.trim()) {
+      toast.error("State is required");
+      return;
+    }
+    if (!hotelForm.zipCode.trim()) {
+      toast.error("Zip Code is required");
+      return;
+    }
+    if (!hotelForm.contactNo.trim()) {
+      toast.error("Contact Number is required");
+      return;
+    }
+    if (!hotelForm.contactFirstName.trim()) {
+      toast.error("Contact First Name is required");
+      return;
+    }
+    if (!hotelForm.contactLastName.trim()) {
+      toast.error("Contact Last Name is required");
+      return;
+    }
+
+    toast.success("Hotel added successfully!");
+    setIsAddHotelOpen(false);
+    setHotelForm({
+      hotelName: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      hotelPicture: null,
+      contactNo: "",
+      contactFirstName: "",
+      contactLastName: ""
+    });
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -118,10 +216,139 @@ const Hotels = () => {
             <Filter size={16} />
             Filter
           </Button>
-          <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
-            <Building2 size={16} />
-            Add Hotel
-          </Button>
+          <Sheet open={isAddHotelOpen} onOpenChange={setIsAddHotelOpen}>
+            <SheetTrigger asChild>
+              <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
+                <Building2 size={16} />
+                Add Hotel
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-[400px] sm:w-[540px]">
+              <SheetHeader>
+                <SheetTitle>Add New Hotel</SheetTitle>
+                <SheetDescription>
+                  Enter the hotel details to add a new property to the system.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hotelName">Hotel Name *</Label>
+                  <Input
+                    id="hotelName"
+                    value={hotelForm.hotelName}
+                    onChange={(e) => handleFormChange("hotelName", e.target.value)}
+                    placeholder="Enter hotel name"
+                    maxLength={100}
+                  />
+                  <p className="text-xs text-muted-foreground">{hotelForm.hotelName.length}/100 characters</p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="address1">Address 1 *</Label>
+                  <Input
+                    id="address1"
+                    value={hotelForm.address1}
+                    onChange={(e) => handleFormChange("address1", e.target.value)}
+                    placeholder="Enter street address"
+                    maxLength={100}
+                  />
+                  <p className="text-xs text-muted-foreground">{hotelForm.address1.length}/100 characters</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address2">Address 2</Label>
+                  <Input
+                    id="address2"
+                    value={hotelForm.address2}
+                    onChange={(e) => handleFormChange("address2", e.target.value)}
+                    placeholder="Apartment, suite, etc. (optional)"
+                    maxLength={50}
+                  />
+                  <p className="text-xs text-muted-foreground">{hotelForm.address2.length}/50 characters</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City *</Label>
+                    <Input
+                      id="city"
+                      value={hotelForm.city}
+                      onChange={(e) => handleFormChange("city", e.target.value)}
+                      placeholder="Enter city"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State *</Label>
+                    <Input
+                      id="state"
+                      value={hotelForm.state}
+                      onChange={(e) => handleFormChange("state", e.target.value)}
+                      placeholder="Enter state"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="zipCode">Zip Code *</Label>
+                  <Input
+                    id="zipCode"
+                    value={hotelForm.zipCode}
+                    onChange={(e) => handleFormChange("zipCode", e.target.value)}
+                    placeholder="Enter zip code"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="hotelPicture">Hotel Picture</Label>
+                  <Input
+                    id="hotelPicture"
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="contactNo">Contact Number *</Label>
+                  <Input
+                    id="contactNo"
+                    value={hotelForm.contactNo}
+                    onChange={(e) => handleFormChange("contactNo", e.target.value)}
+                    placeholder="Enter contact number"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="contactFirstName">Contact First Name *</Label>
+                    <Input
+                      id="contactFirstName"
+                      value={hotelForm.contactFirstName}
+                      onChange={(e) => handleFormChange("contactFirstName", e.target.value)}
+                      placeholder="First name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="contactLastName">Contact Last Name *</Label>
+                    <Input
+                      id="contactLastName"
+                      value={hotelForm.contactLastName}
+                      onChange={(e) => handleFormChange("contactLastName", e.target.value)}
+                      placeholder="Last name"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setIsAddHotelOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleAddHotel} className="bg-brand-purple hover:bg-brand-purple-dark">
+                  Add Hotel
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
 
