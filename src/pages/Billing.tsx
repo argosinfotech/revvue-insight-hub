@@ -8,7 +8,10 @@ import {
   BarChart, 
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Plus,
+  Edit,
+  Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +19,33 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetDescription, 
+  SheetHeader, 
+  SheetTitle, 
+  SheetTrigger,
+  SheetClose
+} from "@/components/ui/sheet";
+import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+interface PackageData {
+  id: string;
+  name: string;
+  description: string;
+  hotelBaseFee: string;
+  investorFee: string;
+  isActive: boolean;
+  createdAt: string;
+}
 
 // Sample billing history
 const billingHistory = [
@@ -27,14 +57,102 @@ const billingHistory = [
 ];
 
 const Billing = () => {
-  const [hotelBaseFee, setHotelBaseFee] = useState("10.00");
-  const [investorFee, setInvestorFee] = useState("2.00");
-  const [isEditing, setIsEditing] = useState(false);
-  const [tabValue, setTabValue] = useState("pricing");
+  // Initial packages data
+  const [packages, setPackages] = useState<PackageData[]>([
+    {
+      id: "1",
+      name: "Standard Package",
+      description: "Basic package for small hotels",
+      hotelBaseFee: "10.00",
+      investorFee: "2.00",
+      isActive: true,
+      createdAt: "2024-01-15"
+    },
+    {
+      id: "2", 
+      name: "Premium Package",
+      description: "Advanced features for growing hotels",
+      hotelBaseFee: "25.00",
+      investorFee: "3.50",
+      isActive: true,
+      createdAt: "2024-02-01"
+    }
+  ]);
 
-  const handleSavePricing = () => {
-    toast.success("Pricing settings updated successfully");
-    setIsEditing(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [editingPackage, setEditingPackage] = useState<PackageData | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    hotelBaseFee: "",
+    investorFee: ""
+  });
+  const [tabValue, setTabValue] = useState("packages");
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      description: "",
+      hotelBaseFee: "",
+      investorFee: ""
+    });
+    setEditingPackage(null);
+  };
+
+  const handleAddPackage = () => {
+    resetForm();
+    setIsSheetOpen(true);
+  };
+
+  const handleEditPackage = (pkg: PackageData) => {
+    setEditingPackage(pkg);
+    setFormData({
+      name: pkg.name,
+      description: pkg.description,
+      hotelBaseFee: pkg.hotelBaseFee,
+      investorFee: pkg.investorFee
+    });
+    setIsSheetOpen(true);
+  };
+
+  const handleSavePackage = () => {
+    if (!formData.name.trim() || !formData.hotelBaseFee || !formData.investorFee) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const packageData: PackageData = {
+      id: editingPackage?.id || Date.now().toString(),
+      name: formData.name,
+      description: formData.description,
+      hotelBaseFee: formData.hotelBaseFee,
+      investorFee: formData.investorFee,
+      isActive: true,
+      createdAt: editingPackage?.createdAt || new Date().toISOString().split('T')[0]
+    };
+
+    if (editingPackage) {
+      setPackages(packages.map(pkg => pkg.id === editingPackage.id ? packageData : pkg));
+      toast.success("Package updated successfully");
+    } else {
+      setPackages([...packages, packageData]);
+      toast.success("Package created successfully");
+    }
+
+    setIsSheetOpen(false);
+    resetForm();
+  };
+
+  const handleDeletePackage = (id: string) => {
+    setPackages(packages.filter(pkg => pkg.id !== id));
+    toast.success("Package deleted successfully");
+  };
+
+  const togglePackageStatus = (id: string) => {
+    setPackages(packages.map(pkg => 
+      pkg.id === id ? { ...pkg, isActive: !pkg.isActive } : pkg
+    ));
+    toast.success("Package status updated");
   };
 
   return (
@@ -50,9 +168,9 @@ const Billing = () => {
 
       <Tabs defaultValue={tabValue} onValueChange={setTabValue} className="space-y-4">
         <TabsList>
-          <TabsTrigger value="pricing">
+          <TabsTrigger value="packages">
             <Package className="h-4 w-4 mr-2" />
-            Pricing Settings
+            Package Management
           </TabsTrigger>
           <TabsTrigger value="history">
             <CreditCard className="h-4 w-4 mr-2" />
@@ -64,139 +182,184 @@ const Billing = () => {
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="pricing" className="space-y-4">
+        <TabsContent value="packages" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Package Pricing</CardTitle>
-              <CardDescription>
-                Configure the base fees for hotels and investors
-              </CardDescription>
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle>Subscription Packages</CardTitle>
+                  <CardDescription>
+                    Create and manage different pricing packages for hotels
+                  </CardDescription>
+                </div>
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                  <SheetTrigger asChild>
+                    <Button onClick={handleAddPackage} className="bg-brand-purple hover:bg-brand-purple-dark">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Package
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent>
+                    <SheetHeader>
+                      <SheetTitle>
+                        {editingPackage ? "Edit Package" : "Create New Package"}
+                      </SheetTitle>
+                      <SheetDescription>
+                        {editingPackage ? "Update package details" : "Add a new subscription package"}
+                      </SheetDescription>
+                    </SheetHeader>
+                    
+                    <div className="space-y-6 mt-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="package-name">Package Name *</Label>
+                        <Input
+                          id="package-name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({...formData, name: e.target.value})}
+                          placeholder="e.g., Premium Package"
+                          maxLength={100}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="package-description">Description</Label>
+                        <Input
+                          id="package-description"
+                          value={formData.description}
+                          onChange={(e) => setFormData({...formData, description: e.target.value})}
+                          placeholder="Brief description of the package"
+                          maxLength={200}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="hotel-fee">Base Fee per Hotel (USD/month) *</Label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                          <Input
+                            id="hotel-fee"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={formData.hotelBaseFee}
+                            onChange={(e) => setFormData({...formData, hotelBaseFee: e.target.value})}
+                            className="pl-8"
+                            placeholder="0.00"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="investor-fee">Fee per Investor per Hotel (USD/month) *</Label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                          <Input
+                            id="investor-fee"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={formData.investorFee}
+                            onChange={(e) => setFormData({...formData, investorFee: e.target.value})}
+                            className="pl-8"
+                            placeholder="0.00"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="p-4 border rounded-lg bg-muted/50">
+                        <h3 className="text-sm font-medium mb-2">Pricing Example</h3>
+                        <div className="space-y-2 text-sm">
+                          <p>For a hotel with 10 investors:</p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>Base Fee: ${formData.hotelBaseFee || "0.00"} per month</li>
+                            <li>Investor Fee: ${formData.investorFee || "0.00"} × 10 investors = ${((parseFloat(formData.investorFee) || 0) * 10).toFixed(2)} per month</li>
+                            <li>Total: ${((parseFloat(formData.hotelBaseFee) || 0) + (parseFloat(formData.investorFee) || 0) * 10).toFixed(2)} per month</li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 pt-4">
+                        <SheetClose asChild>
+                          <Button variant="outline" onClick={resetForm} className="flex-1">
+                            Cancel
+                          </Button>
+                        </SheetClose>
+                        <Button onClick={handleSavePackage} className="flex-1 bg-brand-purple hover:bg-brand-purple-dark">
+                          <Save className="h-4 w-4 mr-2" />
+                          {editingPackage ? "Update" : "Create"}
+                        </Button>
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="hotel-fee" className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1" />
-                      Base Fee per Hotel (USD, monthly)
-                    </Label>
-                    <div className="flex items-center gap-2 relative">
-                      <span className="absolute left-3 text-muted-foreground">$</span>
-                      <Input
-                        id="hotel-fee"
-                        value={hotelBaseFee}
-                        onChange={(e) => setHotelBaseFee(e.target.value)}
-                        disabled={!isEditing}
-                        className="pl-8"
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      This fee is charged monthly for each hotel in the system.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="investor-fee" className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1" />
-                      Fee per Investor per Hotel (USD, monthly)
-                    </Label>
-                    <div className="flex items-center gap-2 relative">
-                      <span className="absolute left-3 text-muted-foreground">$</span>
-                      <Input
-                        id="investor-fee"
-                        value={investorFee}
-                        onChange={(e) => setInvestorFee(e.target.value)}
-                        disabled={!isEditing}
-                        className="pl-8"
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      This fee is charged monthly for each investor associated with each hotel.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 border rounded-lg bg-muted/50">
-                  <h3 className="text-sm font-medium mb-2">Pricing Example</h3>
-                  <div className="space-y-2 text-sm">
-                    <p>For a hotel with 10 investors:</p>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Base Fee: ${hotelBaseFee} per month</li>
-                      <li>Investor Fee: ${investorFee} × 10 investors = ${(parseFloat(investorFee) * 10).toFixed(2)} per month</li>
-                      <li>Total: ${(parseFloat(hotelBaseFee) + parseFloat(investorFee) * 10).toFixed(2)} per month</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <div className="text-sm text-muted-foreground">
-                <Clock className="h-4 w-4 inline mr-1" />
-                Last updated: April 15, 2024
-              </div>
-              {isEditing ? (
-                <div className="space-x-2">
-                  <Button variant="outline" onClick={() => setIsEditing(false)}>
-                    Cancel
-                  </Button>
-                  <Button 
-                    onClick={handleSavePricing}
-                    className="bg-brand-purple hover:bg-brand-purple-dark"
-                  >
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Changes
-                  </Button>
-                </div>
-              ) : (
-                <Button onClick={() => setIsEditing(true)}>
-                  Edit Pricing
-                </Button>
-              )}
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Historical Pricing Log</CardTitle>
-              <CardDescription>
-                Record of all pricing changes
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="rounded-md border">
-                  <table className="w-full text-sm">
-                    <thead className="bg-muted/50">
-                      <tr className="border-b">
-                        <th className="h-10 px-4 text-left font-medium">Date</th>
-                        <th className="h-10 px-4 text-left font-medium">Changed By</th>
-                        <th className="h-10 px-4 text-left font-medium">Hotel Fee</th>
-                        <th className="h-10 px-4 text-left font-medium">Investor Fee</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b">
-                        <td className="p-4">April 15, 2024</td>
-                        <td className="p-4">admin@example.com</td>
-                        <td className="p-4">$10.00</td>
-                        <td className="p-4">$2.00</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-4">January 10, 2024</td>
-                        <td className="p-4">admin@example.com</td>
-                        <td className="p-4">$8.50</td>
-                        <td className="p-4">$1.75</td>
-                      </tr>
-                      <tr>
-                        <td className="p-4">October 2, 2023</td>
-                        <td className="p-4">admin@example.com</td>
-                        <td className="p-4">$8.00</td>
-                        <td className="p-4">$1.50</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Package Name</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Hotel Fee</TableHead>
+                    <TableHead>Investor Fee</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Created</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {packages.map((pkg) => (
+                    <TableRow key={pkg.id}>
+                      <TableCell className="font-medium">{pkg.name}</TableCell>
+                      <TableCell>{pkg.description}</TableCell>
+                      <TableCell>${pkg.hotelBaseFee}/month</TableCell>
+                      <TableCell>${pkg.investorFee}/month</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          {pkg.isActive ? (
+                            <>
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <span className="text-green-600">Active</span>
+                            </>
+                          ) : (
+                            <>
+                              <AlertCircle className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-600">Inactive</span>
+                            </>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>{new Date(pkg.createdAt).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleEditPackage(pkg)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => togglePackageStatus(pkg.id)}
+                          >
+                            {pkg.isActive ? "Deactivate" : "Activate"}
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleDeletePackage(pkg.id)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>
