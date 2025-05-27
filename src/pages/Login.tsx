@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -91,6 +91,18 @@ const Login = () => {
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
+          
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{" "}
+              <Link 
+                to="/portfolio-signup" 
+                className="font-medium text-brand-purple hover:underline"
+              >
+                Sign up as Portfolio Manager
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
