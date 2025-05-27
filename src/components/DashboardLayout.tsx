@@ -11,7 +11,8 @@ import {
   LogOut, 
   Menu, 
   X, 
-  Activity 
+  Activity,
+  TrendingUp
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -51,12 +52,16 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+  // Determine if this is a Portfolio Manager based on the current path
+  const isPortfolioManager = location.pathname.startsWith('/portfolio');
+
   const handleLogout = () => {
     toast.success("Logged out successfully");
     navigate("/login");
   };
 
-  const navItems = [
+  // Different navigation items based on user role
+  const adminNavItems = [
     {
       to: "/dashboard",
       icon: <BarChartBig size={20} />,
@@ -93,6 +98,34 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       label: "Settings",
     },
   ];
+
+  const portfolioManagerNavItems = [
+    {
+      to: "/portfolio-hotels",
+      icon: <Building2 size={20} />,
+      label: "My Hotels",
+    },
+    {
+      to: "/portfolio-dashboard",
+      icon: <TrendingUp size={20} />,
+      label: "Revenue Analytics",
+    },
+    {
+      to: "/portfolio-investors",
+      icon: <Users size={20} />,
+      label: "My Investors",
+    },
+    {
+      to: "/portfolio-settings",
+      icon: <Settings size={20} />,
+      label: "Settings",
+    },
+  ];
+
+  const navItems = isPortfolioManager ? portfolioManagerNavItems : adminNavItems;
+  const userRole = isPortfolioManager ? "Portfolio Manager" : "Super Admin";
+  const userEmail = isPortfolioManager ? "manager@example.com" : "admin@example.com";
+  const userInitials = isPortfolioManager ? "PM" : "SA";
 
   return (
     <div className="min-h-screen flex">
@@ -139,11 +172,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <div className="flex items-center gap-2">
                 <Avatar>
                   <AvatarImage src="" />
-                  <AvatarFallback>SA</AvatarFallback>
+                  <AvatarFallback>{userInitials}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">Super Admin</span>
-                  <span className="text-xs text-gray-500">admin@example.com</span>
+                  <span className="text-sm font-medium">{userRole}</span>
+                  <span className="text-xs text-gray-500">{userEmail}</span>
                 </div>
               </div>
               <Button
@@ -180,7 +213,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </Button>
             <Avatar className="h-8 w-8">
               <AvatarImage src="" />
-              <AvatarFallback>SA</AvatarFallback>
+              <AvatarFallback>{userInitials}</AvatarFallback>
             </Avatar>
           </div>
         </header>

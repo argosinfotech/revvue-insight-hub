@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Building2, Plus, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import DashboardLayout from "@/components/DashboardLayout";
 
 interface Investor {
   id: string;
@@ -154,8 +154,8 @@ const PortfolioManagerHotels = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <DashboardLayout>
+      <div className="space-y-8">
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
@@ -428,7 +428,7 @@ const PortfolioManagerHotels = () => {
           </Card>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
