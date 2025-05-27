@@ -15,6 +15,9 @@ import Billing from "@/pages/Billing";
 import NotFound from "@/pages/NotFound";
 import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
 import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
+import PortfolioRevenueDashboard from "@/pages/PortfolioRevenueDashboard";
+import PortfolioInvestors from "@/pages/PortfolioInvestors";
+import PortfolioSettings from "@/pages/PortfolioSettings";
 
 const queryClient = new QueryClient();
 
@@ -28,8 +31,14 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/portfolio-signup" element={<PortfolioManagerSignup />} />
-          <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
           
+          {/* Portfolio Manager Routes */}
+          <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
+          <Route path="/portfolio-dashboard" element={<PortfolioRevenueDashboard />} />
+          <Route path="/portfolio-investors" element={<PortfolioInvestors />} />
+          <Route path="/portfolio-settings" element={<PortfolioSettings />} />
+          
+          {/* Admin Routes */}
           <Route 
             path="/dashboard" 
             element={
@@ -66,7 +75,7 @@ const App = () => (
             } 
           />
           
-          {/* Additional routes will be added here */}
+          {/* Additional admin routes */}
           <Route 
             path="/activity" 
             element={
