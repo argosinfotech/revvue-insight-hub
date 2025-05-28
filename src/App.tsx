@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +17,7 @@ import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
 import PortfolioRevenueDashboard from "@/pages/PortfolioRevenueDashboard";
 import PortfolioInvestors from "@/pages/PortfolioInvestors";
 import PortfolioSettings from "@/pages/PortfolioSettings";
+import Activity from "@/pages/Activity";
 
 const queryClient = new QueryClient();
 
@@ -75,17 +75,12 @@ const App = () => (
             } 
           />
           
-          {/* Additional admin routes */}
+          {/* Activity page with proper component */}
           <Route 
             path="/activity" 
             element={
               <DashboardLayout>
-                <div className="min-h-screen flex items-center justify-center">
-                  <div className="text-center">
-                    <h1 className="text-2xl font-bold mb-4">Activity Logs</h1>
-                    <p className="text-muted-foreground">This page is under construction.</p>
-                  </div>
-                </div>
+                <Activity />
               </DashboardLayout>
             } 
           />
