@@ -132,7 +132,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {/* Sidebar */}
       <aside
         className={cn(
-          "h-screen bg-white border-r transition-all duration-300 flex flex-col",
+          "fixed left-0 top-0 h-screen bg-white border-r transition-all duration-300 flex flex-col z-50",
           isSidebarOpen ? "w-64" : "w-20"
         )}
       >
@@ -204,8 +204,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-16 border-b flex items-center justify-end px-6 bg-white">
+      <div 
+        className={cn(
+          "flex-1 flex flex-col min-h-screen transition-all duration-300",
+          isSidebarOpen ? "ml-64" : "ml-20"
+        )}
+      >
+        <header className="h-16 border-b flex items-center justify-end px-6 bg-white sticky top-0 z-40">
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm">
               <Bell size={16} className="mr-1" /> 
