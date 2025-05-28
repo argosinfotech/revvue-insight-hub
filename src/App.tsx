@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +19,7 @@ import PortfolioRevenueDashboard from "@/pages/PortfolioRevenueDashboard";
 import PortfolioInvestors from "@/pages/PortfolioInvestors";
 import PortfolioSettings from "@/pages/PortfolioSettings";
 import Activity from "@/pages/Activity";
+import Users from "@/pages/Users";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +83,16 @@ const App = () => (
             element={
               <DashboardLayout>
                 <Activity />
+              </DashboardLayout>
+            } 
+          />
+          
+          {/* Users management page */}
+          <Route 
+            path="/users" 
+            element={
+              <DashboardLayout>
+                <Users />
               </DashboardLayout>
             } 
           />

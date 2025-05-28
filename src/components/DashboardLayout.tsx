@@ -12,7 +12,8 @@ import {
   Menu, 
   X, 
   Activity,
-  TrendingUp
+  TrendingUp,
+  UserCog
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -91,6 +92,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       to: "/activity",
       icon: <Activity size={20} />,
       label: "Activity Logs",
+    },
+    {
+      to: "/users",
+      icon: <UserCog size={20} />,
+      label: "Users Management",
     },
     {
       to: "/settings",
@@ -221,7 +227,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <AvatarFallback>{userInitials}</AvatarFallback>
             </Avatar>
           </div>
-        </header>
+        </div>
         <main className="flex-1 overflow-y-auto p-6 bg-gray-50">{children}</main>
       </div>
     </div>
