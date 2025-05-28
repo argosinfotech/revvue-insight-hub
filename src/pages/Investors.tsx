@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Users, Search, Filter, MoreVertical, Trash2, Edit, Eye, Download, Mail, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLocation } from "react-router-dom";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -96,10 +97,14 @@ const loginActivity = [
 ];
 
 const Investors = () => {
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedInvestorId, setSelectedInvestorId] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  
+  // Determine if this is a Portfolio Manager based on the current path
+  const isPortfolioManager = location.pathname.startsWith('/portfolio');
   
   const filteredInvestors = investors.filter(investor => 
     investor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -138,10 +143,13 @@ const Investors = () => {
             <Filter size={16} />
             Filter
           </Button>
-          <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
-            <Users size={16} />
-            Add Investor
-          </Button>
+          {/* Only show Add Investor button for Portfolio Managers */}
+          {isPortfolioManager && (
+            <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
+              <Users size={16} />
+              Add Investor
+            </Button>
+          )}
         </div>
       </div>
 

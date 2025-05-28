@@ -3,6 +3,7 @@ import { Building2, Search, Filter, MoreVertical, Trash2, Edit, Eye, Download } 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocation } from "react-router-dom";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -88,6 +89,7 @@ const hotels = [
 ];
 
 const Hotels = () => {
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedHotelId, setSelectedHotelId] = useState<number | null>(null);
@@ -105,6 +107,9 @@ const Hotels = () => {
     contactFirstName: "",
     contactLastName: ""
   });
+
+  // Determine if this is a Portfolio Manager based on the current path
+  const isPortfolioManager = location.pathname.startsWith('/portfolio');
 
   const filteredHotels = hotels.filter(hotel => 
     hotel.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -216,139 +221,142 @@ const Hotels = () => {
             <Filter size={16} />
             Filter
           </Button>
-          <Sheet open={isAddHotelOpen} onOpenChange={setIsAddHotelOpen}>
-            <SheetTrigger asChild>
-              <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
-                <Building2 size={16} />
-                Add Hotel
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-[400px] sm:w-[540px]">
-              <SheetHeader>
-                <SheetTitle>Add New Hotel</SheetTitle>
-                <SheetDescription>
-                  Enter the hotel details to add a new property to the system.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="space-y-2">
-                  <Label htmlFor="hotelName">Hotel Name *</Label>
-                  <Input
-                    id="hotelName"
-                    value={hotelForm.hotelName}
-                    onChange={(e) => handleFormChange("hotelName", e.target.value)}
-                    placeholder="Enter hotel name"
-                    maxLength={100}
-                  />
-                  <p className="text-xs text-muted-foreground">{hotelForm.hotelName.length}/100 characters</p>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="address1">Address 1 *</Label>
-                  <Input
-                    id="address1"
-                    value={hotelForm.address1}
-                    onChange={(e) => handleFormChange("address1", e.target.value)}
-                    placeholder="Enter street address"
-                    maxLength={100}
-                  />
-                  <p className="text-xs text-muted-foreground">{hotelForm.address1.length}/100 characters</p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="address2">Address 2</Label>
-                  <Input
-                    id="address2"
-                    value={hotelForm.address2}
-                    onChange={(e) => handleFormChange("address2", e.target.value)}
-                    placeholder="Apartment, suite, etc. (optional)"
-                    maxLength={50}
-                  />
-                  <p className="text-xs text-muted-foreground">{hotelForm.address2.length}/50 characters</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="city">City *</Label>
-                    <Input
-                      id="city"
-                      value={hotelForm.city}
-                      onChange={(e) => handleFormChange("city", e.target.value)}
-                      placeholder="Enter city"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="state">State *</Label>
-                    <Input
-                      id="state"
-                      value={hotelForm.state}
-                      onChange={(e) => handleFormChange("state", e.target.value)}
-                      placeholder="Enter state"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="zipCode">Zip Code *</Label>
-                  <Input
-                    id="zipCode"
-                    value={hotelForm.zipCode}
-                    onChange={(e) => handleFormChange("zipCode", e.target.value)}
-                    placeholder="Enter zip code"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="hotelPicture">Hotel Picture</Label>
-                  <Input
-                    id="hotelPicture"
-                    type="file"
-                    onChange={handleFileChange}
-                    accept="image/*"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="contactNo">Contact Number *</Label>
-                  <Input
-                    id="contactNo"
-                    value={hotelForm.contactNo}
-                    onChange={(e) => handleFormChange("contactNo", e.target.value)}
-                    placeholder="Enter contact number"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contactFirstName">Contact First Name *</Label>
-                    <Input
-                      id="contactFirstName"
-                      value={hotelForm.contactFirstName}
-                      onChange={(e) => handleFormChange("contactFirstName", e.target.value)}
-                      placeholder="First name"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="contactLastName">Contact Last Name *</Label>
-                    <Input
-                      id="contactLastName"
-                      value={hotelForm.contactLastName}
-                      onChange={(e) => handleFormChange("contactLastName", e.target.value)}
-                      placeholder="Last name"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setIsAddHotelOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleAddHotel} className="bg-brand-purple hover:bg-brand-purple-dark">
+          {/* Only show Add Hotel button for Portfolio Managers */}
+          {isPortfolioManager && (
+            <Sheet open={isAddHotelOpen} onOpenChange={setIsAddHotelOpen}>
+              <SheetTrigger asChild>
+                <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
+                  <Building2 size={16} />
                   Add Hotel
                 </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetTrigger>
+              <SheetContent className="w-[400px] sm:w-[540px]">
+                <SheetHeader>
+                  <SheetTitle>Add New Hotel</SheetTitle>
+                  <SheetDescription>
+                    Enter the hotel details to add a new property to the system.
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="hotelName">Hotel Name *</Label>
+                    <Input
+                      id="hotelName"
+                      value={hotelForm.hotelName}
+                      onChange={(e) => handleFormChange("hotelName", e.target.value)}
+                      placeholder="Enter hotel name"
+                      maxLength={100}
+                    />
+                    <p className="text-xs text-muted-foreground">{hotelForm.hotelName.length}/100 characters</p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="address1">Address 1 *</Label>
+                    <Input
+                      id="address1"
+                      value={hotelForm.address1}
+                      onChange={(e) => handleFormChange("address1", e.target.value)}
+                      placeholder="Enter street address"
+                      maxLength={100}
+                    />
+                    <p className="text-xs text-muted-foreground">{hotelForm.address1.length}/100 characters</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="address2">Address 2</Label>
+                    <Input
+                      id="address2"
+                      value={hotelForm.address2}
+                      onChange={(e) => handleFormChange("address2", e.target.value)}
+                      placeholder="Apartment, suite, etc. (optional)"
+                      maxLength={50}
+                    />
+                    <p className="text-xs text-muted-foreground">{hotelForm.address2.length}/50 characters</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City *</Label>
+                      <Input
+                        id="city"
+                        value={hotelForm.city}
+                        onChange={(e) => handleFormChange("city", e.target.value)}
+                        placeholder="Enter city"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="state">State *</Label>
+                      <Input
+                        id="state"
+                        value={hotelForm.state}
+                        onChange={(e) => handleFormChange("state", e.target.value)}
+                        placeholder="Enter state"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="zipCode">Zip Code *</Label>
+                    <Input
+                      id="zipCode"
+                      value={hotelForm.zipCode}
+                      onChange={(e) => handleFormChange("zipCode", e.target.value)}
+                      placeholder="Enter zip code"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="hotelPicture">Hotel Picture</Label>
+                    <Input
+                      id="hotelPicture"
+                      type="file"
+                      onChange={handleFileChange}
+                      accept="image/*"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="contactNo">Contact Number *</Label>
+                    <Input
+                      id="contactNo"
+                      value={hotelForm.contactNo}
+                      onChange={(e) => handleFormChange("contactNo", e.target.value)}
+                      placeholder="Enter contact number"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="contactFirstName">Contact First Name *</Label>
+                      <Input
+                        id="contactFirstName"
+                        value={hotelForm.contactFirstName}
+                        onChange={(e) => handleFormChange("contactFirstName", e.target.value)}
+                        placeholder="First name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="contactLastName">Contact Last Name *</Label>
+                      <Input
+                        id="contactLastName"
+                        value={hotelForm.contactLastName}
+                        onChange={(e) => handleFormChange("contactLastName", e.target.value)}
+                        placeholder="Last name"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={() => setIsAddHotelOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleAddHotel} className="bg-brand-purple hover:bg-brand-purple-dark">
+                    Add Hotel
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
       </div>
 
