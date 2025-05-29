@@ -1,9 +1,11 @@
+
 import { useState } from "react";
-import { Building2, Plus, Trash2, Users } from "lucide-react";
+import { Building2, Plus, Trash2, Users, Search, Eye, Edit, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -14,6 +16,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import DashboardLayout from "@/components/DashboardLayout";
 
 interface Investor {
@@ -26,131 +57,189 @@ interface Investor {
 interface Hotel {
   id: string;
   name: string;
-  address: string;
+  managerName: string;
+  address1: string;
+  address2?: string;
   city: string;
   state: string;
+  area: string;
   zipCode: string;
+  status: "active" | "inactive";
+  dateAdded: string;
   investors: Investor[];
-  totalInvestment: number;
+  recentActivity: string[];
 }
 
 const PortfolioManagerHotels = () => {
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([
+    {
+      id: "1",
+      name: "Grand Plaza Hotel",
+      managerName: "John Smith",
+      address1: "123 Main Street",
+      address2: "Suite 100",
+      city: "New York",
+      state: "NY",
+      area: "Manhattan",
+      zipCode: "10001",
+      status: "active",
+      dateAdded: "2023-10-15",
+      investors: [
+        { id: "1", name: "Alice Johnson", email: "alice@example.com", investmentPercentage: 30 },
+        { id: "2", name: "Bob Wilson", email: "bob@example.com", investmentPercentage: 25 }
+      ],
+      recentActivity: [
+        "Revenue entry updated: April 23, 2024",
+        "New investor added: April 20, 2024",
+        "Staff member added: April 18, 2024"
+      ]
+    },
+    {
+      id: "2",
+      name: "Ocean View Resort",
+      managerName: "Sarah Davis",
+      address1: "456 Beach Road",
+      city: "Miami",
+      state: "FL",
+      area: "South Beach",
+      zipCode: "33139",
+      status: "active",
+      dateAdded: "2023-11-02",
+      investors: [
+        { id: "3", name: "Carol Brown", email: "carol@example.com", investmentPercentage: 40 }
+      ],
+      recentActivity: [
+        "Monthly report generated: April 25, 2024",
+        "Maintenance scheduled: April 22, 2024"
+      ]
+    }
+  ]);
+
+  const [searchQuery, setSearchQuery] = useState("");
   const [isAddHotelOpen, setIsAddHotelOpen] = useState(false);
+  const [isViewDetailsOpen, setIsViewDetailsOpen] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
-  const [isInvestorDialogOpen, setIsInvestorDialogOpen] = useState(false);
+  const [editingHotel, setEditingHotel] = useState<Hotel | null>(null);
   
   const [hotelForm, setHotelForm] = useState({
     name: "",
-    address: "",
+    managerName: "",
+    address1: "",
+    address2: "",
     city: "",
     state: "",
+    area: "",
     zipCode: "",
+    status: "active" as "active" | "inactive",
   });
 
-  const [investorForm, setInvestorForm] = useState({
-    name: "",
-    email: "",
-    investmentPercentage: "",
-  });
+  const filteredHotels = hotels.filter(hotel =>
+    hotel.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const resetForm = () => {
+    setHotelForm({
+      name: "",
+      managerName: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      area: "",
+      zipCode: "",
+      status: "active",
+    });
+    setEditingHotel(null);
+  };
 
   const handleAddHotel = () => {
-    if (!hotelForm.name || !hotelForm.address || !hotelForm.city || !hotelForm.state || !hotelForm.zipCode) {
-      toast.error("All hotel fields are required");
+    if (!hotelForm.name || !hotelForm.managerName || !hotelForm.address1 || 
+        !hotelForm.city || !hotelForm.state || !hotelForm.area || !hotelForm.zipCode) {
+      toast.error("All required fields must be filled");
       return;
     }
 
     const newHotel: Hotel = {
       id: Date.now().toString(),
       name: hotelForm.name,
-      address: hotelForm.address,
+      managerName: hotelForm.managerName,
+      address1: hotelForm.address1,
+      address2: hotelForm.address2,
       city: hotelForm.city,
       state: hotelForm.state,
+      area: hotelForm.area,
       zipCode: hotelForm.zipCode,
+      status: hotelForm.status,
+      dateAdded: new Date().toISOString().split('T')[0],
       investors: [],
-      totalInvestment: 0,
+      recentActivity: ["Hotel created"],
     };
 
     setHotels([...hotels, newHotel]);
-    setHotelForm({ name: "", address: "", city: "", state: "", zipCode: "" });
+    resetForm();
     setIsAddHotelOpen(false);
     toast.success("Hotel added successfully!");
   };
 
-  const handleAddInvestor = () => {
-    if (!selectedHotel) return;
+  const handleEditHotel = () => {
+    if (!editingHotel) return;
     
-    if (!investorForm.name || !investorForm.email || !investorForm.investmentPercentage) {
-      toast.error("All investor fields are required");
+    if (!hotelForm.name || !hotelForm.managerName || !hotelForm.address1 || 
+        !hotelForm.city || !hotelForm.state || !hotelForm.area || !hotelForm.zipCode) {
+      toast.error("All required fields must be filled");
       return;
     }
-
-    const percentage = parseFloat(investorForm.investmentPercentage);
-    if (percentage <= 0 || percentage > 100) {
-      toast.error("Investment percentage must be between 1 and 100");
-      return;
-    }
-
-    // Calculate current total percentage
-    const currentTotal = selectedHotel.investors.reduce((sum, inv) => sum + inv.investmentPercentage, 0);
-    if (currentTotal + percentage > 100) {
-      toast.error(`Cannot add ${percentage}%. Only ${100 - currentTotal}% remaining.`);
-      return;
-    }
-
-    // Check for duplicate email
-    if (selectedHotel.investors.some(inv => inv.email === investorForm.email)) {
-      toast.error("An investor with this email already exists for this hotel");
-      return;
-    }
-
-    const newInvestor: Investor = {
-      id: Date.now().toString(),
-      name: investorForm.name,
-      email: investorForm.email,
-      investmentPercentage: percentage,
-    };
 
     const updatedHotels = hotels.map(hotel => {
-      if (hotel.id === selectedHotel.id) {
+      if (hotel.id === editingHotel.id) {
         return {
           ...hotel,
-          investors: [...hotel.investors, newInvestor],
+          name: hotelForm.name,
+          managerName: hotelForm.managerName,
+          address1: hotelForm.address1,
+          address2: hotelForm.address2,
+          city: hotelForm.city,
+          state: hotelForm.state,
+          area: hotelForm.area,
+          zipCode: hotelForm.zipCode,
+          status: hotelForm.status,
         };
       }
       return hotel;
     });
 
     setHotels(updatedHotels);
-    setSelectedHotel({ ...selectedHotel, investors: [...selectedHotel.investors, newInvestor] });
-    setInvestorForm({ name: "", email: "", investmentPercentage: "" });
-    setIsInvestorDialogOpen(false);
-    toast.success("Investor added successfully!");
+    resetForm();
+    setIsAddHotelOpen(false);
+    setIsViewDetailsOpen(false);
+    toast.success("Hotel updated successfully!");
   };
 
-  const handleRemoveInvestor = (hotelId: string, investorId: string) => {
-    const updatedHotels = hotels.map(hotel => {
-      if (hotel.id === hotelId) {
-        return {
-          ...hotel,
-          investors: hotel.investors.filter(inv => inv.id !== investorId),
-        };
-      }
-      return hotel;
+  const handleDeleteHotel = (hotelId: string) => {
+    setHotels(hotels.filter(hotel => hotel.id !== hotelId));
+    toast.success("Hotel deleted successfully!");
+  };
+
+  const openViewDetails = (hotel: Hotel) => {
+    setSelectedHotel(hotel);
+    setIsViewDetailsOpen(true);
+  };
+
+  const openEditForm = (hotel: Hotel) => {
+    setEditingHotel(hotel);
+    setHotelForm({
+      name: hotel.name,
+      managerName: hotel.managerName,
+      address1: hotel.address1,
+      address2: hotel.address2 || "",
+      city: hotel.city,
+      state: hotel.state,
+      area: hotel.area,
+      zipCode: hotel.zipCode,
+      status: hotel.status,
     });
-
-    setHotels(updatedHotels);
-    if (selectedHotel && selectedHotel.id === hotelId) {
-      setSelectedHotel({
-        ...selectedHotel,
-        investors: selectedHotel.investors.filter(inv => inv.id !== investorId),
-      });
-    }
-    toast.success("Investor removed successfully!");
-  };
-
-  const getTotalInvestmentPercentage = (hotel: Hotel) => {
-    return hotel.investors.reduce((sum, inv) => sum + inv.investmentPercentage, 0);
+    setIsViewDetailsOpen(false);
+    setIsAddHotelOpen(true);
   };
 
   return (
@@ -160,24 +249,24 @@ const PortfolioManagerHotels = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">My Hotels</h1>
-            <p className="text-muted-foreground">Manage your hotel portfolio and investors</p>
+            <p className="text-muted-foreground">Manage your hotel portfolio</p>
           </div>
-          <Dialog open={isAddHotelOpen} onOpenChange={setIsAddHotelOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-brand-purple hover:bg-brand-purple-dark">
+          <Sheet open={isAddHotelOpen} onOpenChange={setIsAddHotelOpen}>
+            <SheetTrigger asChild>
+              <Button className="bg-brand-purple hover:bg-brand-purple-dark" onClick={resetForm}>
                 <Building2 className="h-4 w-4 mr-2" />
                 Add Hotel
               </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add New Hotel</DialogTitle>
-                <DialogDescription>
-                  Enter the details for your new hotel property.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
+            </SheetTrigger>
+            <SheetContent className="w-[400px] sm:w-[540px]">
+              <SheetHeader>
+                <SheetTitle>{editingHotel ? "Edit Hotel" : "Add New Hotel"}</SheetTitle>
+                <SheetDescription>
+                  {editingHotel ? "Update hotel details" : "Enter the hotel details to add a new property"}
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <div className="space-y-2">
                   <Label htmlFor="hotelName">Hotel Name *</Label>
                   <Input
                     id="hotelName"
@@ -186,17 +275,39 @@ const PortfolioManagerHotels = () => {
                     placeholder="Enter hotel name"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="address">Address *</Label>
+
+                <div className="space-y-2">
+                  <Label htmlFor="managerName">Manager Name *</Label>
                   <Input
-                    id="address"
-                    value={hotelForm.address}
-                    onChange={(e) => setHotelForm({ ...hotelForm, address: e.target.value })}
+                    id="managerName"
+                    value={hotelForm.managerName}
+                    onChange={(e) => setHotelForm({ ...hotelForm, managerName: e.target.value })}
+                    placeholder="Enter manager name"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="address1">Address 1 *</Label>
+                  <Input
+                    id="address1"
+                    value={hotelForm.address1}
+                    onChange={(e) => setHotelForm({ ...hotelForm, address1: e.target.value })}
                     placeholder="Enter street address"
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address2">Address 2</Label>
+                  <Input
+                    id="address2"
+                    value={hotelForm.address2}
+                    onChange={(e) => setHotelForm({ ...hotelForm, address2: e.target.value })}
+                    placeholder="Apartment, suite, etc. (optional)"
+                  />
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="city">City *</Label>
                     <Input
                       id="city"
@@ -205,7 +316,7 @@ const PortfolioManagerHotels = () => {
                       placeholder="Enter city"
                     />
                   </div>
-                  <div>
+                  <div className="space-y-2">
                     <Label htmlFor="state">State *</Label>
                     <Input
                       id="state"
@@ -215,218 +326,244 @@ const PortfolioManagerHotels = () => {
                     />
                   </div>
                 </div>
-                <div>
-                  <Label htmlFor="zipCode">Zip Code *</Label>
-                  <Input
-                    id="zipCode"
-                    value={hotelForm.zipCode}
-                    onChange={(e) => setHotelForm({ ...hotelForm, zipCode: e.target.value })}
-                    placeholder="Enter zip code"
-                  />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="area">Area *</Label>
+                    <Input
+                      id="area"
+                      value={hotelForm.area}
+                      onChange={(e) => setHotelForm({ ...hotelForm, area: e.target.value })}
+                      placeholder="Enter area"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="zipCode">Zip Code *</Label>
+                    <Input
+                      id="zipCode"
+                      value={hotelForm.zipCode}
+                      onChange={(e) => setHotelForm({ ...hotelForm, zipCode: e.target.value })}
+                      placeholder="Enter zip code"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="status">Status *</Label>
+                  <Select value={hotelForm.status} onValueChange={(value: "active" | "inactive") => setHotelForm({ ...hotelForm, status: value })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setIsAddHotelOpen(false)}>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => { resetForm(); setIsAddHotelOpen(false); }}>
                   Cancel
                 </Button>
-                <Button onClick={handleAddHotel} className="bg-brand-purple hover:bg-brand-purple-dark">
-                  Add Hotel
+                <Button 
+                  onClick={editingHotel ? handleEditHotel : handleAddHotel} 
+                  className="bg-brand-purple hover:bg-brand-purple-dark"
+                >
+                  {editingHotel ? "Update Hotel" : "Add Hotel"}
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
-        {/* Hotels Grid */}
-        {hotels.length === 0 ? (
-          <Card className="text-center py-12">
-            <CardContent>
-              <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No Hotels Yet</h3>
-              <p className="text-muted-foreground mb-4">
-                Start by adding your first hotel property to begin managing your portfolio.
-              </p>
-              <Button 
-                onClick={() => setIsAddHotelOpen(true)}
-                className="bg-brand-purple hover:bg-brand-purple-dark"
-              >
-                <Building2 className="h-4 w-4 mr-2" />
-                Add Your First Hotel
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {hotels.map((hotel) => (
-              <Card key={hotel.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span className="truncate">{hotel.name}</span>
-                    <Building2 className="h-5 w-5 text-muted-foreground" />
-                  </CardTitle>
-                  <CardDescription>
-                    {hotel.address}, {hotel.city}, {hotel.state} {hotel.zipCode}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Investors</span>
-                    <span className="font-semibold">{hotel.investors.length}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Total Investment</span>
-                    <span className="font-semibold">{getTotalInvestmentPercentage(hotel)}%</span>
-                  </div>
-                  
-                  {hotel.investors.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-medium">Recent Investors:</h4>
-                      {hotel.investors.slice(0, 3).map((investor) => (
-                        <div key={investor.id} className="flex justify-between text-xs">
-                          <span className="truncate mr-2">{investor.name}</span>
-                          <span>{investor.investmentPercentage}%</span>
-                        </div>
-                      ))}
-                      {hotel.investors.length > 3 && (
-                        <p className="text-xs text-muted-foreground">
-                          +{hotel.investors.length - 3} more investors
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      onClick={() => {
-                        setSelectedHotel(hotel);
-                        setIsInvestorDialogOpen(true);
-                      }}
-                      className="flex-1"
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      Add Investor
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => setSelectedHotel(hotel)}
-                    >
-                      <Users className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        {/* Search */}
+        <div className="flex items-center gap-4">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search hotel name..."
+              className="pl-8"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-        )}
+        </div>
 
-        {/* Add Investor Dialog */}
-        <Dialog open={isInvestorDialogOpen} onOpenChange={setIsInvestorDialogOpen}>
-          <DialogContent>
+        {/* Hotels Table */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Hotels List</CardTitle>
+            <CardDescription>
+              Showing {filteredHotels.length} of {hotels.length} hotels
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Hotel Name</TableHead>
+                    <TableHead>Address</TableHead>
+                    <TableHead>Manager Name</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date Added</TableHead>
+                    <TableHead>No. of Investors</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredHotels.length > 0 ? (
+                    filteredHotels.map((hotel) => (
+                      <TableRow key={hotel.id}>
+                        <TableCell className="font-medium">{hotel.name}</TableCell>
+                        <TableCell>
+                          {hotel.address1}, {hotel.city}, {hotel.state} {hotel.zipCode}
+                        </TableCell>
+                        <TableCell>{hotel.managerName}</TableCell>
+                        <TableCell>
+                          <Badge variant={hotel.status === "active" ? "default" : "secondary"} 
+                                 className={hotel.status === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
+                            {hotel.status === "active" ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{new Date(hotel.dateAdded).toLocaleDateString()}</TableCell>
+                        <TableCell>{hotel.investors.length}</TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <MoreVertical size={16} />
+                                <span className="sr-only">Open menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => openViewDetails(hotel)}>
+                                <Eye size={14} className="mr-2" />
+                                View Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => openEditForm(hotel)}>
+                                <Edit size={14} className="mr-2" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="text-red-600"
+                                onClick={() => handleDeleteHotel(hotel.id)}
+                              >
+                                <Trash2 size={14} className="mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-24 text-center">
+                        No hotels found.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* View Details Dialog */}
+        <Dialog open={isViewDetailsOpen} onOpenChange={setIsViewDetailsOpen}>
+          <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
-              <DialogTitle>Add Investor</DialogTitle>
+              <DialogTitle className="flex items-center justify-between">
+                Hotel Details
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => selectedHotel && openEditForm(selectedHotel)}
+                  >
+                    <Edit size={14} className="mr-1" />
+                    Edit
+                  </Button>
+                </div>
+              </DialogTitle>
               <DialogDescription>
-                Add a new investor to {selectedHotel?.name}
+                Complete information about the selected hotel
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="investorName">Investor Name *</Label>
-                <Input
-                  id="investorName"
-                  value={investorForm.name}
-                  onChange={(e) => setInvestorForm({ ...investorForm, name: e.target.value })}
-                  placeholder="Enter investor name"
-                />
-              </div>
-              <div>
-                <Label htmlFor="investorEmail">Email *</Label>
-                <Input
-                  id="investorEmail"
-                  type="email"
-                  value={investorForm.email}
-                  onChange={(e) => setInvestorForm({ ...investorForm, email: e.target.value })}
-                  placeholder="Enter investor email"
-                />
-              </div>
-              <div>
-                <Label htmlFor="percentage">Investment Percentage *</Label>
-                <Input
-                  id="percentage"
-                  type="number"
-                  min="0.01"
-                  max="100"
-                  step="0.01"
-                  value={investorForm.investmentPercentage}
-                  onChange={(e) => setInvestorForm({ ...investorForm, investmentPercentage: e.target.value })}
-                  placeholder="Enter percentage (e.g., 25.5)"
-                />
-                {selectedHotel && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Remaining: {(100 - getTotalInvestmentPercentage(selectedHotel)).toFixed(2)}%
-                  </p>
+            
+            {selectedHotel && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-muted-foreground">Hotel Name</Label>
+                    <p className="text-base font-medium">{selectedHotel.name}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Manager Name</Label>
+                    <p className="text-base">{selectedHotel.managerName}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Address</Label>
+                    <p className="text-base">
+                      {selectedHotel.address1}
+                      {selectedHotel.address2 && `, ${selectedHotel.address2}`}
+                      <br />
+                      {selectedHotel.city}, {selectedHotel.state} {selectedHotel.zipCode}
+                    </p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Number of Investors</Label>
+                    <p className="text-base">{selectedHotel.investors.length}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Date Added</Label>
+                    <p className="text-base">{new Date(selectedHotel.dateAdded).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <Label className="text-muted-foreground">Status</Label>
+                    <Badge variant={selectedHotel.status === "active" ? "default" : "secondary"} 
+                           className={selectedHotel.status === "active" ? "bg-green-500" : ""}>
+                      {selectedHotel.status === "active" ? "Active" : "Inactive"}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground">Recent Activity</Label>
+                  <div className="text-sm space-y-1">
+                    {selectedHotel.recentActivity.map((activity, index) => (
+                      <p key={index} className="text-muted-foreground">• {activity}</p>
+                    ))}
+                  </div>
+                </div>
+
+                {selectedHotel.investors.length > 0 && (
+                  <div className="space-y-2">
+                    <Label className="text-muted-foreground">Investors</Label>
+                    <div className="space-y-2">
+                      {selectedHotel.investors.map((investor) => (
+                        <div key={investor.id} className="flex justify-between items-center p-2 border rounded">
+                          <div>
+                            <p className="font-medium">{investor.name}</p>
+                            <p className="text-sm text-muted-foreground">{investor.email}</p>
+                          </div>
+                          <span className="font-semibold">{investor.investmentPercentage}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-            </div>
+            )}
+
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsInvestorDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleAddInvestor} className="bg-brand-purple hover:bg-brand-purple-dark">
-                Add Investor
+              <Button variant="outline" onClick={() => setIsViewDetailsOpen(false)}>
+                Close
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-
-        {/* Selected Hotel Details */}
-        {selectedHotel && !isInvestorDialogOpen && (
-          <Card>
-            <CardHeader>
-              <CardTitle>{selectedHotel.name} - Investor Details</CardTitle>
-              <CardDescription>
-                Manage investors for this property
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {selectedHotel.investors.length === 0 ? (
-                <div className="text-center py-8">
-                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No investors added yet</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {selectedHotel.investors.map((investor) => (
-                    <div key={investor.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <p className="font-medium">{investor.name}</p>
-                        <p className="text-sm text-muted-foreground">{investor.email}</p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="font-semibold">{investor.investmentPercentage}%</span>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleRemoveInvestor(selectedHotel.id, investor.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="border-t pt-4">
-                    <div className="flex justify-between items-center">
-                      <span className="font-semibold">Total Investment:</span>
-                      <span className="font-bold text-lg">{getTotalInvestmentPercentage(selectedHotel)}%</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
       </div>
     </DashboardLayout>
   );
