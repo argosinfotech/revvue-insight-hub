@@ -22,6 +22,8 @@ import PortfolioSettings from "@/pages/PortfolioSettings";
 import Activity from "@/pages/Activity";
 import Users from "@/pages/Users";
 import Subscription from "@/pages/Subscription";
+import Profile from "@/pages/Profile";
+import ChangePassword from "@/pages/ChangePassword";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,24 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/portfolio-signup" element={<PortfolioManagerSignup />} />
+          
+          {/* Common Routes for all users */}
+          <Route 
+            path="/profile" 
+            element={
+              <DashboardLayout>
+                <Profile />
+              </DashboardLayout>
+            } 
+          />
+          <Route 
+            path="/change-password" 
+            element={
+              <DashboardLayout>
+                <ChangePassword />
+              </DashboardLayout>
+            } 
+          />
           
           {/* Portfolio Manager Routes */}
           <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
