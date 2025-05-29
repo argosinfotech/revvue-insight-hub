@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { CreditCard, Download, Calendar, DollarSign, FileText, Settings, User, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,6 +20,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -31,6 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useToast } from "@/hooks/use-toast";
 
 // Sample data
 const latestSubscription = {
@@ -122,24 +133,42 @@ const Subscription = () => {
   const [selectedPlan, setSelectedPlan] = useState("premium");
   const [billingPeriod, setBillingPeriod] = useState("monthly");
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const { toast } = useToast();
 
   const handleUpdateBillingInfo = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Update billing info submitted");
+    toast({
+      title: "Billing Information Updated",
+      description: "Your billing information has been successfully updated.",
+    });
   };
 
   const handleChangePlan = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Change plan submitted", { selectedPlan, billingPeriod });
+    toast({
+      title: "Plan Changed",
+      description: "Your subscription plan has been successfully updated.",
+    });
   };
 
   const handleChangePaymentMethod = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Change payment method submitted", { paymentMethod });
+    toast({
+      title: "Payment Method Updated",
+      description: "Your payment method has been successfully updated.",
+    });
   };
 
   const handleCancelSubscription = () => {
-    console.log("Cancel subscription clicked");
+    console.log("Cancel subscription confirmed");
+    toast({
+      title: "Subscription Cancelled",
+      description: "Your subscription has been cancelled. You will have access until the end of your billing period.",
+      variant: "destructive",
+    });
   };
 
   const handleDownloadReceipt = (paymentId: number) => {
@@ -365,9 +394,30 @@ const Subscription = () => {
             </SheetContent>
           </Sheet>
 
-          <Button variant="destructive" onClick={handleCancelSubscription}>
-            Cancel Subscription
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">
+                Cancel Subscription
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure you want to cancel your subscription?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action will cancel your subscription. You will continue to have access to your account until the end of your current billing period ({latestSubscription.nextBillingDate}). This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Keep Subscription</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={handleCancelSubscription}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Yes, Cancel Subscription
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
