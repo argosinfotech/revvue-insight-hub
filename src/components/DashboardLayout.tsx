@@ -77,6 +77,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     if (currentPath.startsWith('/portfolio') || currentPath === '/subscription') {
       sessionStorage.setItem('userRole', 'portfolio-manager');
       return 'portfolio-manager';
+    } else if (currentPath.startsWith('/staff')) {
+      sessionStorage.setItem('userRole', 'hotel-staff');
+      return 'hotel-staff';
     } else if (currentPath.startsWith('/dashboard') || currentPath === '/hotels' || currentPath === '/investors' || currentPath === '/billing' || currentPath === '/activity' || currentPath === '/users' || currentPath === '/settings' || currentPath === '/notifications') {
       sessionStorage.setItem('userRole', 'admin');
       return 'admin';
@@ -89,6 +92,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const userRole = getUserRole();
   const isPortfolioManager = userRole === 'portfolio-manager';
+  const isHotelStaff = userRole === 'hotel-staff';
+  const isAdmin = userRole === 'admin';
 
   const handleLogout = () => {
     // Clear user role on logout
@@ -175,10 +180,43 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     },
   ];
 
-  const navItems = isPortfolioManager ? portfolioManagerNavItems : adminNavItems;
-  const roleDisplayName = isPortfolioManager ? "Portfolio Manager" : "Super Admin";
-  const userEmail = isPortfolioManager ? "manager@example.com" : "admin@example.com";
-  const userInitials = isPortfolioManager ? "PM" : "SA";
+  const hotelStaffNavItems = [
+    {
+      to: "/staff-dashboard",
+      icon: <BarChartBig size={20} />,
+      label: "Dashboard",
+    },
+  ];
+
+  const getNavItems = () => {
+    if (isHotelStaff) return hotelStaffNavItems;
+    if (isPortfolioManager) return portfolioManagerNavItems;
+    return adminNavItems;
+  };
+
+  const navItems = getNavItems();
+  
+  const getRoleDisplayName = () => {
+    if (isHotelStaff) return "Hotel Staff";
+    if (isPortfolioManager) return "Portfolio Manager";
+    return "Super Admin";
+  };
+
+  const getUserEmail = () => {
+    if (isHotelStaff) return "staff@example.com";
+    if (isPortfolioManager) return "manager@example.com";
+    return "admin@example.com";
+  };
+
+  const getUserInitials = () => {
+    if (isHotelStaff) return "HS";
+    if (isPortfolioManager) return "PM";
+    return "SA";
+  };
+
+  const roleDisplayName = getRoleDisplayName();
+  const userEmail = getUserEmail();
+  const userInitials = getUserInitials();
 
   return (
     <div className="min-h-screen flex">

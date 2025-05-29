@@ -23,13 +23,20 @@ const Login = () => {
 
       // For demo purposes, simple validation with role-based routing
       if (email === "admin@example.com" && password === "password") {
+        sessionStorage.setItem('userRole', 'admin');
         toast.success("Admin login successful");
         navigate("/dashboard");
       } else if (email === "manager@example.com" && password === "password") {
+        sessionStorage.setItem('userRole', 'portfolio-manager');
         toast.success("Portfolio Manager login successful");
         navigate("/portfolio-hotels");
+      } else if (email === "staff@example.com" && password === "password") {
+        sessionStorage.setItem('userRole', 'hotel-staff');
+        toast.success("Hotel Staff login successful");
+        navigate("/staff-dashboard");
       } else if (email.includes("@") && password.length >= 6) {
         // Generic Portfolio Manager login (for registered users)
+        sessionStorage.setItem('userRole', 'portfolio-manager');
         toast.success("Portfolio Manager login successful");
         navigate("/portfolio-hotels");
       } else {
@@ -106,8 +113,11 @@ const Login = () => {
             <p className="text-xs text-gray-500 mb-1">
               Admin: admin@example.com / password
             </p>
-            <p className="text-xs text-gray-500 mb-4">
+            <p className="text-xs text-gray-500 mb-1">
               Portfolio Manager: manager@example.com / password
+            </p>
+            <p className="text-xs text-gray-500 mb-4">
+              Hotel Staff: staff@example.com / password
             </p>
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
