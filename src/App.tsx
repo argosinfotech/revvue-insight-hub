@@ -39,7 +39,14 @@ const App = () => (
           <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
           <Route path="/portfolio-dashboard" element={<PortfolioDashboard />} />
           <Route path="/portfolio-investors" element={<PortfolioInvestors />} />
-          <Route path="/portfolio-staffs" element={<PortfolioStaffs />} />
+          <Route 
+            path="/portfolio-staffs" 
+            element={
+              <DashboardLayout>
+                <PortfolioStaffs />
+              </DashboardLayout>
+            } 
+          />
           <Route path="/portfolio-settings" element={<PortfolioSettings />} />
           
           {/* Admin Routes */}
