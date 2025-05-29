@@ -107,14 +107,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const portfolioManagerNavItems = [
     {
-      to: "/portfolio-hotels",
-      icon: <Building2 size={20} />,
-      label: "My Hotels",
-    },
-    {
       to: "/portfolio-dashboard",
       icon: <TrendingUp size={20} />,
       label: "Dashboard",
+    },
+    {
+      to: "/portfolio-hotels",
+      icon: <Building2 size={20} />,
+      label: "My Hotels",
     },
     {
       to: "/portfolio-investors",
