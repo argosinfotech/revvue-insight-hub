@@ -1,4 +1,3 @@
-
 import { ReactNode, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
@@ -55,7 +54,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Determine if this is a Portfolio Manager based on the current path
-  const isPortfolioManager = location.pathname.startsWith('/portfolio');
+  const isPortfolioManager = location.pathname.startsWith('/portfolio') || 
+                           location.pathname === '/subscription' ||
+                           location.pathname.startsWith('/subscription');
 
   const handleLogout = () => {
     toast.success("Logged out successfully");
