@@ -1,4 +1,3 @@
-
 import { ReactNode, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
@@ -64,12 +63,37 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Determine if this is a Portfolio Manager based on the current path
-  const isPortfolioManager = location.pathname.startsWith('/portfolio') || 
-                           location.pathname === '/subscription' ||
-                           location.pathname.startsWith('/subscription');
+  // Determine user role - for now, we'll use a simple check based on previous navigation
+  // In a real app, this would come from authentication context/state management
+  const getUserRole = () => {
+    // Check sessionStorage or localStorage for user role
+    const storedRole = sessionStorage.getItem('userRole') || localStorage.getItem('userRole');
+    if (storedRole) {
+      return storedRole;
+    }
+    
+    // Fallback: determine based on current path or referrer
+    const currentPath = location.pathname;
+    if (currentPath.startsWith('/portfolio') || currentPath === '/subscription') {
+      sessionStorage.setItem('userRole', 'portfolio-manager');
+      return 'portfolio-manager';
+    } else if (currentPath.startsWith('/dashboard') || currentPath === '/hotels' || currentPath === '/investors' || currentPath === '/billing' || currentPath === '/activity' || currentPath === '/users' || currentPath === '/settings' || currentPath === '/notifications') {
+      sessionStorage.setItem('userRole', 'admin');
+      return 'admin';
+    }
+    
+    // For common pages, check browser history or default to portfolio manager
+    // You could also check document.referrer or use a more sophisticated method
+    return 'portfolio-manager'; // Default to portfolio manager
+  };
+
+  const userRole = getUserRole();
+  const isPortfolioManager = userRole === 'portfolio-manager';
 
   const handleLogout = () => {
+    // Clear user role on logout
+    sessionStorage.removeItem('userRole');
+    localStorage.removeItem('userRole');
     toast.success("Logged out successfully");
     navigate("/login");
   };
@@ -152,7 +176,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   ];
 
   const navItems = isPortfolioManager ? portfolioManagerNavItems : adminNavItems;
-  const userRole = isPortfolioManager ? "Portfolio Manager" : "Super Admin";
+  const roleDisplayName = isPortfolioManager ? "Portfolio Manager" : "Super Admin";
   const userEmail = isPortfolioManager ? "manager@example.com" : "admin@example.com";
   const userInitials = isPortfolioManager ? "PM" : "SA";
 
@@ -204,7 +228,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <AvatarFallback>{userInitials}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">{userRole}</span>
+                  <span className="text-sm font-medium">{roleDisplayName}</span>
                   <span className="text-xs text-gray-500">{userEmail}</span>
                 </div>
               </div>
@@ -254,7 +278,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     <AvatarFallback>{userInitials}</AvatarFallback>
                   </Avatar>
                   <div className="hidden sm:block text-right">
-                    <div className="text-sm font-medium">{userRole}</div>
+                    <div className="text-sm font-medium">{roleDisplayName}</div>
                     <div className="text-xs text-gray-500">{userEmail}</div>
                   </div>
                 </div>
@@ -262,7 +286,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{userRole}</p>
+                    <p className="text-sm font-medium leading-none">{roleDisplayName}</p>
                     <p className="text-xs leading-none text-muted-foreground">
                       {userEmail}
                     </p>
