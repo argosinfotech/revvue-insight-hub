@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { CreditCard, Download, Calendar, DollarSign, FileText, Settings } from "lucide-react";
+import { CreditCard, Download, Calendar, DollarSign, FileText, Settings, User, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,24 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // Sample data
 const latestSubscription = {
@@ -73,17 +91,51 @@ const payments = [
   }
 ];
 
+const plans = [
+  {
+    id: "basic",
+    name: "Basic Plan",
+    hotels: 2,
+    investors: 50,
+    monthlyPrice: "$29.99",
+    yearlyPrice: "$299.99"
+  },
+  {
+    id: "premium",
+    name: "Premium Plan",
+    hotels: 5,
+    investors: 100,
+    monthlyPrice: "$99.99",
+    yearlyPrice: "$999.99"
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise Plan",
+    hotels: "Unlimited",
+    investors: "Unlimited",
+    monthlyPrice: "$199.99",
+    yearlyPrice: "$1999.99"
+  }
+];
+
 const Subscription = () => {
-  const handleUpdateBillingInfo = () => {
-    console.log("Update billing info clicked");
+  const [selectedPlan, setSelectedPlan] = useState("premium");
+  const [billingPeriod, setBillingPeriod] = useState("monthly");
+  const [paymentMethod, setPaymentMethod] = useState("card");
+
+  const handleUpdateBillingInfo = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Update billing info submitted");
   };
 
-  const handleChangePlan = () => {
-    console.log("Change plan clicked");
+  const handleChangePlan = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Change plan submitted", { selectedPlan, billingPeriod });
   };
 
-  const handleChangePaymentMethod = () => {
-    console.log("Change payment method clicked");
+  const handleChangePaymentMethod = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Change payment method submitted", { paymentMethod });
   };
 
   const handleCancelSubscription = () => {
@@ -104,18 +156,215 @@ const Subscription = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleUpdateBillingInfo}>
-            <CreditCard size={16} className="mr-2" />
-            Update Billing Info
-          </Button>
-          <Button variant="outline" onClick={handleChangePlan}>
-            <Settings size={16} className="mr-2" />
-            Change Plan
-          </Button>
-          <Button variant="outline" onClick={handleChangePaymentMethod}>
-            <CreditCard size={16} className="mr-2" />
-            Change Payment Method
-          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">
+                <User size={16} className="mr-2" />
+                Update Billing Info
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Update Billing Information</SheetTitle>
+                <SheetDescription>
+                  Update your billing address and contact information
+                </SheetDescription>
+              </SheetHeader>
+              <form onSubmit={handleUpdateBillingInfo} className="space-y-6 mt-6">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input id="firstName" defaultValue="John" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input id="lastName" defaultValue="Smith" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" defaultValue="john.smith@example.com" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input id="phone" defaultValue="+1 (555) 123-4567" />
+                  </div>
+                  <Separator />
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Address</Label>
+                    <Input id="address" defaultValue="123 Main Street" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City</Label>
+                      <Input id="city" defaultValue="New York" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="state">State</Label>
+                      <Input id="state" defaultValue="NY" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="zipCode">ZIP Code</Label>
+                      <Input id="zipCode" defaultValue="10001" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="country">Country</Label>
+                      <Select defaultValue="us">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="us">United States</SelectItem>
+                          <SelectItem value="ca">Canada</SelectItem>
+                          <SelectItem value="uk">United Kingdom</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+                <Button type="submit" className="w-full">
+                  Update Billing Information
+                </Button>
+              </form>
+            </SheetContent>
+          </Sheet>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">
+                <Settings size={16} className="mr-2" />
+                Change Plan
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Change Subscription Plan</SheetTitle>
+                <SheetDescription>
+                  Choose a different plan that fits your needs
+                </SheetDescription>
+              </SheetHeader>
+              <form onSubmit={handleChangePlan} className="space-y-6 mt-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Select Plan</Label>
+                    <RadioGroup value={selectedPlan} onValueChange={setSelectedPlan}>
+                      {plans.map((plan) => (
+                        <div key={plan.id} className="flex items-center space-x-2 p-4 border rounded-lg">
+                          <RadioGroupItem value={plan.id} id={plan.id} />
+                          <div className="flex-1">
+                            <Label htmlFor={plan.id} className="font-medium">
+                              {plan.name}
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                              {plan.hotels} Hotels, {plan.investors} Investors
+                            </p>
+                            <p className="text-sm font-medium">
+                              {billingPeriod === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+                              /{billingPeriod === "monthly" ? "month" : "year"}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Billing Period</Label>
+                    <RadioGroup value={billingPeriod} onValueChange={setBillingPeriod}>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="monthly" id="monthly" />
+                        <Label htmlFor="monthly">Monthly</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yearly" id="yearly" />
+                        <Label htmlFor="yearly">Yearly (Save 17%)</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                </div>
+                <Button type="submit" className="w-full">
+                  Change Plan
+                </Button>
+              </form>
+            </SheetContent>
+          </Sheet>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">
+                <CreditCard size={16} className="mr-2" />
+                Change Payment Method
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Change Payment Method</SheetTitle>
+                <SheetDescription>
+                  Update your payment method for future charges
+                </SheetDescription>
+              </SheetHeader>
+              <form onSubmit={handleChangePaymentMethod} className="space-y-6 mt-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Payment Method</Label>
+                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                      <div className="flex items-center space-x-2 p-4 border rounded-lg">
+                        <RadioGroupItem value="card" id="card" />
+                        <div className="flex-1">
+                          <Label htmlFor="card" className="font-medium">Credit/Debit Card</Label>
+                          <p className="text-sm text-muted-foreground">Visa, Mastercard, American Express</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 p-4 border rounded-lg">
+                        <RadioGroupItem value="paypal" id="paypal" />
+                        <div className="flex-1">
+                          <Label htmlFor="paypal" className="font-medium">PayPal</Label>
+                          <p className="text-sm text-muted-foreground">Pay with your PayPal account</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 p-4 border rounded-lg">
+                        <RadioGroupItem value="bank" id="bank" />
+                        <div className="flex-1">
+                          <Label htmlFor="bank" className="font-medium">Bank Transfer</Label>
+                          <p className="text-sm text-muted-foreground">Direct bank account transfer</p>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  {paymentMethod === "card" && (
+                    <div className="space-y-4">
+                      <Separator />
+                      <div className="space-y-2">
+                        <Label htmlFor="cardNumber">Card Number</Label>
+                        <Input id="cardNumber" placeholder="1234 5678 9012 3456" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="expiry">Expiry Date</Label>
+                          <Input id="expiry" placeholder="MM/YY" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cvv">CVV</Label>
+                          <Input id="cvv" placeholder="123" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cardName">Name on Card</Label>
+                        <Input id="cardName" defaultValue="John Smith" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <Button type="submit" className="w-full">
+                  Update Payment Method
+                </Button>
+              </form>
+            </SheetContent>
+          </Sheet>
+
           <Button variant="destructive" onClick={handleCancelSubscription}>
             Cancel Subscription
           </Button>
