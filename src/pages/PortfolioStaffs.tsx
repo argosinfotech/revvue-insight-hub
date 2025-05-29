@@ -86,6 +86,7 @@ const hotels = [
 const PortfolioStaffs = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddStaffOpen, setIsAddStaffOpen] = useState(false);
+  const [editingStaff, setEditingStaff] = useState<typeof staffMembers[0] | null>(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -121,13 +122,18 @@ const PortfolioStaffs = () => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
     }
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6 || formData.password.length > 15) {
-      newErrors.password = "Password must be between 6 and 15 characters";
-    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, and one number";
+    
+    // Only validate password if we're adding a new staff (not editing)
+    if (!editingStaff) {
+      if (!formData.password.trim()) {
+        newErrors.password = "Password is required";
+      } else if (formData.password.length < 6 || formData.password.length > 15) {
+        newErrors.password = "Password must be between 6 and 15 characters";
+      } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+        newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, and one number";
+      }
     }
+    
     if (!formData.hotel) {
       newErrors.hotel = "Hotel selection is required";
     }
@@ -140,19 +146,42 @@ const PortfolioStaffs = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form submitted:", formData);
-      toast.success("Staff member added successfully!");
-      setIsAddStaffOpen(false);
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        email: "",
-        password: "",
-        hotel: "",
-        sendWelcomeEmail: false,
-      });
-      setErrors({});
+      if (editingStaff) {
+        toast.success("Staff member updated successfully!");
+      } else {
+        toast.success("Staff member added successfully!");
+      }
+      handleCloseSheet();
     }
+  };
+
+  const handleCloseSheet = () => {
+    setIsAddStaffOpen(false);
+    setEditingStaff(null);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      password: "",
+      hotel: "",
+      sendWelcomeEmail: false,
+    });
+    setErrors({});
+  };
+
+  const handleEdit = (staff: typeof staffMembers[0]) => {
+    setEditingStaff(staff);
+    setFormData({
+      firstName: staff.firstName,
+      lastName: staff.lastName,
+      phone: staff.phone,
+      email: staff.email,
+      password: "", // Don't pre-fill password for security
+      hotel: staff.hotelName,
+      sendWelcomeEmail: false,
+    });
+    setIsAddStaffOpen(true);
   };
 
   const handleSendReminder = (staffId: number) => {
@@ -177,9 +206,9 @@ const PortfolioStaffs = () => {
           </SheetTrigger>
           <SheetContent className="w-[500px] sm:w-[600px]">
             <SheetHeader>
-              <SheetTitle>Add New Staff Member</SheetTitle>
+              <SheetTitle>{editingStaff ? "Edit Staff Member" : "Add New Staff Member"}</SheetTitle>
               <SheetDescription>
-                Add a new staff member to your hotel team
+                {editingStaff ? "Update staff member information" : "Add a new staff member to your hotel team"}
               </SheetDescription>
             </SheetHeader>
             
@@ -239,14 +268,16 @@ const PortfolioStaffs = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password *</Label>
+                <Label htmlFor="password">
+                  Password {editingStaff ? "(Leave blank to keep current password)" : "*"}
+                </Label>
                 <Input
                   id="password"
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   className={errors.password ? "border-red-500" : ""}
-                  placeholder="6-15 characters with uppercase, lowercase & number"
+                  placeholder={editingStaff ? "Leave blank to keep current password" : "6-15 characters with uppercase, lowercase & number"}
                 />
                 {errors.password && (
                   <p className="text-sm text-red-500">{errors.password}</p>
@@ -255,7 +286,7 @@ const PortfolioStaffs = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="hotel">Hotel *</Label>
-                <Select onValueChange={(value) => setFormData({...formData, hotel: value})}>
+                <Select value={formData.hotel} onValueChange={(value) => setFormData({...formData, hotel: value})}>
                   <SelectTrigger className={errors.hotel ? "border-red-500" : ""}>
                     <SelectValue placeholder="Select a hotel" />
                   </SelectTrigger>
@@ -287,12 +318,12 @@ const PortfolioStaffs = () => {
                 <Button 
                   type="button" 
                   variant="outline" 
-                  onClick={() => setIsAddStaffOpen(false)}
+                  onClick={handleCloseSheet}
                 >
                   Cancel
                 </Button>
                 <Button type="submit" className="bg-brand-purple hover:bg-brand-purple-dark">
-                  Add Staff Member
+                  {editingStaff ? "Update Staff Member" : "Add Staff Member"}
                 </Button>
               </div>
             </form>
@@ -375,7 +406,7 @@ const PortfolioStaffs = () => {
                               <Send size={14} className="mr-2" />
                               Send Reminder
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEdit(staff)}>
                               <Edit size={14} className="mr-2" />
                               Edit
                             </DropdownMenuItem>
