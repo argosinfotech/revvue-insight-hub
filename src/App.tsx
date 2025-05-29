@@ -17,6 +17,7 @@ import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
 import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
 import PortfolioDashboard from "@/pages/PortfolioDashboard";
 import PortfolioInvestors from "@/pages/PortfolioInvestors";
+import PortfolioStaffs from "@/pages/PortfolioStaffs";
 import PortfolioSettings from "@/pages/PortfolioSettings";
 import Activity from "@/pages/Activity";
 import Users from "@/pages/Users";
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
           <Route path="/portfolio-dashboard" element={<PortfolioDashboard />} />
           <Route path="/portfolio-investors" element={<PortfolioInvestors />} />
+          <Route path="/portfolio-staffs" element={<PortfolioStaffs />} />
           <Route path="/portfolio-settings" element={<PortfolioSettings />} />
           
           {/* Admin Routes */}

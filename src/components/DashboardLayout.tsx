@@ -122,6 +122,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       label: "My Investors",
     },
     {
+      to: "/portfolio-staffs",
+      icon: <UserCog size={20} />,
+      label: "Hotel Staffs",
+    },
+    {
       to: "/portfolio-settings",
       icon: <Settings size={20} />,
       label: "Settings",
