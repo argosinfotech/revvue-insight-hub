@@ -21,6 +21,7 @@ import PortfolioStaffs from "@/pages/PortfolioStaffs";
 import PortfolioSettings from "@/pages/PortfolioSettings";
 import Activity from "@/pages/Activity";
 import Users from "@/pages/Users";
+import Subscription from "@/pages/Subscription";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,14 @@ const App = () => (
             element={
               <DashboardLayout>
                 <PortfolioStaffs />
+              </DashboardLayout>
+            } 
+          />
+          <Route 
+            path="/subscription" 
+            element={
+              <DashboardLayout>
+                <Subscription />
               </DashboardLayout>
             } 
           />

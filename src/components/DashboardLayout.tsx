@@ -13,7 +13,8 @@ import {
   X, 
   Activity,
   TrendingUp,
-  UserCog
+  UserCog,
+  CreditCard
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -125,6 +126,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       to: "/portfolio-staffs",
       icon: <UserCog size={20} />,
       label: "Hotel Staffs",
+    },
+    {
+      to: "/subscription",
+      icon: <CreditCard size={20} />,
+      label: "Subscription",
     },
     {
       to: "/portfolio-settings",
