@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Users, Mail, Phone, DollarSign, Search, Filter, MoreVertical, Eye, Edit, Trash2, UserPlus, X, Building2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -100,6 +99,7 @@ interface InvestorFormData {
   zipCode?: string;
   status: string;
   sendInvitation: boolean;
+  sendSMS: boolean;
 }
 
 const PortfolioInvestors = () => {
@@ -127,6 +127,7 @@ const PortfolioInvestors = () => {
       zipCode: "",
       status: "invite_sent",
       sendInvitation: true,
+      sendSMS: false,
     },
   });
 
@@ -241,6 +242,7 @@ const PortfolioInvestors = () => {
       zipCode: investor.zipCode || "",
       status: investor.status,
       sendInvitation: false,
+      sendSMS: false,
     });
     setIsAddEditSheetOpen(true);
   };
@@ -710,33 +712,34 @@ const PortfolioInvestors = () => {
                   />
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="address1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address 1</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter address line 1" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="address2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address 2</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter address line 2" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="address1"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Address 1</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter address line 1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address2"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Address 2</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter address line 2" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <div className="grid grid-cols-3 gap-4">
                   <FormField
@@ -805,25 +808,46 @@ const PortfolioInvestors = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="sendInvitation"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>
-                          Send Invitation Email
-                        </FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="sendInvitation"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>
+                            Send Invitation Email
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="sendSMS"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>
+                            Send Invitation SMS
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <div className="flex justify-end gap-3 pt-6">
                   <Button 
