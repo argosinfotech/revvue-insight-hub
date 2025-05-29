@@ -1,14 +1,38 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, DollarSign, TrendingUp } from "lucide-react";
+import { Calendar, Users, DollarSign, TrendingUp, ClipboardCheck } from "lucide-react";
+import HotelAuditForm from "@/components/HotelAuditForm";
 
 const StaffDashboard = () => {
+  const [showAuditForm, setShowAuditForm] = useState(false);
+
+  if (showAuditForm) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-900">Hotel Audit</h1>
+          <Button 
+            variant="outline" 
+            onClick={() => setShowAuditForm(false)}
+          >
+            Back to Dashboard
+          </Button>
+        </div>
+        <HotelAuditForm />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Hotel Staff Dashboard</h1>
-        <Button>Add New Entry</Button>
+        <Button onClick={() => setShowAuditForm(true)}>
+          <ClipboardCheck className="h-4 w-4 mr-2" />
+          Start Hotel Audit
+        </Button>
       </div>
 
       {/* Quick Stats */}
