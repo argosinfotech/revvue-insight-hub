@@ -114,7 +114,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     {
       to: "/portfolio-dashboard",
       icon: <TrendingUp size={20} />,
-      label: "Revenue Analytics",
+      label: "Dashboard",
     },
     {
       to: "/portfolio-investors",

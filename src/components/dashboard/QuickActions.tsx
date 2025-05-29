@@ -1,7 +1,6 @@
 
 import { Plus, Users, Download, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -48,29 +47,19 @@ const QuickActions = () => {
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
-        <CardDescription>
-          Frequently used actions for portfolio management
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap gap-3">
-          {actions.map((action, index) => (
-            <Button
-              key={index}
-              variant={action.variant}
-              onClick={action.action}
-              className="flex items-center gap-2"
-            >
-              <action.icon className="h-4 w-4" />
-              {action.title}
-            </Button>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex flex-wrap gap-3">
+      {actions.map((action, index) => (
+        <Button
+          key={index}
+          variant={action.variant}
+          onClick={action.action}
+          className="flex items-center gap-2"
+        >
+          <action.icon className="h-4 w-4" />
+          {action.title}
+        </Button>
+      ))}
+    </div>
   );
 };
 

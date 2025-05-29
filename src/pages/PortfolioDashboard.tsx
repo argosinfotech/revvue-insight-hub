@@ -26,12 +26,15 @@ const PortfolioDashboard = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Portfolio Dashboard</h1>
-          <p className="text-muted-foreground">
-            Comprehensive overview of your hotel portfolio performance
-          </p>
+        {/* Header with Quick Actions */}
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Portfolio Dashboard</h1>
+            <p className="text-muted-foreground">
+              Comprehensive overview of your hotel portfolio performance
+            </p>
+          </div>
+          <QuickActions />
         </div>
 
         {/* Filters */}
@@ -46,9 +49,6 @@ const PortfolioDashboard = () => {
 
         {/* Charts */}
         <DashboardCharts selectedHotel={selectedHotel} />
-
-        {/* Quick Actions */}
-        <QuickActions />
       </div>
     </DashboardLayout>
   );
