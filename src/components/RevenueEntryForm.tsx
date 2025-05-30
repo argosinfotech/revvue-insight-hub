@@ -191,7 +191,7 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
 
         <div className="space-y-3 pt-4">
           <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-            Submit
+            {isEditing ? "Update Entry" : "Submit"}
           </Button>
           <Button 
             type="button" 
@@ -201,6 +201,14 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
           >
             <RotateCcw className="h-4 w-4 mr-2" />
             Reset Form
+          </Button>
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onClose}
+            className="w-full"
+          >
+            Cancel
           </Button>
         </div>
       </form>
