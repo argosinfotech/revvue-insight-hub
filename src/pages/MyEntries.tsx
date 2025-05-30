@@ -4,9 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Filter, Plus, FileDown, Edit, Eye, Calendar } from "lucide-react";
-import RevenueEntryForm from "@/components/RevenueEntryForm";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import RevenueEntryForm from "@/components/RevenueEntryForm";
 
 interface RevenueEntry {
   id: string;
@@ -20,7 +27,7 @@ interface RevenueEntry {
 }
 
 const MyEntries = () => {
-  const [showRevenueForm, setShowRevenueForm] = useState(false);
+  const [showRevenueModal, setShowRevenueModal] = useState(false);
   const [editingEntry, setEditingEntry] = useState<RevenueEntry | null>(null);
 
   // Mock data - in real app this would come from API
@@ -59,7 +66,7 @@ const MyEntries = () => {
 
   const handleAddTodaysRevenue = () => {
     setEditingEntry(null);
-    setShowRevenueForm(true);
+    setShowRevenueModal(true);
   };
 
   const handleEdit = (entry: RevenueEntry) => {
@@ -71,7 +78,7 @@ const MyEntries = () => {
     
     if (hoursDiff <= 24) {
       setEditingEntry(entry);
-      setShowRevenueForm(true);
+      setShowRevenueModal(true);
     } else {
       alert("Entry can only be edited within 24 hours of creation.");
     }
@@ -92,17 +99,10 @@ const MyEntries = () => {
     console.log("Export entries");
   };
 
-  if (showRevenueForm) {
-    return (
-      <RevenueEntryForm 
-        entry={editingEntry}
-        onClose={() => {
-          setShowRevenueForm(false);
-          setEditingEntry(null);
-        }}
-      />
-    );
-  }
+  const handleCloseModal = () => {
+    setShowRevenueModal(false);
+    setEditingEntry(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -192,6 +192,23 @@ const MyEntries = () => {
           </Table>
         </CardContent>
       </Card>
+
+      <Dialog open={showRevenueModal} onOpenChange={setShowRevenueModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {editingEntry ? "Edit Revenue Entry" : "Add Today's Revenue"}
+            </DialogTitle>
+            <DialogDescription>
+              {editingEntry ? "Update your revenue entry" : "Submit your daily revenue data"}
+            </DialogDescription>
+          </DialogHeader>
+          <RevenueEntryForm 
+            entry={editingEntry}
+            onClose={handleCloseModal}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
