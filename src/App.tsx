@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +25,7 @@ import Subscription from "@/pages/Subscription";
 import Profile from "@/pages/Profile";
 import ChangePassword from "@/pages/ChangePassword";
 import StaffDashboard from "@/pages/StaffDashboard";
+import MyEntries from "@/pages/MyEntries";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,14 @@ const App = () => (
             element={
               <DashboardLayout>
                 <StaffDashboard />
+              </DashboardLayout>
+            } 
+          />
+          <Route 
+            path="/my-entries" 
+            element={
+              <DashboardLayout>
+                <MyEntries />
               </DashboardLayout>
             } 
           />

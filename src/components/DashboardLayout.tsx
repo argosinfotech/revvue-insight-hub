@@ -15,7 +15,8 @@ import {
   UserCog,
   CreditCard,
   User,
-  Lock
+  Lock,
+  FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -185,6 +186,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       to: "/staff-dashboard",
       icon: <BarChartBig size={20} />,
       label: "Dashboard",
+    },
+    {
+      to: "/my-entries",
+      icon: <FileText size={20} />,
+      label: "My Entries",
     },
   ];
 
