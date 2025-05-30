@@ -1,14 +1,14 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Users, DollarSign, TrendingUp, Plus, CheckCircle, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import HotelAuditForm from "@/components/HotelAuditForm";
 
 const StaffDashboard = () => {
-  const [showAuditForm, setShowAuditForm] = useState(false);
+  const navigate = useNavigate();
 
   // Mock data - in real app this would come from API
   const hotelInfo = {
@@ -28,28 +28,15 @@ const StaffDashboard = () => {
 
   const todaysDate = new Date();
 
-  if (showAuditForm) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">Hotel Audit</h1>
-          <Button 
-            variant="outline" 
-            onClick={() => setShowAuditForm(false)}
-          >
-            Back to Dashboard
-          </Button>
-        </div>
-        <HotelAuditForm />
-      </div>
-    );
-  }
+  const handleAddRevenue = () => {
+    navigate('/my-entries');
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Hotel Staff Dashboard</h1>
-        <Button onClick={() => setShowAuditForm(true)} className="bg-purple-600 hover:bg-purple-700">
+        <Button onClick={handleAddRevenue} className="bg-purple-600 hover:bg-purple-700">
           <Plus className="h-4 w-4 mr-2" />
           Add Today's Revenue
         </Button>
@@ -82,7 +69,7 @@ const StaffDashboard = () => {
                       <Clock className="h-3 w-3" />
                       Pending
                     </Badge>
-                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700" onClick={handleAddRevenue}>
                       Add Now
                     </Button>
                   </>
