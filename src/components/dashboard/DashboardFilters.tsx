@@ -1,7 +1,6 @@
 
 import { useState } from "react";
-import { Calendar, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Calendar } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -33,33 +32,32 @@ const DashboardFilters = ({ onDateRangeChange, onHotelChange, selectedHotel }: D
   };
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="flex flex-wrap gap-4">
-          {/* Date Range */}
+    <Card className="bg-gray-50 border-none">
+      <CardContent className="pt-4 pb-4">
+        <div className="flex flex-wrap gap-3 items-center text-sm">
+          {/* Date Range - Compact */}
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            <span className="text-sm font-medium">Date Range:</span>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
             <input
               type="date"
               value={dateRange.from.toISOString().split('T')[0]}
               onChange={(e) => handleDateRangeChange('from', e.target.value)}
-              className="px-3 py-1 border rounded-md text-sm"
+              className="px-2 py-1 border rounded text-xs w-32"
             />
-            <span className="text-sm text-muted-foreground">to</span>
+            <span className="text-xs text-muted-foreground">to</span>
             <input
               type="date"
               value={dateRange.to.toISOString().split('T')[0]}
               onChange={(e) => handleDateRangeChange('to', e.target.value)}
-              className="px-3 py-1 border rounded-md text-sm"
+              className="px-2 py-1 border rounded text-xs w-32"
             />
           </div>
 
-          {/* Hotel Selection */}
+          {/* Hotel Selection - Compact */}
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Hotel:</span>
+            <span className="text-xs font-medium text-muted-foreground">Hotel:</span>
             <Select value={selectedHotel} onValueChange={onHotelChange}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-36 h-8 text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

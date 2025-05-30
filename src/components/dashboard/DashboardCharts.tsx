@@ -17,13 +17,13 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
     { month: "Jun", revenue: selectedHotel === "all" ? 130000 : 50000 }
   ];
 
-  // Mock data for bookings per week
+  // Mock data for bookings percentage per week
   const weeklyBookingsData = [
-    { week: "Week 1", bookings: selectedHotel === "all" ? 85 : 28 },
-    { week: "Week 2", bookings: selectedHotel === "all" ? 92 : 31 },
-    { week: "Week 3", bookings: selectedHotel === "all" ? 78 : 26 },
-    { week: "Week 4", bookings: selectedHotel === "all" ? 96 : 32 },
-    { week: "Week 5", bookings: selectedHotel === "all" ? 88 : 29 }
+    { week: "Week 1", percentage: selectedHotel === "all" ? 85 : 88 },
+    { week: "Week 2", percentage: selectedHotel === "all" ? 92 : 95 },
+    { week: "Week 3", percentage: selectedHotel === "all" ? 78 : 82 },
+    { week: "Week 4", percentage: selectedHotel === "all" ? 96 : 98 },
+    { week: "Week 5", percentage: selectedHotel === "all" ? 88 : 91 }
   ];
 
   return (
@@ -62,12 +62,12 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
         </CardContent>
       </Card>
 
-      {/* Weekly Bookings Chart */}
+      {/* Weekly Bookings Percentage Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Weekly Bookings</CardTitle>
+          <CardTitle>Weekly Booking Percentage</CardTitle>
           <CardDescription>
-            Bookings per week for the current month
+            Booking percentage per week for the current month
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -76,9 +76,14 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
               <BarChart data={weeklyBookingsData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="week" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="bookings" fill="#9b87f5" radius={[4, 4, 0, 0]} />
+                <YAxis 
+                  tickFormatter={(value) => `${value}%`}
+                  domain={[0, 100]}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value}%`, 'Booking Percentage']}
+                />
+                <Bar dataKey="percentage" fill="#9b87f5" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
