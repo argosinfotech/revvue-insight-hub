@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Phone, Building, Camera } from "lucide-react";
+import { User, Mail, Phone, Camera } from "lucide-react";
 import { toast } from "sonner";
 
 const Profile = () => {
@@ -13,9 +13,7 @@ const Profile = () => {
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    company: "RevVue Inc.",
-    position: "Portfolio Manager"
+    phone: "+1 (555) 123-4567"
   });
 
   // Mock hotel data - in real app this would come from API based on user's enrollment
@@ -144,31 +142,6 @@ const Profile = () => {
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   disabled={!isEditing}
                   className="pl-10"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
-                <div className="relative">
-                  <Building className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="company"
-                    value={formData.company}
-                    onChange={(e) => handleInputChange('company', e.target.value)}
-                    disabled={!isEditing}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="position">Position</Label>
-                <Input
-                  id="position"
-                  value={formData.position}
-                  onChange={(e) => handleInputChange('position', e.target.value)}
-                  disabled={!isEditing}
                 />
               </div>
             </div>
