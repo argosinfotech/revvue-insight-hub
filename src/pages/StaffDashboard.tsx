@@ -2,11 +2,31 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, DollarSign, TrendingUp, ClipboardCheck } from "lucide-react";
+import { Calendar, Users, DollarSign, TrendingUp, Plus, CheckCircle, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 import HotelAuditForm from "@/components/HotelAuditForm";
 
 const StaffDashboard = () => {
   const [showAuditForm, setShowAuditForm] = useState(false);
+
+  // Mock data - in real app this would come from API
+  const hotelInfo = {
+    name: "Grand Luxury Hotel",
+    todaySubmissionStatus: "pending", // "pending" or "completed"
+  };
+
+  const last7DaysEntries = [
+    { date: new Date(2024, 11, 15), revenue: 12450, submitted: true },
+    { date: new Date(2024, 11, 14), revenue: 9800, submitted: true },
+    { date: new Date(2024, 11, 13), revenue: 11200, submitted: false },
+    { date: new Date(2024, 11, 12), revenue: 10500, submitted: true },
+    { date: new Date(2024, 11, 11), revenue: 13200, submitted: true },
+    { date: new Date(2024, 11, 10), revenue: 8900, submitted: true },
+    { date: new Date(2024, 11, 9), revenue: 9600, submitted: true },
+  ];
+
+  const todaysDate = new Date();
 
   if (showAuditForm) {
     return (
@@ -29,11 +49,90 @@ const StaffDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Hotel Staff Dashboard</h1>
-        <Button onClick={() => setShowAuditForm(true)}>
-          <ClipboardCheck className="h-4 w-4 mr-2" />
-          Start Hotel Audit
+        <Button onClick={() => setShowAuditForm(true)} className="bg-purple-600 hover:bg-purple-700">
+          <Plus className="h-4 w-4 mr-2" />
+          Add Today's Revenue
         </Button>
       </div>
+
+      {/* Hotel Information Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Hotel Information</CardTitle>
+          <CardDescription>
+            Current hotel details and submission status
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">Hotel Name</p>
+              <p className="text-lg font-semibold">{hotelInfo.name}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">Today's Date</p>
+              <p className="text-lg font-semibold">{format(todaysDate, "MMM dd, yyyy")}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">Today's Submission Status</p>
+              <div className="flex items-center gap-2">
+                {hotelInfo.todaySubmissionStatus === "pending" ? (
+                  <>
+                    <Badge variant="secondary" className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      Pending
+                    </Badge>
+                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                      Add Now
+                    </Button>
+                  </>
+                ) : (
+                  <Badge variant="default" className="flex items-center gap-1 bg-green-600">
+                    <CheckCircle className="h-3 w-3" />
+                    Updated
+                  </Badge>
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">Last 7 Days Summary</p>
+              <p className="text-lg font-semibold">
+                {last7DaysEntries.filter(entry => entry.submitted).length}/7 Submitted
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Last 7 Days Entry Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Last 7 Days Entry Summary</CardTitle>
+          <CardDescription>
+            Recent revenue entries and submission status
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {last7DaysEntries.map((entry, index) => (
+              <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex items-center space-x-4">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">{format(entry.date, "MMM dd, yyyy")}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Revenue: ${entry.revenue.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <Badge variant={entry.submitted ? "default" : "secondary"}>
+                  {entry.submitted ? "Submitted" : "Pending"}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
