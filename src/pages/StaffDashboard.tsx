@@ -6,7 +6,6 @@ import { Calendar, Users, DollarSign, TrendingUp, Plus, CheckCircle, Clock, XCir
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import HotelAuditForm from "@/components/HotelAuditForm";
 
 const StaffDashboard = () => {
   const navigate = useNavigate();
