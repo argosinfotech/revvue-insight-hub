@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Phone, Building, Camera } from "lucide-react";
+import { User, Mail, Phone, MapPin, Building, Camera } from "lucide-react";
 import { toast } from "sonner";
 
 const Profile = () => {
@@ -15,9 +14,24 @@ const Profile = () => {
     lastName: "Doe",
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567",
+    address: "123 Main Street",
+    city: "New York",
+    state: "NY",
+    zipCode: "10001",
     company: "RevVue Inc.",
     position: "Portfolio Manager"
   });
+
+  // Mock hotel data - in real app this would come from API based on user's enrollment
+  const enrolledHotel = {
+    name: "Grand Luxury Hotel",
+    address: "456 Hotel Boulevard",
+    city: "New York",
+    state: "NY",
+    zipCode: "10002",
+    manager: "Sarah Johnson",
+    enrollmentDate: "2023-10-15"
+  };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -173,6 +187,99 @@ const Profile = () => {
                 </Button>
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Address Information Card - Updated to show hotel information */}
+        <Card className="md:col-span-3">
+          <CardHeader>
+            <CardTitle>Address Information</CardTitle>
+            <CardDescription>
+              Your personal address and enrolled hotel details
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Personal Address Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Personal Address</h3>
+              <div className="space-y-2">
+                <Label htmlFor="address">Street Address</Label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => handleInputChange('address', e.target.value)}
+                    disabled={!isEditing}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="city">City</Label>
+                  <Input
+                    id="city"
+                    value={formData.city}
+                    onChange={(e) => handleInputChange('city', e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">State</Label>
+                  <Input
+                    id="state"
+                    value={formData.state}
+                    onChange={(e) => handleInputChange('state', e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="zipCode">ZIP Code</Label>
+                  <Input
+                    id="zipCode"
+                    value={formData.zipCode}
+                    onChange={(e) => handleInputChange('zipCode', e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Hotel Information Section */}
+            <div className="space-y-4 pt-6 border-t">
+              <div className="flex items-center gap-2">
+                <Building className="h-5 w-5 text-muted-foreground" />
+                <h3 className="text-lg font-medium">Enrolled Hotel Information</h3>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-1">
+                    <Label className="text-muted-foreground text-sm">Hotel Name</Label>
+                    <p className="font-semibold">{enrolledHotel.name}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-muted-foreground text-sm">Hotel Manager</Label>
+                    <p className="font-medium">{enrolledHotel.manager}</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-1">
+                  <Label className="text-muted-foreground text-sm">Hotel Address</Label>
+                  <p className="font-medium">
+                    {enrolledHotel.address}<br />
+                    {enrolledHotel.city}, {enrolledHotel.state} {enrolledHotel.zipCode}
+                  </p>
+                </div>
+                
+                <div className="space-y-1">
+                  <Label className="text-muted-foreground text-sm">Enrollment Date</Label>
+                  <p className="font-medium">{new Date(enrolledHotel.enrollmentDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
