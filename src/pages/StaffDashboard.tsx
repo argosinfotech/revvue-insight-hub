@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, DollarSign, TrendingUp, Plus, CheckCircle, Clock, XCircle } from "lucide-react";
+import { Calendar, Users, DollarSign, TrendingUp, Plus, CheckCircle, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -30,25 +30,6 @@ const StaffDashboard = () => {
 
   const handleAddRevenue = () => {
     navigate('/my-entries');
-  };
-
-  const getHeatmapColor = (entry: typeof last7DaysEntries[0]) => {
-    if (!entry.submitted) {
-      return "bg-red-100 border-red-200 text-red-600";
-    }
-    
-    // Color code based on revenue level
-    if (entry.revenue >= 13000) {
-      return "bg-green-100 border-green-200 text-green-700";
-    } else if (entry.revenue >= 10000) {
-      return "bg-blue-100 border-blue-200 text-blue-700";
-    } else {
-      return "bg-yellow-100 border-yellow-200 text-yellow-700";
-    }
-  };
-
-  const getStatusIcon = (submitted: boolean) => {
-    return submitted ? CheckCircle : XCircle;
   };
 
   return (
@@ -160,67 +141,6 @@ const StaffDashboard = () => {
               <p className="text-lg font-semibold">
                 {last7DaysEntries.filter(entry => entry.submitted).length}/7 Submitted
               </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Last 7 Days Entry Summary - Heatmap View */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Last 7 Days Entry Summary</CardTitle>
-          <CardDescription>
-            Color-coded heatmap view of recent revenue entries and submission status
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-7 gap-3">
-            {last7DaysEntries.map((entry, index) => {
-              const StatusIcon = getStatusIcon(entry.submitted);
-              return (
-                <div 
-                  key={index} 
-                  className={`p-4 rounded-lg border-2 text-center space-y-2 transition-all hover:scale-105 ${getHeatmapColor(entry)}`}
-                >
-                  <div className="flex justify-center">
-                    <StatusIcon className="h-6 w-6" />
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-medium">
-                      {format(entry.date, "MMM dd")}
-                    </p>
-                    <p className="text-xs font-semibold">
-                      ${entry.revenue.toLocaleString()}
-                    </p>
-                    <p className="text-xs">
-                      {entry.submitted ? "Submitted" : "Missing"}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          
-          {/* Legend */}
-          <div className="mt-6 pt-4 border-t">
-            <p className="text-sm font-medium text-muted-foreground mb-3">Legend:</p>
-            <div className="flex flex-wrap gap-4 text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-green-100 border border-green-200 rounded"></div>
-                <span>High Revenue (≥$13k)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-blue-100 border border-blue-200 rounded"></div>
-                <span>Good Revenue ($10k-$12.9k)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-yellow-100 border border-yellow-200 rounded"></div>
-                <span>Low Revenue (<$10k)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-red-100 border border-red-200 rounded"></div>
-                <span>Not Submitted</span>
-              </div>
             </div>
           </div>
         </CardContent>
