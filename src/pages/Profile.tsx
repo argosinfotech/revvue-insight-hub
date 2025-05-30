@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -198,11 +197,6 @@ const Profile = () => {
           <CardContent className="space-y-6">
             {/* Hotel Information Section */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Building className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-lg font-medium">Hotel Details</h3>
-              </div>
-              
               <div className="bg-muted/50 p-4 rounded-lg space-y-3">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-1">
