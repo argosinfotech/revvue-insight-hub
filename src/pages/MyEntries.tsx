@@ -3,16 +3,9 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Filter, Plus, FileDown, Edit, Eye, Calendar } from "lucide-react";
+import { Filter, Plus, FileDown, Edit, Eye, Calendar, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import RevenueEntryForm from "@/components/RevenueEntryForm";
 
 interface RevenueEntry {
@@ -27,7 +20,7 @@ interface RevenueEntry {
 }
 
 const MyEntries = () => {
-  const [showRevenueModal, setShowRevenueModal] = useState(false);
+  const [showRevenuePanel, setShowRevenuePanel] = useState(false);
   const [editingEntry, setEditingEntry] = useState<RevenueEntry | null>(null);
 
   // Mock data - in real app this would come from API
@@ -66,7 +59,7 @@ const MyEntries = () => {
 
   const handleAddTodaysRevenue = () => {
     setEditingEntry(null);
-    setShowRevenueModal(true);
+    setShowRevenuePanel(true);
   };
 
   const handleEdit = (entry: RevenueEntry) => {
@@ -78,7 +71,7 @@ const MyEntries = () => {
     
     if (hoursDiff <= 24) {
       setEditingEntry(entry);
-      setShowRevenueModal(true);
+      setShowRevenuePanel(true);
     } else {
       alert("Entry can only be edited within 24 hours of creation.");
     }
@@ -99,116 +92,127 @@ const MyEntries = () => {
     console.log("Export entries");
   };
 
-  const handleCloseModal = () => {
-    setShowRevenueModal(false);
+  const handleClosePanel = () => {
+    setShowRevenuePanel(false);
     setEditingEntry(null);
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">My Entries</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={handleFilter}>
-            <Filter className="h-4 w-4 mr-2" />
-            Filter
-          </Button>
-          <Button variant="outline" onClick={handleExport}>
-            <FileDown className="h-4 w-4 mr-2" />
-            Export Entries
-          </Button>
-          <Button onClick={handleAddTodaysRevenue}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Today's Revenue
-          </Button>
+    <div className="flex h-full">
+      {/* Main Content */}
+      <div className={`flex-1 space-y-6 ${showRevenuePanel ? 'mr-96' : ''} transition-all duration-300`}>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-900">My Entries</h1>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleFilter}>
+              <Filter className="h-4 w-4 mr-2" />
+              Filter
+            </Button>
+            <Button variant="outline" onClick={handleExport}>
+              <FileDown className="h-4 w-4 mr-2" />
+              Export Entries
+            </Button>
+            <Button onClick={handleAddTodaysRevenue}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Today's Revenue
+            </Button>
+          </div>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Revenue Entries</CardTitle>
+            <CardDescription>
+              Track and manage your daily revenue submissions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead>Total Revenue</TableHead>
+                  <TableHead>Occupancy %</TableHead>
+                  <TableHead>ADR</TableHead>
+                  <TableHead>Other Revenue</TableHead>
+                  <TableHead>Notes</TableHead>
+                  <TableHead>Revenue Submitted</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {entries.map((entry) => (
+                  <TableRow key={entry.id}>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span>{format(entry.date, "MMM dd, yyyy")}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      ${entry.totalRevenue.toLocaleString()}
+                    </TableCell>
+                    <TableCell>{entry.occupancyPercent}%</TableCell>
+                    <TableCell>${entry.adr}</TableCell>
+                    <TableCell>${entry.otherRevenue.toLocaleString()}</TableCell>
+                    <TableCell className="max-w-[200px] truncate">
+                      {entry.notes}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={entry.revenueSubmitted ? "default" : "secondary"}>
+                        {entry.revenueSubmitted ? "Yes" : "No"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleViewDetails(entry)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(entry)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Revenue Entries</CardTitle>
-          <CardDescription>
-            Track and manage your daily revenue submissions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date & Time</TableHead>
-                <TableHead>Total Revenue</TableHead>
-                <TableHead>Occupancy %</TableHead>
-                <TableHead>ADR</TableHead>
-                <TableHead>Other Revenue</TableHead>
-                <TableHead>Notes</TableHead>
-                <TableHead>Revenue Submitted</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {entries.map((entry) => (
-                <TableRow key={entry.id}>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span>{format(entry.date, "MMM dd, yyyy")}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    ${entry.totalRevenue.toLocaleString()}
-                  </TableCell>
-                  <TableCell>{entry.occupancyPercent}%</TableCell>
-                  <TableCell>${entry.adr}</TableCell>
-                  <TableCell>${entry.otherRevenue.toLocaleString()}</TableCell>
-                  <TableCell className="max-w-[200px] truncate">
-                    {entry.notes}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={entry.revenueSubmitted ? "default" : "secondary"}>
-                      {entry.revenueSubmitted ? "Yes" : "No"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleViewDetails(entry)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEdit(entry)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      <Dialog open={showRevenueModal} onOpenChange={setShowRevenueModal}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {editingEntry ? "Edit Revenue Entry" : "Add Today's Revenue"}
-            </DialogTitle>
-            <DialogDescription>
-              {editingEntry ? "Update your revenue entry" : "Submit your daily revenue data"}
-            </DialogDescription>
-          </DialogHeader>
-          <RevenueEntryForm 
-            entry={editingEntry}
-            onClose={handleCloseModal}
-          />
-        </DialogContent>
-      </Dialog>
+      {/* Right Side Panel */}
+      {showRevenuePanel && (
+        <div className="fixed right-0 top-0 h-full w-96 bg-white border-l shadow-lg z-50 overflow-y-auto">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-semibold">
+                  {editingEntry ? "Edit Revenue Entry" : "Add Today's Revenue"}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {editingEntry ? "Update your revenue entry" : "Submit your daily revenue data"}
+                </p>
+              </div>
+              <Button variant="ghost" size="icon" onClick={handleClosePanel}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <RevenueEntryForm 
+              entry={editingEntry}
+              onClose={handleClosePanel}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

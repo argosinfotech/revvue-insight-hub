@@ -84,7 +84,8 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
                 <Input 
                   type="date" 
                   {...field}
-                  disabled={!isEditing} // Auto-picked for new entries
+                  disabled={!isEditing}
+                  className="bg-gray-50"
                 />
               </FormControl>
               <FormMessage />
@@ -101,7 +102,7 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
               <FormControl>
                 <Input 
                   type="number" 
-                  placeholder="0.00"
+                  placeholder="0"
                   {...field}
                   onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                 />
@@ -141,7 +142,7 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
               <FormControl>
                 <Input 
                   type="number" 
-                  placeholder="0.00"
+                  placeholder="0"
                   {...field}
                   onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                 />
@@ -160,7 +161,7 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
               <FormControl>
                 <Input 
                   type="number" 
-                  placeholder="0.00"
+                  placeholder="0"
                   {...field}
                   onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                 />
@@ -188,9 +189,9 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
           )}
         />
 
-        <div className="flex flex-col gap-2 pt-4">
-          <Button type="submit" className="w-full">
-            {isEditing ? "Update Entry" : "Submit"}
+        <div className="space-y-3 pt-4">
+          <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+            Submit
           </Button>
           <Button 
             type="button" 
