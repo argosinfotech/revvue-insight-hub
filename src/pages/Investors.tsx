@@ -184,7 +184,7 @@ const Investors = () => {
                   <TableHead>Investor</TableHead>
                   <TableHead>Phone Number</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Hotels Invested In</TableHead>
+                  <TableHead>Number of Hotels</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Last Login</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
