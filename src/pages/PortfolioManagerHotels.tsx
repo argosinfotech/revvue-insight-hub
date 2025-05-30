@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Building2, Plus, Trash2, Users, Search, Eye, Edit, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -123,7 +122,6 @@ const PortfolioManagerHotels = () => {
   
   const [hotelForm, setHotelForm] = useState({
     name: "",
-    managerName: "",
     address1: "",
     address2: "",
     city: "",
@@ -140,7 +138,6 @@ const PortfolioManagerHotels = () => {
   const resetForm = () => {
     setHotelForm({
       name: "",
-      managerName: "",
       address1: "",
       address2: "",
       city: "",
@@ -153,7 +150,7 @@ const PortfolioManagerHotels = () => {
   };
 
   const handleAddHotel = () => {
-    if (!hotelForm.name || !hotelForm.managerName || !hotelForm.address1 || 
+    if (!hotelForm.name || !hotelForm.address1 || 
         !hotelForm.city || !hotelForm.state || !hotelForm.area || !hotelForm.zipCode) {
       toast.error("All required fields must be filled");
       return;
@@ -162,7 +159,7 @@ const PortfolioManagerHotels = () => {
     const newHotel: Hotel = {
       id: Date.now().toString(),
       name: hotelForm.name,
-      managerName: hotelForm.managerName,
+      managerName: "To be assigned", // Default value since manager name removed from form
       address1: hotelForm.address1,
       address2: hotelForm.address2,
       city: hotelForm.city,
@@ -184,7 +181,7 @@ const PortfolioManagerHotels = () => {
   const handleEditHotel = () => {
     if (!editingHotel) return;
     
-    if (!hotelForm.name || !hotelForm.managerName || !hotelForm.address1 || 
+    if (!hotelForm.name || !hotelForm.address1 || 
         !hotelForm.city || !hotelForm.state || !hotelForm.area || !hotelForm.zipCode) {
       toast.error("All required fields must be filled");
       return;
@@ -195,7 +192,6 @@ const PortfolioManagerHotels = () => {
         return {
           ...hotel,
           name: hotelForm.name,
-          managerName: hotelForm.managerName,
           address1: hotelForm.address1,
           address2: hotelForm.address2,
           city: hotelForm.city,
@@ -229,7 +225,6 @@ const PortfolioManagerHotels = () => {
     setEditingHotel(hotel);
     setHotelForm({
       name: hotel.name,
-      managerName: hotel.managerName,
       address1: hotel.address1,
       address2: hotel.address2 || "",
       city: hotel.city,
@@ -273,16 +268,6 @@ const PortfolioManagerHotels = () => {
                     value={hotelForm.name}
                     onChange={(e) => setHotelForm({ ...hotelForm, name: e.target.value })}
                     placeholder="Enter hotel name"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="managerName">Manager Name *</Label>
-                  <Input
-                    id="managerName"
-                    value={hotelForm.managerName}
-                    onChange={(e) => setHotelForm({ ...hotelForm, managerName: e.target.value })}
-                    placeholder="Enter manager name"
                   />
                 </div>
                 
