@@ -290,50 +290,6 @@ const PortfolioInvestors = () => {
           </Button>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid gap-6 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Investors</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalInvestors}</div>
-              <p className="text-xs text-muted-foreground">
-                {activeInvestors} active investors
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Investment</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">${totalInvestment.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">
-                Across all properties
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Average Investment</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                ${Math.round(totalInvestment / totalInvestors).toLocaleString()}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Per investor
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Search and Filter */}
         <div className="flex gap-4 items-center">
           <div className="relative flex-1 max-w-md">
@@ -376,7 +332,7 @@ const PortfolioInvestors = () => {
                     <TableHead>Investor Name</TableHead>
                     <TableHead>Phone Number</TableHead>
                     <TableHead>Email</TableHead>
-                    <TableHead>Hotels Invested</TableHead>
+                    <TableHead>Number of Hotels</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Last Login</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -398,15 +354,7 @@ const PortfolioInvestors = () => {
                         </TableCell>
                         <TableCell>{investor.phone}</TableCell>
                         <TableCell>{investor.email}</TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {investor.hotelsInvested.map((hotel, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
-                                {hotel}
-                              </Badge>
-                            ))}
-                          </div>
-                        </TableCell>
+                        <TableCell>{investor.hotelsInvested.length}</TableCell>
                         <TableCell>
                           <Badge className={getStatusColor(investor.status)}>
                             {getStatusLabel(investor.status)}
