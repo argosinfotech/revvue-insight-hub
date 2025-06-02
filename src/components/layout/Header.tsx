@@ -49,7 +49,7 @@ const Header = ({ userRole }: HeaderProps) => {
   const userInitials = getUserInitials();
 
   return (
-    <header className="h-16 border-b flex items-center justify-end px-6 bg-white sticky top-0 z-40 w-full">
+    <header className="h-16 flex items-center justify-end px-6 bg-white sticky top-0 z-40 w-full">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
