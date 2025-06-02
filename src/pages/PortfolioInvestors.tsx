@@ -92,11 +92,6 @@ interface InvestorFormData {
   email: string;
   hotel: string;
   sharePercentage: number;
-  address1?: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
   status: string;
   sendInvitation: boolean;
   sendSMS: boolean;
@@ -120,11 +115,6 @@ const PortfolioInvestors = () => {
       email: "",
       hotel: "",
       sharePercentage: 0,
-      address1: "",
-      address2: "",
-      city: "",
-      state: "",
-      zipCode: "",
       status: "invite_sent",
       sendInvitation: true,
       sendSMS: false,
@@ -235,11 +225,6 @@ const PortfolioInvestors = () => {
       email: investor.email,
       hotel: investor.hotelsInvested[0] || "",
       sharePercentage: 15, // Mock percentage
-      address1: investor.address1 || "",
-      address2: investor.address2 || "",
-      city: investor.city || "",
-      state: investor.state || "",
-      zipCode: investor.zipCode || "",
       status: investor.status,
       sendInvitation: false,
       sendSMS: false,
@@ -653,77 +638,6 @@ const PortfolioInvestors = () => {
                             {...field} 
                             onChange={(e) => field.onChange(parseFloat(e.target.value))}
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="address1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address 1</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter address line 1" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address 2</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter address line 2" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>City</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter city" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="state"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>State</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter state" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="zipCode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Zip Code</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter zip code" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
