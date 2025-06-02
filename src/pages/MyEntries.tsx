@@ -14,6 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import RevenueEntryForm from "@/components/RevenueEntryForm";
+import DashboardLayout from "@/components/DashboardLayout";
 
 interface RevenueEntry {
   id: string;
@@ -109,108 +110,110 @@ const MyEntries = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">My Entries</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={handleFilter}>
-            <Filter className="h-4 w-4 mr-2" />
-            Filter
-          </Button>
-          <Button variant="outline" onClick={handleExport}>
-            <FileDown className="h-4 w-4 mr-2" />
-            Export Entries
-          </Button>
-          <Sheet open={showRevenuePanel} onOpenChange={setShowRevenuePanel}>
-            <SheetTrigger asChild>
-              <Button className="bg-purple-600 hover:bg-purple-700" onClick={resetForm}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Today's Revenue
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-[400px] sm:w-[540px]">
-              <SheetHeader>
-                <SheetTitle>{editingEntry ? "Edit Revenue Entry" : "Add Today's Revenue"}</SheetTitle>
-                <SheetDescription>
-                  {editingEntry ? "Update your revenue entry" : "Submit your daily revenue data"}
-                </SheetDescription>
-              </SheetHeader>
-              <div className="py-4">
-                <RevenueEntryForm 
-                  entry={editingEntry}
-                  onClose={handleClosePanel}
-                />
-              </div>
-            </SheetContent>
-          </Sheet>
+    <DashboardLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-900">My Entries</h1>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleFilter}>
+              <Filter className="h-4 w-4 mr-2" />
+              Filter
+            </Button>
+            <Button variant="outline" onClick={handleExport}>
+              <FileDown className="h-4 w-4 mr-2" />
+              Export Entries
+            </Button>
+            <Sheet open={showRevenuePanel} onOpenChange={setShowRevenuePanel}>
+              <SheetTrigger asChild>
+                <Button className="bg-purple-600 hover:bg-purple-700" onClick={resetForm}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Today's Revenue
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-[400px] sm:w-[540px]">
+                <SheetHeader>
+                  <SheetTitle>{editingEntry ? "Edit Revenue Entry" : "Add Today's Revenue"}</SheetTitle>
+                  <SheetDescription>
+                    {editingEntry ? "Update your revenue entry" : "Submit your daily revenue data"}
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="py-4">
+                  <RevenueEntryForm 
+                    entry={editingEntry}
+                    onClose={handleClosePanel}
+                  />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
-      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Revenue Entries</CardTitle>
-          <CardDescription>
-            Track and manage your daily revenue submissions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date & Time</TableHead>
-                <TableHead>Total Revenue</TableHead>
-                <TableHead>Occupancy %</TableHead>
-                <TableHead>ADR</TableHead>
-                <TableHead>Other Revenue</TableHead>
-                <TableHead>Revenue Submitted</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {entries.map((entry) => (
-                <TableRow key={entry.id}>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span>{format(entry.date, "MMM dd, yyyy")}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    ${entry.totalRevenue.toLocaleString()}
-                  </TableCell>
-                  <TableCell>{entry.occupancyPercent}%</TableCell>
-                  <TableCell>${entry.adr}</TableCell>
-                  <TableCell>${entry.otherRevenue.toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Badge variant={entry.revenueSubmitted ? "default" : "secondary"}>
-                      {entry.revenueSubmitted ? "Yes" : "No"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleViewDetails(entry)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEdit(entry)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+        <Card>
+          <CardHeader>
+            <CardTitle>Revenue Entries</CardTitle>
+            <CardDescription>
+              Track and manage your daily revenue submissions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead>Total Revenue</TableHead>
+                  <TableHead>Occupancy %</TableHead>
+                  <TableHead>ADR</TableHead>
+                  <TableHead>Other Revenue</TableHead>
+                  <TableHead>Revenue Submitted</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+              </TableHeader>
+              <TableBody>
+                {entries.map((entry) => (
+                  <TableRow key={entry.id}>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span>{format(entry.date, "MMM dd, yyyy")}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      ${entry.totalRevenue.toLocaleString()}
+                    </TableCell>
+                    <TableCell>{entry.occupancyPercent}%</TableCell>
+                    <TableCell>${entry.adr}</TableCell>
+                    <TableCell>${entry.otherRevenue.toLocaleString()}</TableCell>
+                    <TableCell>
+                      <Badge variant={entry.revenueSubmitted ? "default" : "secondary"}>
+                        {entry.revenueSubmitted ? "Yes" : "No"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleViewDetails(entry)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(entry)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardLayout>
   );
 };
 
