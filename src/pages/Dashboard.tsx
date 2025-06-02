@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -46,8 +47,8 @@ const StatCard = ({ icon, title, value, description, trend }: {
       {icon}
     </CardHeader>
     <CardContent className="p-0">
-      <div className="text-2xl font-bold">{value}</div>
-      <div className="flex items-center space-x-1">
+      <div className="text-3xl font-bold">{value}</div>
+      <div className="flex items-center space-x-1 mt-1">
         {trend && (
           <span className={`text-xs ${trend.positive ? 'text-green-500' : 'text-red-500'}`}>
             {trend.value}
@@ -62,50 +63,34 @@ const StatCard = ({ icon, title, value, description, trend }: {
 const Dashboard = () => {
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-            <p className="text-muted-foreground">
-              Welcome to RevVue Insight Hub admin dashboard
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" className="gap-1">
-              <FileText size={16} />
-              Reports
-            </Button>
-            <Button className="gap-1 bg-brand-purple hover:bg-brand-purple-dark">
-              <Download size={16} />
-              Export Data
-            </Button>
-          </div>
-        </div>
+      <div className="space-y-8 w-full">
+        {/* Header removed since it's now in the Header component */}
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Stats Cards - 4 column layout like the reference */}
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full">
           <StatCard 
-            icon={<Building2 className="h-4 w-4 text-muted-foreground" />} 
+            icon={<Building2 className="h-5 w-5 text-muted-foreground" />} 
             title="Total Hotels"
             value="67"
             description="Total registered hotels"
             trend={{ value: "+5.2%", positive: true }}
           />
           <StatCard 
-            icon={<Users className="h-4 w-4 text-muted-foreground" />} 
+            icon={<Users className="h-5 w-5 text-muted-foreground" />} 
             title="Active Investors"
             value="243"
             description="Across all hotels"
             trend={{ value: "+12.5%", positive: true }}
           />
           <StatCard 
-            icon={<DollarSign className="h-4 w-4 text-muted-foreground" />} 
+            icon={<DollarSign className="h-5 w-5 text-muted-foreground" />} 
             title="Monthly Revenue"
             value="$8,942"
             description="From subscriptions"
             trend={{ value: "+4.3%", positive: true }}
           />
           <StatCard 
-            icon={<Calendar className="h-4 w-4 text-muted-foreground" />} 
+            icon={<Calendar className="h-5 w-5 text-muted-foreground" />} 
             title="Revenue Entries"
             value="1,289"
             description="Last 30 days"
@@ -113,8 +98,77 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
+        {/* Recent Activity Table */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Timestamp</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">User</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Action</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b">
+                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-20 14:35:00</td>
+                    <td className="py-3 px-4 text-sm">John Doe</td>
+                    <td className="py-3 px-4 text-sm">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        HOTEL CREATE
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-sm text-blue-600">Created new hotel: Grand Plaza</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-19 11:22:00</td>
+                    <td className="py-3 px-4 text-sm">Alice Smith</td>
+                    <td className="py-3 px-4 text-sm">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        INVESTOR UPDATE
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-sm text-blue-600">Updated investor portfolio</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-18 09:15:00</td>
+                    <td className="py-3 px-4 text-sm">John Doe</td>
+                    <td className="py-3 px-4 text-sm">USER CREATE</td>
+                    <td className="py-3 px-4 text-sm text-blue-600">Created new user: Bob Johnson</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-17 16:40:00</td>
+                    <td className="py-3 px-4 text-sm">Alice Smith</td>
+                    <td className="py-3 px-4 text-sm">REVENUE CREATE</td>
+                    <td className="py-3 px-4 text-sm text-blue-600">Created revenue entry</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-16 10:30:00</td>
+                    <td className="py-3 px-4 text-sm">John Doe</td>
+                    <td className="py-3 px-4 text-sm">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        HOTEL DELETE
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-sm text-blue-600">Deleted outdated hotel records</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Charts Section */}
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 w-full">
+          <Card className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -134,7 +188,7 @@ const Dashboard = () => {
               </div>
             </CardHeader>
             <CardContent className="pt-2">
-              <div className="h-80">
+              <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={hotelSignups}
@@ -164,7 +218,7 @@ const Dashboard = () => {
             </CardFooter>
           </Card>
 
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -184,7 +238,7 @@ const Dashboard = () => {
               </div>
             </CardHeader>
             <CardContent className="pt-2">
-              <div className="h-80">
+              <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     data={revenueData}
@@ -218,68 +272,6 @@ const Dashboard = () => {
               <Button variant="ghost" size="icon">
                 <Download size={16} />
               </Button>
-            </CardFooter>
-          </Card>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Hotels</CardTitle>
-              <CardDescription>Newly registered hotels in the system</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-brand-purple-light flex items-center justify-center">
-                        <Building2 size={20} className="text-brand-purple" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Grand Hotel {i}</p>
-                        <p className="text-sm text-muted-foreground">Added 2 days ago</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      View <ArrowRight size={14} className="ml-1" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">View All Hotels</Button>
-            </CardFooter>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Investors</CardTitle>
-              <CardDescription>Newly added investors in the system</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-brand-purple-light flex items-center justify-center">
-                        <Users size={20} className="text-brand-purple" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Investor {i}</p>
-                        <p className="text-sm text-muted-foreground">Joined 3 days ago</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      View <ArrowRight size={14} className="ml-1" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">View All Investors</Button>
             </CardFooter>
           </Card>
         </div>

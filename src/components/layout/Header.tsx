@@ -1,7 +1,8 @@
 
 import { useNavigate } from "react-router-dom";
-import { Bell, User, Lock, LogOut } from "lucide-react";
+import { Bell, User, Lock, LogOut, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -50,9 +51,27 @@ const Header = ({ userRole }: HeaderProps) => {
   const userInitials = getUserInitials();
 
   return (
-    <header className="h-16 border-b flex items-center justify-end px-6 bg-white sticky top-0 z-40">
+    <header className="h-16 border-b flex items-center justify-between px-6 bg-white sticky top-0 z-40 w-full">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm">
+        <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <Button variant="ghost" size="sm" className="h-8">
+            🔄 Refresh
+          </Button>
+          <span>Last updated: 6:12:50 PM</span>
+        </div>
+      </div>
+      
+      <div className="flex items-center gap-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input 
+            placeholder="Search..." 
+            className="pl-10 w-64 h-9"
+          />
+        </div>
+        
+        <Button variant="outline" size="sm" className="h-9">
           <Bell size={16} className="mr-1" /> 
           Notifications
         </Button>
