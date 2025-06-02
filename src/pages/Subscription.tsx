@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
+import DashboardLayout from "@/components/DashboardLayout";
 
 // Sample data
 const latestSubscription = {
@@ -167,356 +168,358 @@ const Subscription = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Subscription</h1>
-          <p className="text-muted-foreground">
-            Manage your subscription plans and billing information
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline">
-                <User size={16} className="mr-2" />
-                Update Billing Info
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Update Billing Information</SheetTitle>
-                <SheetDescription>
-                  Update your billing address and contact information
-                </SheetDescription>
-              </SheetHeader>
-              <form onSubmit={handleUpdateBillingInfo} className="space-y-6 mt-6">
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" defaultValue="John" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" defaultValue="Smith" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" defaultValue="john.smith@example.com" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" defaultValue="+1 (555) 123-4567" />
-                  </div>
-                  <Separator />
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Address</Label>
-                    <Input id="address" defaultValue="123 Main Street" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input id="city" defaultValue="New York" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="state">State</Label>
-                      <Input id="state" defaultValue="NY" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="zipCode">ZIP Code</Label>
-                      <Input id="zipCode" defaultValue="10001" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Country</Label>
-                      <Select defaultValue="us">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="us">United States</SelectItem>
-                          <SelectItem value="ca">Canada</SelectItem>
-                          <SelectItem value="uk">United Kingdom</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-                <Button type="submit" className="w-full">
-                  Update Billing Information
+    <DashboardLayout>
+      <div className="space-y-8">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Subscription</h1>
+            <p className="text-muted-foreground">
+              Manage your subscription plans and billing information
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline">
+                  <User size={16} className="mr-2" />
+                  Update Billing Info
                 </Button>
-              </form>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-
-      <Tabs defaultValue="subscription" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="subscription">
-            <Calendar className="h-4 w-4 mr-2" />
-            Subscription
-          </TabsTrigger>
-          <TabsTrigger value="payments">
-            <DollarSign className="h-4 w-4 mr-2" />
-            Payments
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="subscription" className="space-y-8">
-          {/* Latest Subscription Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar size={20} />
-                Latest Subscription
-              </CardTitle>
-              <CardDescription>
-                Your current active subscription details
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Plan Type</p>
-                  <p className="text-lg font-semibold">{latestSubscription.planType}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Plan Amount</p>
-                  <p className="text-lg font-semibold text-green-600">{latestSubscription.planAmount}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Next Billing Date</p>
-                  <p className="text-lg font-semibold">{latestSubscription.nextBillingDate}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Subscription ID</p>
-                  <p className="text-lg font-mono">{latestSubscription.subscriptionId}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Plan Status</p>
-                  <Badge variant={latestSubscription.planStatus === "active" ? "default" : "secondary"} 
-                         className={latestSubscription.planStatus === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
-                    {latestSubscription.planStatus === "active" ? "Active" : "Inactive"}
-                  </Badge>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Plan ID</p>
-                  <p className="text-lg font-mono">{latestSubscription.planId}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Contact Name</p>
-                  <p className="text-lg font-semibold">{latestSubscription.contactName}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Last Paid Amount</p>
-                  <p className="text-lg font-semibold text-blue-600">{latestSubscription.lastPayedAmount}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Last Payment Date</p>
-                  <p className="text-lg font-semibold">{latestSubscription.lastPaymentDate}</p>
-                </div>
-              </div>
-              
-              {/* Action Buttons */}
-              <div className="flex gap-2 mt-6 pt-6 border-t">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="outline">
-                      <Settings size={16} className="mr-2" />
-                      Change Plan
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>Change Subscription Plan</SheetTitle>
-                      <SheetDescription>
-                        Choose a different plan that fits your needs
-                      </SheetDescription>
-                    </SheetHeader>
-                    <form onSubmit={handleChangePlan} className="space-y-6 mt-6">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label>Select Plan</Label>
-                          <RadioGroup value={selectedPlan} onValueChange={setSelectedPlan}>
-                            {plans.map((plan) => (
-                              <div key={plan.id} className="flex items-center space-x-2 p-4 border rounded-lg">
-                                <RadioGroupItem value={plan.id} id={plan.id} />
-                                <div className="flex-1">
-                                  <Label htmlFor={plan.id} className="font-medium">
-                                    {plan.name}
-                                  </Label>
-                                  <p className="text-sm text-muted-foreground">
-                                    {plan.hotels} Hotels, {plan.investors} Investors
-                                  </p>
-                                  <p className="text-sm font-medium">
-                                    {billingPeriod === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
-                                    /{billingPeriod === "monthly" ? "month" : "year"}
-                                  </p>
-                                </div>
-                              </div>
-                            ))}
-                          </RadioGroup>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Billing Period</Label>
-                          <RadioGroup value={billingPeriod} onValueChange={setBillingPeriod}>
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="monthly" id="monthly" />
-                              <Label htmlFor="monthly">Monthly</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="yearly" id="yearly" />
-                              <Label htmlFor="yearly">Yearly (Save 17%)</Label>
-                            </div>
-                          </RadioGroup>
-                        </div>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Update Billing Information</SheetTitle>
+                  <SheetDescription>
+                    Update your billing address and contact information
+                  </SheetDescription>
+                </SheetHeader>
+                <form onSubmit={handleUpdateBillingInfo} className="space-y-6 mt-6">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input id="firstName" defaultValue="John" />
                       </div>
-                      <Button type="submit" className="w-full">
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <Input id="lastName" defaultValue="Smith" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" type="email" defaultValue="john.smith@example.com" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input id="phone" defaultValue="+1 (555) 123-4567" />
+                    </div>
+                    <Separator />
+                    <div className="space-y-2">
+                      <Label htmlFor="address">Address</Label>
+                      <Input id="address" defaultValue="123 Main Street" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="city">City</Label>
+                        <Input id="city" defaultValue="New York" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="state">State</Label>
+                        <Input id="state" defaultValue="NY" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="zipCode">ZIP Code</Label>
+                        <Input id="zipCode" defaultValue="10001" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="country">Country</Label>
+                        <Select defaultValue="us">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="us">United States</SelectItem>
+                            <SelectItem value="ca">Canada</SelectItem>
+                            <SelectItem value="uk">United Kingdom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full">
+                    Update Billing Information
+                  </Button>
+                </form>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+
+        <Tabs defaultValue="subscription" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="subscription">
+              <Calendar className="h-4 w-4 mr-2" />
+              Subscription
+            </TabsTrigger>
+            <TabsTrigger value="payments">
+              <DollarSign className="h-4 w-4 mr-2" />
+              Payments
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="subscription" className="space-y-8">
+            {/* Latest Subscription Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar size={20} />
+                  Latest Subscription
+                </CardTitle>
+                <CardDescription>
+                  Your current active subscription details
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Plan Type</p>
+                    <p className="text-lg font-semibold">{latestSubscription.planType}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Plan Amount</p>
+                    <p className="text-lg font-semibold text-green-600">{latestSubscription.planAmount}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Next Billing Date</p>
+                    <p className="text-lg font-semibold">{latestSubscription.nextBillingDate}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Subscription ID</p>
+                    <p className="text-lg font-mono">{latestSubscription.subscriptionId}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Plan Status</p>
+                    <Badge variant={latestSubscription.planStatus === "active" ? "default" : "secondary"} 
+                           className={latestSubscription.planStatus === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
+                      {latestSubscription.planStatus === "active" ? "Active" : "Inactive"}
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Plan ID</p>
+                    <p className="text-lg font-mono">{latestSubscription.planId}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Contact Name</p>
+                    <p className="text-lg font-semibold">{latestSubscription.contactName}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Last Paid Amount</p>
+                    <p className="text-lg font-semibold text-blue-600">{latestSubscription.lastPayedAmount}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Last Payment Date</p>
+                    <p className="text-lg font-semibold">{latestSubscription.lastPaymentDate}</p>
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex gap-2 mt-6 pt-6 border-t">
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline">
+                        <Settings size={16} className="mr-2" />
                         Change Plan
                       </Button>
-                    </form>
-                  </SheetContent>
-                </Sheet>
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>Change Subscription Plan</SheetTitle>
+                        <SheetDescription>
+                          Choose a different plan that fits your needs
+                        </SheetDescription>
+                      </SheetHeader>
+                      <form onSubmit={handleChangePlan} className="space-y-6 mt-6">
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <Label>Select Plan</Label>
+                            <RadioGroup value={selectedPlan} onValueChange={setSelectedPlan}>
+                              {plans.map((plan) => (
+                                <div key={plan.id} className="flex items-center space-x-2 p-4 border rounded-lg">
+                                  <RadioGroupItem value={plan.id} id={plan.id} />
+                                  <div className="flex-1">
+                                    <Label htmlFor={plan.id} className="font-medium">
+                                      {plan.name}
+                                    </Label>
+                                    <p className="text-sm text-muted-foreground">
+                                      {plan.hotels} Hotels, {plan.investors} Investors
+                                    </p>
+                                    <p className="text-sm font-medium">
+                                      {billingPeriod === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+                                      /{billingPeriod === "monthly" ? "month" : "year"}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </RadioGroup>
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Billing Period</Label>
+                            <RadioGroup value={billingPeriod} onValueChange={setBillingPeriod}>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="monthly" id="monthly" />
+                                <Label htmlFor="monthly">Monthly</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="yearly" id="yearly" />
+                                <Label htmlFor="yearly">Yearly (Save 17%)</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+                        </div>
+                        <Button type="submit" className="w-full">
+                          Change Plan
+                        </Button>
+                      </form>
+                    </SheetContent>
+                  </Sheet>
 
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive">
-                      Cancel Subscription
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure you want to cancel your subscription?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action will cancel your subscription. You will continue to have access to your account until the end of your current billing period ({latestSubscription.nextBillingDate}). This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Keep Subscription</AlertDialogCancel>
-                      <AlertDialogAction 
-                        onClick={handleCancelSubscription}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                      >
-                        Yes, Cancel Subscription
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            </CardContent>
-          </Card>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive">
+                        Cancel Subscription
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure you want to cancel your subscription?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action will cancel your subscription. You will continue to have access to your account until the end of your current billing period ({latestSubscription.nextBillingDate}). This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Keep Subscription</AlertDialogCancel>
+                        <AlertDialogAction 
+                          onClick={handleCancelSubscription}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Yes, Cancel Subscription
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Subscriptions Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText size={20} />
-                Subscriptions
-              </CardTitle>
-              <CardDescription>
-                All your subscription plans history
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Subscription Plan</TableHead>
-                      <TableHead>Subscription Period</TableHead>
-                      <TableHead>Plan Status</TableHead>
-                      <TableHead>Pay Mode</TableHead>
-                      <TableHead>Plan Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {subscriptions.map((subscription) => (
-                      <TableRow key={subscription.id}>
-                        <TableCell className="font-medium">{subscription.subscriptionPlan}</TableCell>
-                        <TableCell>{subscription.subscriptionPeriod}</TableCell>
-                        <TableCell>
-                          <Badge variant={subscription.planStatus === "active" ? "default" : "secondary"} 
-                                 className={subscription.planStatus === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
-                            {subscription.planStatus === "active" ? "Active" : "Cancelled"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{subscription.payMode}</TableCell>
-                        <TableCell className="font-semibold">{subscription.planAmount}</TableCell>
+            {/* Subscriptions Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText size={20} />
+                  Subscriptions
+                </CardTitle>
+                <CardDescription>
+                  All your subscription plans history
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Subscription Plan</TableHead>
+                        <TableHead>Subscription Period</TableHead>
+                        <TableHead>Plan Status</TableHead>
+                        <TableHead>Pay Mode</TableHead>
+                        <TableHead>Plan Amount</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {subscriptions.map((subscription) => (
+                        <TableRow key={subscription.id}>
+                          <TableCell className="font-medium">{subscription.subscriptionPlan}</TableCell>
+                          <TableCell>{subscription.subscriptionPeriod}</TableCell>
+                          <TableCell>
+                            <Badge variant={subscription.planStatus === "active" ? "default" : "secondary"} 
+                                   className={subscription.planStatus === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
+                              {subscription.planStatus === "active" ? "Active" : "Cancelled"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{subscription.payMode}</TableCell>
+                          <TableCell className="font-semibold">{subscription.planAmount}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="payments" className="space-y-4">
-          {/* Payments Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign size={20} />
-                Payments
-              </CardTitle>
-              <CardDescription>
-                Your payment history and receipts
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Payment Date</TableHead>
-                      <TableHead>Payment Status</TableHead>
-                      <TableHead>Plan Name</TableHead>
-                      <TableHead>Plan Duration</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {payments.map((payment) => (
-                      <TableRow key={payment.id}>
-                        <TableCell>{payment.paymentDate}</TableCell>
-                        <TableCell>
-                          <Badge 
-                            variant={payment.paymentStatus === "completed" ? "default" : "destructive"}
-                            className={payment.paymentStatus === "completed" ? "bg-green-500 hover:bg-green-600" : ""}
-                          >
-                            {payment.paymentStatus === "completed" ? "Completed" : payment.paymentStatus === "failed" ? "Failed" : payment.paymentStatus}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{payment.planName}</TableCell>
-                        <TableCell>{payment.planDuration}</TableCell>
-                        <TableCell className="font-semibold">{payment.amount}</TableCell>
-                        <TableCell className="text-right">
-                          {payment.paymentStatus === "completed" && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleDownloadReceipt(payment.id)}
+          <TabsContent value="payments" className="space-y-4">
+            {/* Payments Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <DollarSign size={20} />
+                  Payments
+                </CardTitle>
+                <CardDescription>
+                  Your payment history and receipts
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Payment Date</TableHead>
+                        <TableHead>Payment Status</TableHead>
+                        <TableHead>Plan Name</TableHead>
+                        <TableHead>Plan Duration</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {payments.map((payment) => (
+                        <TableRow key={payment.id}>
+                          <TableCell>{payment.paymentDate}</TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant={payment.paymentStatus === "completed" ? "default" : "destructive"}
+                              className={payment.paymentStatus === "completed" ? "bg-green-500 hover:bg-green-600" : ""}
                             >
-                              <Download size={14} className="mr-1" />
-                              Download Receipt
-                            </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+                              {payment.paymentStatus === "completed" ? "Completed" : payment.paymentStatus === "failed" ? "Failed" : payment.paymentStatus}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{payment.planName}</TableCell>
+                          <TableCell>{payment.planDuration}</TableCell>
+                          <TableCell className="font-semibold">{payment.amount}</TableCell>
+                          <TableCell className="text-right">
+                            {payment.paymentStatus === "completed" && (
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDownloadReceipt(payment.id)}
+                              >
+                                <Download size={14} className="mr-1" />
+                                Download Receipt
+                              </Button>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </DashboardLayout>
   );
 };
 
