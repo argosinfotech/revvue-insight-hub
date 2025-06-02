@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,8 +34,8 @@ const StaffDashboard = () => {
   ]);
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+    <div className="min-h-screen w-full bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -186,7 +185,7 @@ const StaffDashboard = () => {
           </Card>
         </div>
       </div>
-    </DashboardLayout>
+    </div>
   );
 };
 
