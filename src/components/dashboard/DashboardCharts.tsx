@@ -27,9 +27,9 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
   ];
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 w-full">
       {/* Monthly Revenue Chart */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Monthly Revenue</CardTitle>
           <CardDescription>
@@ -37,7 +37,7 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-80">
+          <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={monthlyRevenueData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -63,7 +63,7 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
       </Card>
 
       {/* Weekly Bookings Percentage Chart */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Weekly Booking Percentage</CardTitle>
           <CardDescription>
@@ -71,7 +71,7 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-80">
+          <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={weeklyBookingsData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />

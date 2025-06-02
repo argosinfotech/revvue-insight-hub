@@ -47,7 +47,7 @@ const QuickActions = () => {
   ];
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-3 w-full">
       {actions.map((action, index) => (
         <Button
           key={index}
