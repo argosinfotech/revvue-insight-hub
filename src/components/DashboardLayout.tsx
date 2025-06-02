@@ -21,9 +21,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen w-full">
         <Header userRole={userRole} />
-        <main className="flex-1 w-full bg-gray-50">{children}</main>
+        <main className="flex-1 w-full bg-gray-50 p-6">{children}</main>
       </div>
     </div>
   );
