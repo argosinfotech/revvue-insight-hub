@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -84,8 +83,7 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
                 <Input 
                   type="date" 
                   {...field}
-                  disabled={!isEditing}
-                  className="bg-gray-50"
+                  className="bg-white"
                 />
               </FormControl>
               <FormMessage />

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -163,7 +162,6 @@ const MyEntries = () => {
                 <TableHead>Occupancy %</TableHead>
                 <TableHead>ADR</TableHead>
                 <TableHead>Other Revenue</TableHead>
-                <TableHead>Notes</TableHead>
                 <TableHead>Revenue Submitted</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -183,9 +181,6 @@ const MyEntries = () => {
                   <TableCell>{entry.occupancyPercent}%</TableCell>
                   <TableCell>${entry.adr}</TableCell>
                   <TableCell>${entry.otherRevenue.toLocaleString()}</TableCell>
-                  <TableCell className="max-w-[200px] truncate">
-                    {entry.notes}
-                  </TableCell>
                   <TableCell>
                     <Badge variant={entry.revenueSubmitted ? "default" : "secondary"}>
                       {entry.revenueSubmitted ? "Yes" : "No"}
