@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -62,9 +63,15 @@ const StatCard = ({ icon, title, value, description, trend }: {
 const Dashboard = () => {
   return (
     <DashboardLayout>
-      <div className="w-full h-full">
+      <div className="h-full">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your hotels today.</p>
+        </div>
+
         {/* Stats Cards - Responsive grid */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full mb-6">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <StatCard 
             icon={<Building2 className="h-5 w-5 text-muted-foreground" />} 
             title="Total Hotels"
@@ -96,7 +103,7 @@ const Dashboard = () => {
         </div>
 
         {/* Recent Activity Table */}
-        <Card className="w-full mb-6">
+        <Card className="mb-8">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
           </CardHeader>
@@ -164,8 +171,8 @@ const Dashboard = () => {
         </Card>
 
         {/* Charts Section - Responsive grid */}
-        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 w-full">
-          <Card className="w-full">
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
+          <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
@@ -215,7 +222,7 @@ const Dashboard = () => {
             </CardFooter>
           </Card>
 
-          <Card className="w-full">
+          <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
