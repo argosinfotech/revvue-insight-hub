@@ -14,7 +14,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const userRole = useUserRole();
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex w-full">
       <Sidebar
         userRole={userRole}
         isOpen={isSidebarOpen}
@@ -28,7 +28,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         )}
       >
         <Header userRole={userRole} />
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-50">{children}</main>
+        <main className="flex-1 p-6 bg-gray-50">{children}</main>
       </div>
     </div>
   );
