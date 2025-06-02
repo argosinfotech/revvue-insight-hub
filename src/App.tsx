@@ -43,6 +43,7 @@ function App() {
           <Route path="/billing" element={<Billing />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/settings" element={<PortfolioSettings />} />
           
           {/* Portfolio Manager routes */}
           <Route path="/portfolio-dashboard" element={<PortfolioDashboard />} />
