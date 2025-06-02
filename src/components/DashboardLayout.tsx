@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       <div className="flex-1 flex flex-col min-h-screen w-full">
         <Header userRole={userRole} />
-        <main className="flex-1 w-full bg-gray-50 p-6 overflow-x-auto">{children}</main>
+        <main className="flex-1 w-full bg-gray-50 p-4 sm:p-6 overflow-x-auto">{children}</main>
       </div>
     </div>
   );

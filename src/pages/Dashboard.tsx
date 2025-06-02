@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -63,11 +62,9 @@ const StatCard = ({ icon, title, value, description, trend }: {
 const Dashboard = () => {
   return (
     <DashboardLayout>
-      <div className="space-y-8 w-full">
-        {/* Header removed since it's now in the Header component */}
-
-        {/* Stats Cards - 4 column layout like the reference */}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full">
+      <div className="w-full h-full">
+        {/* Stats Cards - Responsive grid */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full mb-6">
           <StatCard 
             icon={<Building2 className="h-5 w-5 text-muted-foreground" />} 
             title="Total Hotels"
@@ -99,66 +96,66 @@ const Dashboard = () => {
         </div>
 
         {/* Recent Activity Table */}
-        <Card className="w-full">
+        <Card className="w-full mb-6">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Timestamp</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">User</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Action</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Details</th>
+                    <th className="text-left py-3 px-6 text-sm font-medium text-muted-foreground">Timestamp</th>
+                    <th className="text-left py-3 px-6 text-sm font-medium text-muted-foreground">User</th>
+                    <th className="text-left py-3 px-6 text-sm font-medium text-muted-foreground">Action</th>
+                    <th className="text-left py-3 px-6 text-sm font-medium text-muted-foreground">Details</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-20 14:35:00</td>
-                    <td className="py-3 px-4 text-sm">John Doe</td>
-                    <td className="py-3 px-4 text-sm">
+                    <td className="py-3 px-6 text-sm text-blue-600">2024-01-20 14:35:00</td>
+                    <td className="py-3 px-6 text-sm">John Doe</td>
+                    <td className="py-3 px-6 text-sm">
                       <span className="inline-flex items-center gap-1">
                         <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                         HOTEL CREATE
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-blue-600">Created new hotel: Grand Plaza</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">Created new hotel: Grand Plaza</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-19 11:22:00</td>
-                    <td className="py-3 px-4 text-sm">Alice Smith</td>
-                    <td className="py-3 px-4 text-sm">
+                    <td className="py-3 px-6 text-sm text-blue-600">2024-01-19 11:22:00</td>
+                    <td className="py-3 px-6 text-sm">Alice Smith</td>
+                    <td className="py-3 px-6 text-sm">
                       <span className="inline-flex items-center gap-1">
                         <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                         INVESTOR UPDATE
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-blue-600">Updated investor portfolio</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">Updated investor portfolio</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-18 09:15:00</td>
-                    <td className="py-3 px-4 text-sm">John Doe</td>
-                    <td className="py-3 px-4 text-sm">USER CREATE</td>
-                    <td className="py-3 px-4 text-sm text-blue-600">Created new user: Bob Johnson</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">2024-01-18 09:15:00</td>
+                    <td className="py-3 px-6 text-sm">John Doe</td>
+                    <td className="py-3 px-6 text-sm">USER CREATE</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">Created new user: Bob Johnson</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-17 16:40:00</td>
-                    <td className="py-3 px-4 text-sm">Alice Smith</td>
-                    <td className="py-3 px-4 text-sm">REVENUE CREATE</td>
-                    <td className="py-3 px-4 text-sm text-blue-600">Created revenue entry</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">2024-01-17 16:40:00</td>
+                    <td className="py-3 px-6 text-sm">Alice Smith</td>
+                    <td className="py-3 px-6 text-sm">REVENUE CREATE</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">Created revenue entry</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 text-sm text-blue-600">2024-01-16 10:30:00</td>
-                    <td className="py-3 px-4 text-sm">John Doe</td>
-                    <td className="py-3 px-4 text-sm">
+                    <td className="py-3 px-6 text-sm text-blue-600">2024-01-16 10:30:00</td>
+                    <td className="py-3 px-6 text-sm">John Doe</td>
+                    <td className="py-3 px-6 text-sm">
                       <span className="inline-flex items-center gap-1">
                         <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                         HOTEL DELETE
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-blue-600">Deleted outdated hotel records</td>
+                    <td className="py-3 px-6 text-sm text-blue-600">Deleted outdated hotel records</td>
                   </tr>
                 </tbody>
               </table>
@@ -166,17 +163,17 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Charts Section */}
+        {/* Charts Section - Responsive grid */}
         <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 w-full">
           <Card className="w-full">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <CardTitle>Hotel Signups</CardTitle>
                   <CardDescription>New hotels registered in the last 30 days</CardDescription>
                 </div>
                 <Select defaultValue="30">
-                  <SelectTrigger className="w-[120px]">
+                  <SelectTrigger className="w-full sm:w-[120px]">
                     <SelectValue placeholder="Time period" />
                   </SelectTrigger>
                   <SelectContent>
@@ -208,7 +205,7 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex flex-col sm:flex-row justify-between gap-2">
               <Button variant="ghost" className="text-sm text-muted-foreground">
                 View all data
               </Button>
@@ -220,13 +217,13 @@ const Dashboard = () => {
 
           <Card className="w-full">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <CardTitle>Subscription Revenue</CardTitle>
                   <CardDescription>Monthly revenue from subscriptions</CardDescription>
                 </div>
                 <Select defaultValue="6">
-                  <SelectTrigger className="w-[120px]">
+                  <SelectTrigger className="w-full sm:w-[120px]">
                     <SelectValue placeholder="Time period" />
                   </SelectTrigger>
                   <SelectContent>
@@ -265,7 +262,7 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex flex-col sm:flex-row justify-between gap-2">
               <Button variant="ghost" className="text-sm text-muted-foreground">
                 View all data
               </Button>
