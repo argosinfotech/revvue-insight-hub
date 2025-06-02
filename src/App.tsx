@@ -1,194 +1,72 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import DashboardLayout from "@/components/DashboardLayout";
-
-// Pages
+import { Toaster } from "@/components/ui/sonner";
+import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Hotels from "@/pages/Hotels";
 import Investors from "@/pages/Investors";
 import Billing from "@/pages/Billing";
-import NotFound from "@/pages/NotFound";
-import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
-import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
-import PortfolioDashboard from "@/pages/PortfolioDashboard";
-import PortfolioInvestors from "@/pages/PortfolioInvestors";
-import PortfolioStaffs from "@/pages/PortfolioStaffs";
-import PortfolioSettings from "@/pages/PortfolioSettings";
 import Activity from "@/pages/Activity";
 import Users from "@/pages/Users";
+import NotFound from "@/pages/NotFound";
+import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
+import PortfolioDashboard from "@/pages/PortfolioDashboard";
+import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
+import PortfolioInvestors from "@/pages/PortfolioInvestors";
+import PortfolioStaffs from "@/pages/PortfolioStaffs";
 import Subscription from "@/pages/Subscription";
-import Profile from "@/pages/Profile";
-import ChangePassword from "@/pages/ChangePassword";
+import PortfolioSettings from "@/pages/PortfolioSettings";
 import StaffDashboard from "@/pages/StaffDashboard";
 import MyEntries from "@/pages/MyEntries";
+import Profile from "@/pages/Profile";
+import ChangePassword from "@/pages/ChangePassword";
+import Revenue from "@/pages/Revenue";
+import "./App.css";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/portfolio-signup" element={<PortfolioManagerSignup />} />
+          <Route path="/portfolio-manager-signup" element={<PortfolioManagerSignup />} />
           
-          {/* Common Routes for all users */}
-          <Route 
-            path="/profile" 
-            element={
-              <DashboardLayout>
-                <Profile />
-              </DashboardLayout>
-            } 
-          />
-          <Route 
-            path="/change-password" 
-            element={
-              <DashboardLayout>
-                <ChangePassword />
-              </DashboardLayout>
-            } 
-          />
+          {/* Admin routes */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/hotels" element={<Hotels />} />
+          <Route path="/investors" element={<Investors />} />
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/users" element={<Users />} />
           
-          {/* Hotel Staff Routes */}
-          <Route 
-            path="/staff-dashboard" 
-            element={
-              <DashboardLayout>
-                <StaffDashboard />
-              </DashboardLayout>
-            } 
-          />
-          <Route 
-            path="/my-entries" 
-            element={
-              <DashboardLayout>
-                <MyEntries />
-              </DashboardLayout>
-            } 
-          />
-          
-          {/* Portfolio Manager Routes */}
-          <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
+          {/* Portfolio Manager routes */}
           <Route path="/portfolio-dashboard" element={<PortfolioDashboard />} />
+          <Route path="/portfolio-hotels" element={<PortfolioManagerHotels />} />
+          <Route path="/revenue" element={<Revenue />} />
           <Route path="/portfolio-investors" element={<PortfolioInvestors />} />
-          <Route 
-            path="/portfolio-staffs" 
-            element={
-              <DashboardLayout>
-                <PortfolioStaffs />
-              </DashboardLayout>
-            } 
-          />
-          <Route 
-            path="/subscription" 
-            element={
-              <DashboardLayout>
-                <Subscription />
-              </DashboardLayout>
-            } 
-          />
+          <Route path="/portfolio-staffs" element={<PortfolioStaffs />} />
+          <Route path="/subscription" element={<Subscription />} />
           <Route path="/portfolio-settings" element={<PortfolioSettings />} />
           
-          {/* Admin Routes */}
-          <Route 
-            path="/dashboard" 
-            element={
-              <DashboardLayout>
-                <Dashboard />
-              </DashboardLayout>
-            } 
-          />
+          {/* Hotel Staff routes */}
+          <Route path="/staff-dashboard" element={<StaffDashboard />} />
+          <Route path="/my-entries" element={<MyEntries />} />
           
-          <Route 
-            path="/hotels" 
-            element={
-              <DashboardLayout>
-                <Hotels />
-              </DashboardLayout>
-            } 
-          />
+          {/* Common routes */}
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           
-          <Route 
-            path="/investors" 
-            element={
-              <DashboardLayout>
-                <Investors />
-              </DashboardLayout>
-            } 
-          />
-          
-          <Route 
-            path="/billing" 
-            element={
-              <DashboardLayout>
-                <Billing />
-              </DashboardLayout>
-            } 
-          />
-          
-          {/* Activity page with proper component */}
-          <Route 
-            path="/activity" 
-            element={
-              <DashboardLayout>
-                <Activity />
-              </DashboardLayout>
-            } 
-          />
-          
-          {/* Users management page */}
-          <Route 
-            path="/users" 
-            element={
-              <DashboardLayout>
-                <Users />
-              </DashboardLayout>
-            } 
-          />
-          
-          <Route 
-            path="/notifications" 
-            element={
-              <DashboardLayout>
-                <div className="min-h-screen flex items-center justify-center">
-                  <div className="text-center">
-                    <h1 className="text-2xl font-bold mb-4">Notifications Settings</h1>
-                    <p className="text-muted-foreground">This page is under construction.</p>
-                  </div>
-                </div>
-              </DashboardLayout>
-            } 
-          />
-          
-          <Route 
-            path="/settings" 
-            element={
-              <DashboardLayout>
-                <div className="min-h-screen flex items-center justify-center">
-                  <div className="text-center">
-                    <h1 className="text-2xl font-bold mb-4">Admin Settings</h1>
-                    <p className="text-muted-foreground">This page is under construction.</p>
-                  </div>
-                </div>
-              </DashboardLayout>
-            } 
-          />
-          
-          {/* Catch-all route for 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+      </Router>
+      <Toaster />
+    </QueryClientProvider>
+  );
+}
 
 export default App;

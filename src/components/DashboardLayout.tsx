@@ -1,3 +1,4 @@
+
 import { ReactNode, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
@@ -16,7 +17,8 @@ import {
   CreditCard,
   User,
   Lock,
-  FileText
+  FileText,
+  DollarSign
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -158,6 +160,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       to: "/portfolio-hotels",
       icon: <Building2 size={20} />,
       label: "My Hotels",
+    },
+    {
+      to: "/revenue",
+      icon: <DollarSign size={20} />,
+      label: "Revenue",
     },
     {
       to: "/portfolio-investors",
