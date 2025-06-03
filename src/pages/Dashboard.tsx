@@ -123,7 +123,6 @@ const Dashboard = () => {
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">John Doe</td>
                     <td className="py-4 px-6 text-sm font-system">
                       <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">
-                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                         HOTEL CREATE
                       </span>
                     </td>
@@ -134,7 +133,6 @@ const Dashboard = () => {
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">Alice Smith</td>
                     <td className="py-4 px-6 text-sm font-system">
                       <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
-                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                         INVESTOR UPDATE
                       </span>
                     </td>
@@ -165,7 +163,6 @@ const Dashboard = () => {
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">John Doe</td>
                     <td className="py-4 px-6 text-sm font-system">
                       <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-medium">
-                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
                         HOTEL DELETE
                       </span>
                     </td>
