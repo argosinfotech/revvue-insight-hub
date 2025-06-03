@@ -39,7 +39,7 @@ const StatCard = ({ icon, title, value, description, trend }: {
   description: string,
   trend?: { value: string, positive: boolean } 
 }) => (
-  <Card className="backdrop-blur-sm bg-white/50 border border-white/20 hover:bg-white/60 transition-all duration-200 shadow-lg">
+  <Card className="bg-white border border-gray-100 hover:shadow-md transition-all duration-200 shadow-sm">
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <CardTitle className="text-sm font-medium text-gray-700 font-system">{title}</CardTitle>
       <div className="p-2 rounded-lg bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white">
@@ -103,7 +103,7 @@ const Dashboard = () => {
         </div>
 
         {/* Recent Activity Table */}
-        <Card className="backdrop-blur-sm bg-white/50 border border-white/20 shadow-lg">
+        <Card className="bg-white border border-gray-100 shadow-sm">
           <CardHeader>
             <CardTitle className="text-gray-900 font-system">Recent Activity</CardTitle>
           </CardHeader>
@@ -111,7 +111,7 @@ const Dashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-white/20">
+                  <tr className="border-b border-gray-100">
                     <th className="text-left py-4 px-6 text-sm font-medium text-gray-700 font-system">Timestamp</th>
                     <th className="text-left py-4 px-6 text-sm font-medium text-gray-700 font-system">User</th>
                     <th className="text-left py-4 px-6 text-sm font-medium text-gray-700 font-system">Action</th>
@@ -119,7 +119,7 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-white/10 hover:bg-white/30 transition-colors">
+                  <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">2024-01-20 14:35:00</td>
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">John Doe</td>
                     <td className="py-4 px-6 text-sm font-system">
@@ -130,7 +130,7 @@ const Dashboard = () => {
                     </td>
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">Created new hotel: Grand Plaza</td>
                   </tr>
-                  <tr className="border-b border-white/10 hover:bg-white/30 transition-colors">
+                  <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">2024-01-19 11:22:00</td>
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">Alice Smith</td>
                     <td className="py-4 px-6 text-sm font-system">
@@ -141,7 +141,7 @@ const Dashboard = () => {
                     </td>
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">Updated investor portfolio</td>
                   </tr>
-                  <tr className="border-b border-white/10 hover:bg-white/30 transition-colors">
+                  <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">2024-01-18 09:15:00</td>
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">John Doe</td>
                     <td className="py-4 px-6 text-sm font-system">
@@ -151,7 +151,7 @@ const Dashboard = () => {
                     </td>
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">Created new user: Bob Johnson</td>
                   </tr>
-                  <tr className="border-b border-white/10 hover:bg-white/30 transition-colors">
+                  <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">2024-01-17 16:40:00</td>
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">Alice Smith</td>
                     <td className="py-4 px-6 text-sm font-system">
@@ -161,7 +161,7 @@ const Dashboard = () => {
                     </td>
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">Created revenue entry</td>
                   </tr>
-                  <tr className="hover:bg-white/30 transition-colors">
+                  <tr className="hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-6 text-sm text-blue-600 font-system">2024-01-16 10:30:00</td>
                     <td className="py-4 px-6 text-sm text-gray-900 font-system">John Doe</td>
                     <td className="py-4 px-6 text-sm font-system">
@@ -180,7 +180,7 @@ const Dashboard = () => {
 
         {/* Charts Section */}
         <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
-          <Card className="backdrop-blur-sm bg-white/50 border border-white/20 shadow-lg">
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
@@ -188,7 +188,7 @@ const Dashboard = () => {
                   <CardDescription className="text-gray-600 font-system">New hotels registered in the last 30 days</CardDescription>
                 </div>
                 <Select defaultValue="30">
-                  <SelectTrigger className="w-full sm:w-[120px] bg-white/70 border-white/30">
+                  <SelectTrigger className="w-full sm:w-[120px] bg-white border-gray-200">
                     <SelectValue placeholder="Time period" />
                   </SelectTrigger>
                   <SelectContent>
@@ -211,15 +211,15 @@ const Dashboard = () => {
                       bottom: 5,
                     }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.3)" />
-                    <XAxis dataKey="day" stroke="#666" />
-                    <YAxis stroke="#666" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                    <XAxis dataKey="day" stroke="#6b7280" />
+                    <YAxis stroke="#6b7280" />
                     <Tooltip 
                       contentStyle={{
-                        backgroundColor: 'rgba(255,255,255,0.95)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        borderRadius: '12px'
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
                       }}
                     />
                     <Bar dataKey="count" fill="url(#gradient)" radius={[8, 8, 0, 0]} />
@@ -234,16 +234,16 @@ const Dashboard = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row justify-between gap-2">
-              <Button variant="ghost" className="text-sm text-gray-600 hover:bg-white/50 font-system">
+              <Button variant="ghost" className="text-sm text-gray-600 hover:bg-gray-50 font-system">
                 View all data
               </Button>
-              <Button variant="ghost" size="icon" className="hover:bg-white/50">
+              <Button variant="ghost" size="icon" className="hover:bg-gray-50">
                 <Download size={16} />
               </Button>
             </CardFooter>
           </Card>
 
-          <Card className="backdrop-blur-sm bg-white/50 border border-white/20 shadow-lg">
+          <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
@@ -251,7 +251,7 @@ const Dashboard = () => {
                   <CardDescription className="text-gray-600 font-system">Monthly revenue from subscriptions</CardDescription>
                 </div>
                 <Select defaultValue="6">
-                  <SelectTrigger className="w-full sm:w-[120px] bg-white/70 border-white/30">
+                  <SelectTrigger className="w-full sm:w-[120px] bg-white border-gray-200">
                     <SelectValue placeholder="Time period" />
                   </SelectTrigger>
                   <SelectContent>
@@ -274,15 +274,15 @@ const Dashboard = () => {
                       bottom: 5,
                     }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.3)" />
-                    <XAxis dataKey="month" stroke="#666" />
-                    <YAxis stroke="#666" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                    <XAxis dataKey="month" stroke="#6b7280" />
+                    <YAxis stroke="#6b7280" />
                     <Tooltip 
                       contentStyle={{
-                        backgroundColor: 'rgba(255,255,255,0.95)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        borderRadius: '12px'
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
                       }}
                     />
                     <Line 
@@ -298,10 +298,10 @@ const Dashboard = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row justify-between gap-2">
-              <Button variant="ghost" className="text-sm text-gray-600 hover:bg-white/50 font-system">
+              <Button variant="ghost" className="text-sm text-gray-600 hover:bg-gray-50 font-system">
                 View all data
               </Button>
-              <Button variant="ghost" size="icon" className="hover:bg-white/50">
+              <Button variant="ghost" size="icon" className="hover:bg-gray-50">
                 <Download size={16} />
               </Button>
             </CardFooter>

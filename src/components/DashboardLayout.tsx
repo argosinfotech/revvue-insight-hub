@@ -14,7 +14,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const userRole = useUserRole();
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#667eea] to-[#764ba2] relative">
+    <div className="min-h-screen w-full bg-white relative">
       <Sidebar
         userRole={userRole}
         isOpen={isSidebarOpen}
@@ -29,7 +29,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       >
         <Header userRole={userRole} />
         <main className="p-6">
-          <div className="backdrop-blur-xl bg-white/95 rounded-2xl shadow-xl border border-white/20 min-h-[calc(100vh-140px)]">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 min-h-[calc(100vh-140px)]">
             <div className="p-8">
               {children}
             </div>
