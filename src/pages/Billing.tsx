@@ -3,8 +3,16 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from "@/components/ui/table";
 import { 
   Sheet,
   SheetContent,
@@ -117,21 +125,55 @@ const Billing = () => {
           </Button>
         </div>
         
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {packages.map((pkg) => (
-            <div key={pkg.id} className={`p-6 border rounded-lg ${pkg.id === 'pro' ? 'border-brand-purple' : ''}`}>
-              <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
-              <p className="text-2xl font-bold mb-4">
-                {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
-              </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {pkg.features.map((feature, index) => (
-                  <li key={index}>• {feature}</li>
-                ))}
-              </ul>
+        {/* Packages List */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2">
+              Packages List
+            </CardTitle>
+            <CardDescription>
+              Showing {packages.length} packages
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Package Name</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Features</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {packages.length > 0 ? (
+                    packages.map((pkg) => (
+                      <TableRow key={pkg.id}>
+                        <TableCell className="font-medium">{pkg.name}</TableCell>
+                        <TableCell>
+                          {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
+                        </TableCell>
+                        <TableCell>
+                          <ul className="text-sm text-muted-foreground">
+                            {pkg.features.map((feature, index) => (
+                              <li key={index}>• {feature}</li>
+                            ))}
+                          </ul>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={3} className="h-24 text-center">
+                        No packages found.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </div>
-          ))}
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Add Package Panel */}
         <Sheet open={isAddPackageOpen} onOpenChange={setIsAddPackageOpen}>
