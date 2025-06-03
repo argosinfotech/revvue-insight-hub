@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,6 +54,7 @@ type AddPackageFormData = z.infer<typeof addPackageSchema>;
 
 const Billing = () => {
   const [isAddPackageOpen, setIsAddPackageOpen] = useState(false);
+  const [editingPackage, setEditingPackage] = useState<BillingPackage | null>(null);
   const [packages, setPackages] = useState([
     {
       id: "basic",
@@ -86,24 +87,68 @@ const Billing = () => {
   });
 
   const onSubmit = (data: AddPackageFormData) => {
-    console.log("Adding package:", data);
+    console.log("Submitting package:", data);
     
-    const newPackage = {
-      id: `package_${packages.length + 1}`,
-      name: data.name,
-      price: parseFloat(data.price),
-      features: data.features.split('\n').filter(feature => feature.trim() !== '')
-    };
+    if (editingPackage) {
+      // Update existing package
+      const updatedPackage = {
+        ...editingPackage,
+        name: data.name,
+        price: parseFloat(data.price),
+        features: data.features.split('\n').filter(feature => feature.trim() !== '')
+      };
 
-    setPackages([...packages, newPackage]);
-    toast.success("Package added successfully!");
+      setPackages(packages.map(pkg => 
+        pkg.id === editingPackage.id ? updatedPackage : pkg
+      ));
+      toast.success("Package updated successfully!");
+    } else {
+      // Add new package
+      const newPackage = {
+        id: `package_${packages.length + 1}`,
+        name: data.name,
+        price: parseFloat(data.price),
+        features: data.features.split('\n').filter(feature => feature.trim() !== '')
+      };
+
+      setPackages([...packages, newPackage]);
+      toast.success("Package added successfully!");
+    }
+
     setIsAddPackageOpen(false);
+    setEditingPackage(null);
     form.reset();
+  };
+
+  const handleEdit = (pkg: BillingPackage) => {
+    console.log("Editing package:", pkg);
+    setEditingPackage(pkg);
+    
+    // Pre-populate form with package data
+    form.setValue("name", pkg.name);
+    form.setValue("price", pkg.price.toString());
+    form.setValue("description", ""); // Description not stored in current data structure
+    form.setValue("features", pkg.features.join('\n'));
+    
+    setIsAddPackageOpen(true);
+  };
+
+  const handleDelete = (packageId: string) => {
+    console.log("Deleting package:", packageId);
+    setPackages(packages.filter(pkg => pkg.id !== packageId));
+    toast.success("Package deleted successfully!");
   };
 
   const handleCancel = () => {
     setIsAddPackageOpen(false);
+    setEditingPackage(null);
     form.reset();
+  };
+
+  const handleAddNew = () => {
+    setEditingPackage(null);
+    form.reset();
+    setIsAddPackageOpen(true);
   };
 
   return (
@@ -117,7 +162,7 @@ const Billing = () => {
             </p>
           </div>
           <Button 
-            onClick={() => setIsAddPackageOpen(true)}
+            onClick={handleAddNew}
             className="gap-2 bg-brand-purple hover:bg-brand-purple-dark"
           >
             <Plus size={16} />
@@ -143,6 +188,7 @@ const Billing = () => {
                     <TableHead>Package Name</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Features</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -160,11 +206,31 @@ const Billing = () => {
                             ))}
                           </ul>
                         </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEdit(pkg)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(pkg.id)}
+                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={3} className="h-24 text-center">
+                      <TableCell colSpan={4} className="h-24 text-center">
                         No packages found.
                       </TableCell>
                     </TableRow>
@@ -175,13 +241,18 @@ const Billing = () => {
           </CardContent>
         </Card>
 
-        {/* Add Package Panel */}
+        {/* Add/Edit Package Panel */}
         <Sheet open={isAddPackageOpen} onOpenChange={setIsAddPackageOpen}>
           <SheetContent className="sm:max-w-md">
             <SheetHeader>
-              <SheetTitle>Add New Package</SheetTitle>
+              <SheetTitle>
+                {editingPackage ? 'Edit Package' : 'Add New Package'}
+              </SheetTitle>
               <SheetDescription>
-                Create a new billing package with custom pricing and features.
+                {editingPackage 
+                  ? 'Update the package details below.' 
+                  : 'Create a new billing package with custom pricing and features.'
+                }
               </SheetDescription>
             </SheetHeader>
             
@@ -252,7 +323,7 @@ const Billing = () => {
                     Cancel
                   </Button>
                   <Button type="submit" className="bg-brand-purple hover:bg-brand-purple-dark">
-                    Save Package
+                    {editingPackage ? 'Update Package' : 'Save Package'}
                   </Button>
                 </SheetFooter>
               </form>
