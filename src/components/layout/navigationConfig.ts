@@ -1,8 +1,5 @@
-
 import {
   BarChartBig,
-  Building2,
-  Users,
   Settings,
   Bell,
   Package,
@@ -19,16 +16,6 @@ export const adminNavItems = [
     to: "/dashboard",
     icon: BarChartBig,
     label: "Dashboard",
-  },
-  {
-    to: "/hotels",
-    icon: Building2,
-    label: "Hotels",
-  },
-  {
-    to: "/investors",
-    icon: Users,
-    label: "Investors",
   },
   {
     to: "/billing",
