@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Users as UsersIcon, Search, Plus, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +47,7 @@ const USER_TYPES = [
   "Backoffice User"
 ] as const;
 
-// Sample users data - updated to only include allowed types
+// Sample users data - updated to only include John Smith and Mike Wilson
 const sampleUsers = [
   {
     id: 1,
@@ -62,20 +61,6 @@ const sampleUsers = [
     firstName: "Mike",
     lastName: "Wilson",
     email: "mike.wilson@example.com",
-    userType: "Backoffice User" as const
-  },
-  {
-    id: 3,
-    firstName: "Sarah",
-    lastName: "Johnson",
-    email: "sarah.johnson@example.com", 
-    userType: "Super Admin" as const
-  },
-  {
-    id: 4,
-    firstName: "Emma",
-    lastName: "Davis",
-    email: "emma.davis@example.com",
     userType: "Backoffice User" as const
   }
 ];
