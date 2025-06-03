@@ -28,8 +28,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         )}
       >
         <Header userRole={userRole} />
-        <main className="p-4">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 min-h-[calc(100vh-112px)]">
+        <main>
+          <div className="bg-white min-h-[calc(100vh-64px)]">
             <div className="p-6">
               {children}
             </div>
