@@ -30,7 +30,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <Header userRole={userRole} />
         <main className="w-full">
           <div className="bg-white min-h-[calc(100vh-64px)] w-full">
-            <div className="p-6 w-full max-w-none">
+            <div className="p-6 w-full max-w-none text-left">
               {children}
             </div>
           </div>
