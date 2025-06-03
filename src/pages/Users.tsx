@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Users as UsersIcon, Search, Plus, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,75 +42,51 @@ import * as z from "zod";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 
-// User types
+// User types - now only Super Admin and Backoffice User
 const USER_TYPES = [
   "Super Admin",
-  "Backoffice User", 
-  "Portfolio Manager",
-  "Investor"
+  "Backoffice User"
 ] as const;
 
-// Sample companies for Portfolio Manager dropdown
-const COMPANIES = [
-  "Hotel Group Inc.",
-  "Luxury Hotels Corp",
-  "City Hotels Ltd",
-  "Resort Management Co",
-  "Boutique Hotels LLC"
-] as const;
-
-// Sample users data
+// Sample users data - updated to only include allowed types
 const sampleUsers = [
   {
     id: 1,
     firstName: "John",
     lastName: "Smith",
     email: "john.smith@example.com",
-    userType: "Super Admin" as const,
-    company: null
+    userType: "Super Admin" as const
   },
   {
     id: 2,
-    firstName: "Sarah",
-    lastName: "Johnson",
-    email: "sarah.johnson@example.com", 
-    userType: "Portfolio Manager" as const,
-    company: "Hotel Group Inc."
-  },
-  {
-    id: 3,
     firstName: "Mike",
     lastName: "Wilson",
     email: "mike.wilson@example.com",
-    userType: "Backoffice User" as const,
-    company: null
+    userType: "Backoffice User" as const
+  },
+  {
+    id: 3,
+    firstName: "Sarah",
+    lastName: "Johnson",
+    email: "sarah.johnson@example.com", 
+    userType: "Super Admin" as const
   },
   {
     id: 4,
     firstName: "Emma",
     lastName: "Davis",
     email: "emma.davis@example.com",
-    userType: "Investor" as const,
-    company: null
+    userType: "Backoffice User" as const
   }
 ];
 
-// Form validation schema
+// Form validation schema - removed company field
 const addUserSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email format"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  userType: z.enum(USER_TYPES, { required_error: "User type is required" }),
-  company: z.string().optional()
-}).refine((data) => {
-  if (data.userType === "Portfolio Manager") {
-    return data.company && data.company.length > 0;
-  }
-  return true;
-}, {
-  message: "Company is required for Portfolio Manager",
-  path: ["company"]
+  userType: z.enum(USER_TYPES, { required_error: "User type is required" })
 });
 
 type AddUserFormData = z.infer<typeof addUserSchema>;
@@ -126,12 +103,9 @@ const Users = () => {
       lastName: "",
       email: "",
       password: "",
-      userType: undefined,
-      company: ""
+      userType: undefined
     }
   });
-
-  const watchedUserType = form.watch("userType");
 
   const filteredUsers = users.filter(user => 
     user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -148,8 +122,7 @@ const Users = () => {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      userType: data.userType,
-      company: data.userType === "Portfolio Manager" ? data.company : null
+      userType: data.userType
     };
 
     setUsers([...users, newUser]);
@@ -169,7 +142,7 @@ const Users = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Users Management</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Users Management</h1>
             <p className="text-muted-foreground">
               Manage all users in the system
             </p>
@@ -216,7 +189,6 @@ const Users = () => {
                     <TableHead>Last Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>User Type</TableHead>
-                    <TableHead>Company</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -230,21 +202,16 @@ const Users = () => {
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                             user.userType === "Super Admin" 
                               ? "bg-red-100 text-red-800"
-                              : user.userType === "Portfolio Manager"
-                              ? "bg-blue-100 text-blue-800" 
-                              : user.userType === "Backoffice User"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-purple-100 text-purple-800"
+                              : "bg-green-100 text-green-800"
                           }`}>
                             {user.userType}
                           </span>
                         </TableCell>
-                        <TableCell>{user.company || "—"}</TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center">
+                      <TableCell colSpan={4} className="h-24 text-center">
                         No users found.
                       </TableCell>
                     </TableRow>
@@ -347,33 +314,6 @@ const Users = () => {
                     </FormItem>
                   )}
                 />
-
-                {watchedUserType === "Portfolio Manager" && (
-                  <FormField
-                    control={form.control}
-                    name="company"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Company</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select company" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {COMPANIES.map((company) => (
-                              <SelectItem key={company} value={company}>
-                                {company}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
 
                 <SheetFooter className="gap-2">
                   <Button type="button" variant="outline" onClick={handleCancel}>
