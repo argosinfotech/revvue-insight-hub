@@ -14,22 +14,17 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const userRole = useUserRole();
 
   return (
-    <div className="min-h-screen flex w-full bg-white relative">
+    <div className="min-h-screen flex w-full bg-white">
       <Sidebar
         userRole={userRole}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
-      <div 
-        className={cn(
-          "flex-1 transition-all duration-300 ease-in-out min-h-screen",
-          isSidebarOpen ? "ml-[250px]" : "ml-[70px]"
-        )}
-      >
+      <div className="flex-1 flex flex-col min-h-screen">
         <Header userRole={userRole} />
-        <main className="w-full">
-          <div className="bg-white min-h-[calc(100vh-64px)] w-full">
+        <main className="flex-1 w-full">
+          <div className="bg-white min-h-full w-full">
             <div className="p-6 w-full">
               {children}
             </div>
