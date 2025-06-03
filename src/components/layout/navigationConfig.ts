@@ -1,5 +1,8 @@
+
 import {
   BarChartBig,
+  Building2,
+  Users,
   Settings,
   Bell,
   Package,
