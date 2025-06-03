@@ -1,10 +1,9 @@
 
 import { useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import NavItem from "./NavItem";
-import UserProfile from "./UserProfile";
 import { adminNavItems, portfolioManagerNavItems, hotelStaffNavItems } from "./navigationConfig";
 
 interface SidebarProps {
@@ -27,29 +26,24 @@ const Sidebar = ({ userRole, isOpen, onToggle }: SidebarProps) => {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 h-screen bg-white border-r transition-all duration-300 flex flex-col z-50",
-        isOpen ? "w-64" : "w-20"
+        "fixed left-0 top-0 h-screen backdrop-blur-xl bg-white/10 border-r border-white/20 transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex flex-col z-50 shadow-2xl",
+        isOpen ? "w-[250px]" : "w-[70px]"
       )}
     >
-      <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-10 w-10 bg-brand-purple rounded-lg flex items-center justify-center">
+      {/* Header */}
+      <div className="p-6 flex items-center justify-between border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-xl flex items-center justify-center shadow-lg">
             <span className="text-white font-bold text-xl">R</span>
           </div>
           {isOpen && (
-            <span className="font-bold text-xl">RevVue</span>
+            <span className="font-bold text-xl text-white font-system">RevVue</span>
           )}
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onToggle}
-        >
-          {isOpen ? <X size={18} /> : <Menu size={18} />}
-        </Button>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto py-6 px-3 space-y-2">
         {navItems.map((item) => (
           <NavItem
             key={item.to}
@@ -62,8 +56,16 @@ const Sidebar = ({ userRole, isOpen, onToggle }: SidebarProps) => {
         ))}
       </div>
 
-      <div className="border-t p-4">
-        <UserProfile userRole={userRole} isCollapsed={!isOpen} />
+      {/* Toggle Button */}
+      <div className="absolute -right-4 top-6 z-10">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggle}
+          className="h-8 w-8 rounded-full bg-white/90 hover:bg-white border border-white/20 shadow-lg backdrop-blur-sm transition-all duration-200"
+        >
+          <Menu size={16} className="text-gray-700" />
+        </Button>
       </div>
     </aside>
   );

@@ -49,40 +49,42 @@ const Header = ({ userRole }: HeaderProps) => {
   const userInitials = getUserInitials();
 
   return (
-    <header className="h-16 flex items-center justify-end px-6 bg-white sticky top-0 z-40 w-full">
+    <header className="h-16 flex items-center justify-end px-6 backdrop-blur-xl bg-white/10 sticky top-0 z-40 w-full border-b border-white/10">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors">
+          <div className="flex items-center gap-3 cursor-pointer hover:bg-white/10 rounded-xl p-3 transition-all duration-200 backdrop-blur-sm">
             <div className="text-right">
-              <div className="text-sm font-medium">{roleDisplayName}</div>
-              <div className="text-xs text-gray-500">{userEmail}</div>
+              <div className="text-sm font-medium text-white font-system">{roleDisplayName}</div>
+              <div className="text-xs text-white/70">{userEmail}</div>
             </div>
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-9 w-9 ring-2 ring-white/20">
               <AvatarImage src="" />
-              <AvatarFallback>{userInitials}</AvatarFallback>
+              <AvatarFallback className="bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white font-semibold">
+                {userInitials}
+              </AvatarFallback>
             </Avatar>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuContent className="w-56 backdrop-blur-xl bg-white/95 border border-white/20 shadow-xl" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{roleDisplayName}</p>
-              <p className="text-xs leading-none text-muted-foreground">
+              <p className="text-sm font-medium leading-none text-gray-900">{roleDisplayName}</p>
+              <p className="text-xs leading-none text-gray-600">
                 {userEmail}
               </p>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => navigate('/profile')}>
+          <DropdownMenuSeparator className="bg-white/20" />
+          <DropdownMenuItem onClick={() => navigate('/profile')} className="hover:bg-white/50">
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/change-password')}>
+          <DropdownMenuItem onClick={() => navigate('/change-password')} className="hover:bg-white/50">
             <Lock className="mr-2 h-4 w-4" />
             <span>Change Password</span>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
+          <DropdownMenuSeparator className="bg-white/20" />
+          <DropdownMenuItem onClick={handleLogout} className="hover:bg-white/50">
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>
