@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { User, Lock, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -49,7 +48,10 @@ const Header = ({ userRole }: HeaderProps) => {
   const userInitials = getUserInitials();
 
   return (
-    <header className="h-16 flex items-center justify-end px-6 bg-white sticky top-0 z-40 w-full border-b border-gray-100">
+    <header className="h-16 flex items-center justify-end px-6 bg-white sticky top-0 z-40 w-full border-b border-gray-200 relative">
+      {/* Extended border that connects to sidebar */}
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gray-200" />
+      
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-xl p-3 transition-all duration-200">
