@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -55,6 +64,8 @@ type AddPackageFormData = z.infer<typeof addPackageSchema>;
 const Billing = () => {
   const [isAddPackageOpen, setIsAddPackageOpen] = useState(false);
   const [editingPackage, setEditingPackage] = useState<BillingPackage | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [packageToDelete, setPackageToDelete] = useState<BillingPackage | null>(null);
   const [packages, setPackages] = useState([
     {
       id: "basic",
@@ -133,10 +144,24 @@ const Billing = () => {
     setIsAddPackageOpen(true);
   };
 
-  const handleDelete = (packageId: string) => {
-    console.log("Deleting package:", packageId);
-    setPackages(packages.filter(pkg => pkg.id !== packageId));
-    toast.success("Package deleted successfully!");
+  const handleDeleteClick = (pkg: BillingPackage) => {
+    setPackageToDelete(pkg);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (packageToDelete) {
+      console.log("Deleting package:", packageToDelete.id);
+      setPackages(packages.filter(pkg => pkg.id !== packageToDelete.id));
+      toast.success("Package deleted successfully!");
+    }
+    setDeleteDialogOpen(false);
+    setPackageToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setPackageToDelete(null);
   };
 
   const handleCancel = () => {
@@ -219,7 +244,7 @@ const Billing = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleDelete(pkg.id)}
+                              onClick={() => handleDeleteClick(pkg)}
                               className="h-8 w-8 p-0 text-destructive hover:text-destructive"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -330,6 +355,28 @@ const Billing = () => {
             </Form>
           </SheetContent>
         </Sheet>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the package 
+                "{packageToDelete?.name}" from your billing system.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={handleConfirmDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete Package
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </DashboardLayout>
   );
