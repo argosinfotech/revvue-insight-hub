@@ -5,14 +5,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import NavItem from "./NavItem";
 import { adminNavItems, portfolioManagerNavItems, hotelStaffNavItems } from "./navigationConfig";
+import { ReactNode } from "react";
 
 interface SidebarProps {
   userRole: string;
   isOpen: boolean;
   onToggle: () => void;
+  additionalContent?: ReactNode;
 }
 
-const Sidebar = ({ userRole, isOpen, onToggle }: SidebarProps) => {
+const Sidebar = ({ userRole, isOpen, onToggle, additionalContent }: SidebarProps) => {
   const location = useLocation();
 
   const getNavItems = () => {
@@ -54,6 +56,13 @@ const Sidebar = ({ userRole, isOpen, onToggle }: SidebarProps) => {
             isCollapsed={!isOpen}
           />
         ))}
+        
+        {/* Additional Content */}
+        {additionalContent && isOpen && (
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            {additionalContent}
+          </div>
+        )}
       </div>
 
       {/* Toggle Button */}

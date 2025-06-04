@@ -7,9 +7,10 @@ import { useUserRole } from "@/utils/userRole";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  sidebarContent?: ReactNode;
 }
 
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+const DashboardLayout = ({ children, sidebarContent }: DashboardLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const userRole = useUserRole();
 
@@ -19,6 +20,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         userRole={userRole}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+        additionalContent={sidebarContent}
       />
 
       <div 

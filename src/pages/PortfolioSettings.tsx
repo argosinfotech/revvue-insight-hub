@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { User, Bell, Shield, CreditCard, HelpCircle, Save, Mail } from "lucide-react";
+import { User, Bell, Shield, Save } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 import EmailTemplates from "@/components/email-templates/EmailTemplates";
+import SettingsSubmenu from "@/components/layout/SettingsSubmenu";
 
 const PortfolioSettings = () => {
   const [activeSection, setActiveSection] = useState("profile");
@@ -45,15 +47,6 @@ const PortfolioSettings = () => {
   const handleSaveSecurity = () => {
     toast.success("Security settings updated!");
   };
-
-  const menuItems = [
-    { id: "profile", icon: User, label: "Profile" },
-    { id: "notifications", icon: Bell, label: "Notifications" },
-    { id: "security", icon: Shield, label: "Security" },
-    { id: "billing", icon: CreditCard, label: "Billing" },
-    { id: "email-templates", icon: Mail, label: "Email Templates" },
-    { id: "help", icon: HelpCircle, label: "Help & Support" }
-  ];
 
   const renderContent = () => {
     switch (activeSection) {
@@ -303,8 +296,15 @@ const PortfolioSettings = () => {
     }
   };
 
+  const sidebarContent = (
+    <SettingsSubmenu 
+      activeSection={activeSection} 
+      onSectionChange={setActiveSection} 
+    />
+  );
+
   return (
-    <DashboardLayout>
+    <DashboardLayout sidebarContent={sidebarContent}>
       <div className="space-y-8">
         {/* Header */}
         <div>
@@ -312,36 +312,9 @@ const PortfolioSettings = () => {
           <p className="text-muted-foreground">Manage your account preferences and settings</p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Settings Navigation */}
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Settings Menu</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {menuItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
-                      activeSection === item.id
-                        ? 'bg-brand-purple/10 text-brand-purple'
-                        : 'hover:bg-gray-100'
-                    }`}
-                    onClick={() => setActiveSection(item.id)}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span className="text-sm font-medium">{item.label}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Settings Content */}
-          <div className="lg:col-span-2">
-            {renderContent()}
-          </div>
+        {/* Settings Content */}
+        <div className="max-w-4xl">
+          {renderContent()}
         </div>
       </div>
     </DashboardLayout>
