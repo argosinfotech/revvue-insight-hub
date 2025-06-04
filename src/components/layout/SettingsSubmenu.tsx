@@ -18,9 +18,6 @@ const SettingsSubmenu = ({ activeSection, onSectionChange }: SettingsSubmenuProp
 
   return (
     <div className="space-y-2">
-      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-2 mb-3">
-        Settings
-      </div>
       {menuItems.map((item) => (
         <div
           key={item.id}
