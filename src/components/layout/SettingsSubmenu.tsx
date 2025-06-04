@@ -1,5 +1,5 @@
 
-import { User, Bell, Shield, CreditCard, HelpCircle, Mail } from "lucide-react";
+import { Mail, HelpCircle } from "lucide-react";
 
 interface SettingsSubmenuProps {
   activeSection: string;
@@ -8,10 +8,6 @@ interface SettingsSubmenuProps {
 
 const SettingsSubmenu = ({ activeSection, onSectionChange }: SettingsSubmenuProps) => {
   const menuItems = [
-    { id: "profile", icon: User, label: "Profile" },
-    { id: "notifications", icon: Bell, label: "Notifications" },
-    { id: "security", icon: Shield, label: "Security" },
-    { id: "billing", icon: CreditCard, label: "Billing" },
     { id: "email-templates", icon: Mail, label: "Email Templates" },
     { id: "help", icon: HelpCircle, label: "Help & Support" }
   ];
