@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,8 +16,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const revenueEntrySchema = z.object({
+  hotelId: z.string().optional(),
   date: z.string(),
   totalRevenue: z.number().min(0, "Total revenue must be positive"),
   occupancyPercent: z.number().min(0).max(100, "Occupancy must be between 0-100%"),
@@ -41,15 +50,26 @@ interface RevenueEntry {
 interface RevenueEntryFormProps {
   entry?: RevenueEntry | null;
   onClose: () => void;
+  showHotelSelector?: boolean;
 }
 
-const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
+const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: RevenueEntryFormProps) => {
   const isEditing = !!entry;
   const today = new Date();
+
+  // Mock hotel data - in real app this would come from API
+  const hotels = [
+    { id: "1", name: "Grand Plaza Hotel" },
+    { id: "2", name: "Ocean View Resort" },
+    { id: "3", name: "City Center Inn" },
+    { id: "4", name: "Mountain Lodge" },
+    { id: "5", name: "Seaside Hotel" },
+  ];
   
   const form = useForm<RevenueEntryData>({
     resolver: zodResolver(revenueEntrySchema),
     defaultValues: {
+      hotelId: "",
       date: format(entry?.date || today, "yyyy-MM-dd"),
       totalRevenue: entry?.totalRevenue || 0,
       occupancyPercent: entry?.occupancyPercent || 0,
@@ -61,6 +81,10 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
 
   const onSubmit = (data: RevenueEntryData) => {
     console.log("Revenue entry data:", data);
+    if (showHotelSelector && !data.hotelId) {
+      toast.error("Please select a hotel");
+      return;
+    }
     toast.success(isEditing ? "Revenue entry updated successfully!" : "Revenue entry submitted successfully!");
     onClose();
   };
@@ -73,6 +97,33 @@ const RevenueEntryForm = ({ entry, onClose }: RevenueEntryFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {showHotelSelector && (
+          <FormField
+            control={form.control}
+            name="hotelId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Hotel</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a hotel" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {hotels.map((hotel) => (
+                      <SelectItem key={hotel.id} value={hotel.id}>
+                        {hotel.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="date"

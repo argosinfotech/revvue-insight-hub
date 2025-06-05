@@ -4,12 +4,21 @@ import DashboardLayout from "@/components/DashboardLayout";
 import DashboardFilters from "@/components/dashboard/DashboardFilters";
 import MetricsCards from "@/components/dashboard/MetricsCards";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
+import RevenueEntryForm from "@/components/RevenueEntryForm";
 import { Button } from "@/components/ui/button";
-import { FileDown } from "lucide-react";
+import { FileDown, Plus } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const PortfolioDashboard = () => {
   const [selectedHotel, setSelectedHotel] = useState("all");
+  const [showRevenuePanel, setShowRevenuePanel] = useState(false);
   const [dateRange, setDateRange] = useState({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date()
@@ -37,6 +46,14 @@ const PortfolioDashboard = () => {
     toast.success("Portfolio data exported to Excel successfully!");
   };
 
+  const handleAddRevenue = () => {
+    setShowRevenuePanel(true);
+  };
+
+  const handleCloseRevenuePanel = () => {
+    setShowRevenuePanel(false);
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -48,10 +65,16 @@ const PortfolioDashboard = () => {
               Comprehensive overview of your hotel portfolio performance
             </p>
           </div>
-          <Button onClick={handleExportToExcel} className="bg-green-600 hover:bg-green-700">
-            <FileDown className="h-4 w-4 mr-2" />
-            Export to Excel
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleAddRevenue} className="bg-purple-600 hover:bg-purple-700">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Daily Revenue
+            </Button>
+            <Button onClick={handleExportToExcel} className="bg-green-600 hover:bg-green-700">
+              <FileDown className="h-4 w-4 mr-2" />
+              Export to Excel
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -66,6 +89,25 @@ const PortfolioDashboard = () => {
 
         {/* Charts */}
         <DashboardCharts selectedHotel={selectedHotel} />
+
+        {/* Add Revenue Panel */}
+        <Sheet open={showRevenuePanel} onOpenChange={setShowRevenuePanel}>
+          <SheetContent className="w-[400px] sm:w-[540px]">
+            <SheetHeader>
+              <SheetTitle>Add Daily Revenue</SheetTitle>
+              <SheetDescription>
+                Submit daily revenue data for your portfolio hotels
+              </SheetDescription>
+            </SheetHeader>
+            <div className="py-4">
+              <RevenueEntryForm 
+                entry={null}
+                onClose={handleCloseRevenuePanel}
+                showHotelSelector={true}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </DashboardLayout>
   );
