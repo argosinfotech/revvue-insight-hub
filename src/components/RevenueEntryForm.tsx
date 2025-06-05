@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -95,173 +96,183 @@ const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: Revenue
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {showHotelSelector && (
-          <FormField
-            control={form.control}
-            name="hotelId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Hotel</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a hotel" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {hotels.map((hotel) => (
-                      <SelectItem key={hotel.id} value={hotel.id}>
-                        {hotel.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
+    <div className="flex flex-col h-full">
+      <ScrollArea className="flex-1 pr-4">
+        <Form {...form}>
+          <div className="space-y-4">
+            {showHotelSelector && (
+              <FormField
+                control={form.control}
+                name="hotelId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hotel</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a hotel" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {hotels.map((hotel) => (
+                          <SelectItem key={hotel.id} value={hotel.id}>
+                            {hotel.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             )}
-          />
-        )}
 
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date</FormLabel>
-              <FormControl>
-                <Input 
-                  type="date" 
-                  {...field}
-                  className="bg-white"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="date" 
+                      {...field}
+                      className="bg-white"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="totalRevenue"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>$ Total Revenue</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="totalRevenue"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>$ Total Revenue</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      placeholder="0"
+                      {...field}
+                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="occupancyPercent"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Occupancy %</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="0"
-                  max="100"
-                  min="0"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="occupancyPercent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Occupancy %</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      placeholder="0"
+                      max="100"
+                      min="0"
+                      {...field}
+                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="adr"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>$ ADR</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="adr"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>$ ADR</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      placeholder="0"
+                      {...field}
+                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="otherRevenue"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>$ Other Revenue</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="otherRevenue"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>$ Other Revenue</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      placeholder="0"
+                      {...field}
+                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Textarea 
-                  placeholder="Add any additional notes..."
-                  rows={3}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Notes</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Add any additional notes..."
+                      rows={3}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </Form>
+      </ScrollArea>
 
-        <div className="space-y-3 pt-4">
-          <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-            {isEditing ? "Update Entry" : "Submit"}
-          </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={handleReset}
-            className="w-full"
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset Form
-          </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={onClose}
-            className="w-full"
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </Form>
+      <div className="space-y-3 pt-4 border-t">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-3">
+              <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                {isEditing ? "Update Entry" : "Submit"}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={handleReset}
+                className="w-full"
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Reset Form
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onClose}
+                className="w-full"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 };
 
