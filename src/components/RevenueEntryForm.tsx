@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -97,151 +96,153 @@ const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: Revenue
 
   return (
     <div className="flex flex-col h-full">
-      <ScrollArea className="flex-1 pr-4">
-        <Form {...form}>
-          <div className="space-y-4">
-            {showHotelSelector && (
+      <ScrollArea className="flex-1 h-[500px]">
+        <div className="pr-4">
+          <Form {...form}>
+            <div className="space-y-4">
+              {showHotelSelector && (
+                <FormField
+                  control={form.control}
+                  name="hotelId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Hotel</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a hotel" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {hotels.map((hotel) => (
+                            <SelectItem key={hotel.id} value={hotel.id}>
+                              {hotel.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <FormField
                 control={form.control}
-                name="hotelId"
+                name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Hotel</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a hotel" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {hotels.map((hotel) => (
-                          <SelectItem key={hotel.id} value={hotel.id}>
-                            {hotel.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>Date</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="date" 
+                        {...field}
+                        className="bg-white"
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            )}
 
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="date" 
-                      {...field}
-                      className="bg-white"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="totalRevenue"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>$ Total Revenue</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="totalRevenue"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>$ Total Revenue</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="0"
-                      {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="occupancyPercent"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Occupancy %</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        placeholder="0"
+                        max="100"
+                        min="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="occupancyPercent"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Occupancy %</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="0"
-                      max="100"
-                      min="0"
-                      {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="adr"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>$ ADR</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="adr"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>$ ADR</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="0"
-                      {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="otherRevenue"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>$ Other Revenue</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="otherRevenue"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>$ Other Revenue</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="0"
-                      {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Add any additional notes..."
-                      rows={3}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </Form>
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notes</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Add any additional notes..."
+                        rows={3}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </Form>
+        </div>
       </ScrollArea>
 
       <div className="space-y-3 pt-4 border-t">
