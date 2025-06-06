@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Users, Mail, Phone, DollarSign, Search, Filter, MoreVertical, Eye, Edit, Trash2, UserPlus, X, Building2 } from "lucide-react";
+import { Users, Mail, Phone, DollarSign, Search, Filter, MoreVertical, Eye, Edit, Trash2, UserPlus, X, Building2, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -85,13 +85,17 @@ interface LoginActivity {
   device: string;
 }
 
+interface HotelAssignment {
+  hotel: string;
+  sharePercentage: number;
+}
+
 interface InvestorFormData {
   firstName: string;
   lastName: string;
   phone: string;
   email: string;
-  hotel: string;
-  sharePercentage: number;
+  hotelAssignments: HotelAssignment[];
   status: string;
   sendInvitation: boolean;
   sendSMS: boolean;
@@ -113,8 +117,7 @@ const PortfolioInvestors = () => {
       lastName: "",
       phone: "",
       email: "",
-      hotel: "",
-      sharePercentage: 0,
+      hotelAssignments: [{ hotel: "", sharePercentage: 0 }],
       status: "invite_sent",
       sendInvitation: true,
       sendSMS: false,
@@ -218,13 +221,16 @@ const PortfolioInvestors = () => {
 
   const handleEditInvestor = (investor: Investor) => {
     setEditingInvestor(investor);
+    const hotelAssignments = investor.hotelsInvested.map(hotel => ({
+      hotel,
+      sharePercentage: 15, // Mock percentage
+    }));
     form.reset({
       firstName: investor.firstName,
       lastName: investor.lastName,
       phone: investor.phone,
       email: investor.email,
-      hotel: investor.hotelsInvested[0] || "",
-      sharePercentage: 15, // Mock percentage
+      hotelAssignments: hotelAssignments.length > 0 ? hotelAssignments : [{ hotel: "", sharePercentage: 0 }],
       status: investor.status,
       sendInvitation: false,
       sendSMS: false,
@@ -234,7 +240,16 @@ const PortfolioInvestors = () => {
 
   const handleAddInvestor = () => {
     setEditingInvestor(null);
-    form.reset();
+    form.reset({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      hotelAssignments: [{ hotel: "", sharePercentage: 0 }],
+      status: "invite_sent",
+      sendInvitation: true,
+      sendSMS: false,
+    });
     setIsAddEditSheetOpen(true);
   };
 
@@ -253,8 +268,26 @@ const PortfolioInvestors = () => {
     toast.success("Invitation resent successfully");
   };
 
+  const addHotelAssignment = () => {
+    const currentAssignments = form.getValues("hotelAssignments");
+    form.setValue("hotelAssignments", [...currentAssignments, { hotel: "", sharePercentage: 0 }]);
+  };
+
+  const removeHotelAssignment = (index: number) => {
+    const currentAssignments = form.getValues("hotelAssignments");
+    if (currentAssignments.length > 1) {
+      const newAssignments = currentAssignments.filter((_, i) => i !== index);
+      form.setValue("hotelAssignments", newAssignments);
+    }
+  };
+
   const onSubmit = (data: InvestorFormData) => {
     console.log("Form data:", data);
+    const validAssignments = data.hotelAssignments.filter(assignment => assignment.hotel && assignment.sharePercentage > 0);
+    if (validAssignments.length === 0) {
+      toast.error("Please add at least one hotel assignment");
+      return;
+    }
     toast.success(editingInvestor ? "Investor updated successfully" : "Investor added successfully");
     setIsAddEditSheetOpen(false);
     form.reset();
@@ -594,55 +627,87 @@ const PortfolioInvestors = () => {
                   )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="hotel"
-                    rules={{ required: "Hotel selection is required" }}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Hotel *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select hotel" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {hotels.map((hotel) => (
-                              <SelectItem key={hotel} value={hotel}>
-                                {hotel}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="sharePercentage"
-                    rules={{ 
-                      required: "Share percentage is required",
-                      min: { value: 0.01, message: "Must be greater than 0" },
-                      max: { value: 100, message: "Must be less than or equal to 100" }
-                    }}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Share (%) *</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="Enter percentage" 
-                            {...field} 
-                            onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                {/* Hotel Assignments Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Hotel Assignments *</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addHotelAssignment}
+                      className="gap-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add More Hotel
+                    </Button>
+                  </div>
+
+                  {form.watch("hotelAssignments").map((_, index) => (
+                    <div key={index} className="grid grid-cols-2 gap-4 p-4 border rounded-lg relative">
+                      {form.watch("hotelAssignments").length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute top-2 right-2 h-6 w-6 p-0"
+                          onClick={() => removeHotelAssignment(index)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                      
+                      <FormField
+                        control={form.control}
+                        name={`hotelAssignments.${index}.hotel`}
+                        rules={{ required: "Hotel selection is required" }}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Hotel {index + 1} *</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select hotel" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {hotels.map((hotel) => (
+                                  <SelectItem key={hotel} value={hotel}>
+                                    {hotel}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name={`hotelAssignments.${index}.sharePercentage`}
+                        rules={{ 
+                          required: "Share percentage is required",
+                          min: { value: 0.01, message: "Must be greater than 0" },
+                          max: { value: 100, message: "Must be less than or equal to 100" }
+                        }}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Share (%) *</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="number" 
+                                placeholder="Enter percentage" 
+                                {...field} 
+                                onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  ))}
                 </div>
 
                 <FormField
@@ -652,7 +717,7 @@ const PortfolioInvestors = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select status" />
