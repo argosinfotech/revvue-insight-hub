@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -95,9 +96,9 @@ const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: Revenue
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <ScrollArea className="flex-1 h-[500px]">
-        <div className="pr-4">
+    <div className="flex flex-col h-[600px]">
+      <ScrollArea className="flex-1 pr-4">
+        <div className="space-y-4 pb-4">
           <Form {...form}>
             <div className="space-y-4">
               {showHotelSelector && (
@@ -245,7 +246,7 @@ const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: Revenue
         </div>
       </ScrollArea>
 
-      <div className="space-y-3 pt-4 border-t">
+      <div className="border-t pt-4 mt-4 flex-shrink-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-3">
