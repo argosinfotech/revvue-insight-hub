@@ -92,7 +92,6 @@ const PortfolioStaffs = () => {
     lastName: "",
     phone: "",
     email: "",
-    password: "",
     hotel: "",
     sendWelcomeEmail: false,
   });
@@ -121,17 +120,6 @@ const PortfolioStaffs = () => {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
-    }
-    
-    // Only validate password if we're adding a new staff (not editing)
-    if (!editingStaff) {
-      if (!formData.password.trim()) {
-        newErrors.password = "Password is required";
-      } else if (formData.password.length < 6 || formData.password.length > 15) {
-        newErrors.password = "Password must be between 6 and 15 characters";
-      } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-        newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, and one number";
-      }
     }
     
     if (!formData.hotel) {
@@ -163,7 +151,6 @@ const PortfolioStaffs = () => {
       lastName: "",
       phone: "",
       email: "",
-      password: "",
       hotel: "",
       sendWelcomeEmail: false,
     });
@@ -177,7 +164,6 @@ const PortfolioStaffs = () => {
       lastName: staff.lastName,
       phone: staff.phone,
       email: staff.email,
-      password: "", // Don't pre-fill password for security
       hotel: staff.hotelName,
       sendWelcomeEmail: false,
     });
@@ -265,23 +251,6 @@ const PortfolioStaffs = () => {
                   />
                   {errors.email && (
                     <p className="text-sm text-red-500">{errors.email}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">
-                    Password {editingStaff ? "(Leave blank to keep current password)" : "*"}
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    className={errors.password ? "border-red-500" : ""}
-                    placeholder={editingStaff ? "Leave blank to keep current password" : "6-15 characters with uppercase, lowercase & number"}
-                  />
-                  {errors.password && (
-                    <p className="text-sm text-red-500">{errors.password}</p>
                   )}
                 </div>
 
