@@ -282,7 +282,7 @@ const Subscription = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground">Plan Type</p>
+                    <p className="text-sm font-medium text-muted-foreground">Plan Name</p>
                     <p className="text-lg font-semibold">{latestSubscription.planType}</p>
                   </div>
                   <div className="space-y-2">
@@ -303,10 +303,6 @@ const Subscription = () => {
                            className={latestSubscription.planStatus === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
                       {latestSubscription.planStatus === "active" ? "Active" : "Inactive"}
                     </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground">Plan ID</p>
-                    <p className="text-lg font-mono">{latestSubscription.planId}</p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">Last Paid Amount</p>
