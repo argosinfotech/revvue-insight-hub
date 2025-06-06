@@ -53,7 +53,6 @@ const latestSubscription = {
   subscriptionId: "sub_1234567890",
   planStatus: "active",
   planId: "plan_premium_001",
-  contactName: "John Smith",
   lastPayedAmount: "$99.99",
   lastPaymentDate: "2024-05-15"
 };
@@ -308,10 +307,6 @@ const Subscription = () => {
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">Plan ID</p>
                     <p className="text-lg font-mono">{latestSubscription.planId}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground">Contact Name</p>
-                    <p className="text-lg font-semibold">{latestSubscription.contactName}</p>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">Last Paid Amount</p>
