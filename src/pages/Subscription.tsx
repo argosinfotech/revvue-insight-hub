@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { CreditCard, Download, Calendar, DollarSign, FileText, Settings, User } from "lucide-react";
+import { CreditCard, Download, Calendar, DollarSign, FileText, Settings, User, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +43,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from "@/components/DashboardLayout";
 
@@ -411,6 +413,14 @@ const Subscription = () => {
                               </div>
                             </RadioGroup>
                           </div>
+                          
+                          {/* Downgrade Disclaimer */}
+                          <Alert>
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>
+                              <strong>Important:</strong> When downgrading your plan, the new features and pricing will be effective from your next payment cycle. You will continue to have access to your current plan's features until then.
+                            </AlertDescription>
+                          </Alert>
                         </div>
                         <Button type="submit" className="w-full">
                           Change Plan
