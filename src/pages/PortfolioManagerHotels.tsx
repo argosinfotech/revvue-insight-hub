@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Building2, Plus, Trash2, Users, Search, Eye, Edit, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -377,7 +378,6 @@ const PortfolioManagerHotels = () => {
         {/* Hotels Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Hotels List</CardTitle>
             <CardDescription>
               Showing {filteredHotels.length} of {hotels.length} hotels
             </CardDescription>
