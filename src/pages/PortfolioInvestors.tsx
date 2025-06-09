@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Users, Mail, Phone, DollarSign, Search, Filter, MoreVertical, Eye, Edit, Trash2, UserPlus, X, Building2, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -627,10 +628,10 @@ const PortfolioInvestors = () => {
                   )}
                 />
 
-                {/* Hotel Assignments Section */}
+                {/* Invested In Section */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="text-base font-medium">Hotel Assignments *</Label>
+                    <Label className="text-base font-medium">Invested In *</Label>
                     <Button
                       type="button"
                       variant="outline"
