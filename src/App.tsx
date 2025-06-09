@@ -13,6 +13,7 @@ import Users from "@/pages/Users";
 import Notifications from "@/pages/Notifications";
 import NotFound from "@/pages/NotFound";
 import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
+import Payment from "@/pages/Payment";
 import PortfolioDashboard from "@/pages/PortfolioDashboard";
 import PortfolioManagerHotels from "@/pages/PortfolioManagerHotels";
 import PortfolioInvestors from "@/pages/PortfolioInvestors";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/portfolio-manager-signup" element={<PortfolioManagerSignup />} />
+          <Route path="/payment" element={<Payment />} />
           
           {/* Admin routes */}
           <Route path="/dashboard" element={<Dashboard />} />

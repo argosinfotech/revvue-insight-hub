@@ -98,8 +98,8 @@ const PortfolioManagerSignup = () => {
       
       toast.success("Registration successful! Please complete your payment to activate your account.");
       
-      // Redirect to billing page with selected package info
-      navigate("/billing", { 
+      // Redirect to payment page with selected package info
+      navigate("/payment", { 
         state: { 
           selectedPackage: formData.selectedPackage,
           userInfo: formData 
