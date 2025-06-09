@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -119,8 +118,8 @@ const Profile = () => {
     }, 1000);
   };
 
-  // Determine if user should see hotel information (not for Super Admin)
-  const shouldShowHotelInfo = userRole !== 'admin';
+  // Determine if user should see hotel information (only for Hotel Staff)
+  const shouldShowHotelInfo = userRole === 'hotel-staff';
 
   return (
     <DashboardLayout>
@@ -405,7 +404,7 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          {/* Enrolled Hotel Information Card - Only show for non-admin users */}
+          {/* Enrolled Hotel Information Card - Only show for hotel staff */}
           {shouldShowHotelInfo && (
             <Card className="md:col-span-3">
               <CardHeader>
