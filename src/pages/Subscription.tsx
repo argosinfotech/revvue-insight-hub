@@ -191,6 +191,30 @@ const Subscription = () => {
                     Update your billing name and payment card details
                   </SheetDescription>
                 </SheetHeader>
+
+                {/* Current Billing Information Section */}
+                <div className="mt-6 p-4 bg-muted rounded-lg">
+                  <h3 className="text-sm font-medium mb-3">Current Billing Information</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Billing Name:</span>
+                      <span className="font-medium">John Smith</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Card Number:</span>
+                      <span className="font-medium">**** **** **** 3456</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Expiry:</span>
+                      <span className="font-medium">01/2024</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Card Type:</span>
+                      <span className="font-medium">Visa</span>
+                    </div>
+                  </div>
+                </div>
+
                 <form onSubmit={handleUpdateBillingInfo} className="space-y-6 mt-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
