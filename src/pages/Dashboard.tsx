@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -31,49 +32,6 @@ const revenueData = [
   { month: "Apr", revenue: 21000 },
   { month: "May", revenue: 25000 },
   { month: "Jun", revenue: 18000 },
-];
-
-const topPerformingHotels = [
-  {
-    rank: 1,
-    name: "Grand Palace Resort",
-    location: "Miami, FL",
-    monthlyRevenue: 485000,
-    occupancyRate: 94,
-    growth: 12.5
-  },
-  {
-    rank: 2,
-    name: "Ocean View Hotel",
-    location: "San Diego, CA",
-    monthlyRevenue: 425000,
-    occupancyRate: 91,
-    growth: 8.7
-  },
-  {
-    rank: 3,
-    name: "Mountain Lodge",
-    location: "Aspen, CO",
-    monthlyRevenue: 380000,
-    occupancyRate: 89,
-    growth: 15.2
-  },
-  {
-    rank: 4,
-    name: "City Center Hotel",
-    location: "New York, NY",
-    monthlyRevenue: 365000,
-    occupancyRate: 87,
-    growth: 6.8
-  },
-  {
-    rank: 5,
-    name: "Beachfront Resort",
-    location: "Malibu, CA",
-    monthlyRevenue: 342000,
-    occupancyRate: 85,
-    growth: 9.3
-  }
 ];
 
 const StatCard = ({ icon, title, value, description, trend }: { 
@@ -271,55 +229,6 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-
-        {/* Top 5 Performing Hotels Table */}
-        <Card className="bg-white border border-gray-100 shadow-sm">
-          <CardHeader>
-            <div>
-              <CardTitle className="text-gray-900 font-system">Top 5 Performing Hotels</CardTitle>
-              <CardDescription className="text-gray-600 font-system">Best performing hotels based on revenue and occupancy</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-16">Rank</TableHead>
-                  <TableHead>Hotel Name</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead className="text-right">Monthly Revenue</TableHead>
-                  <TableHead className="text-right">Occupancy Rate</TableHead>
-                  <TableHead className="text-right">Growth</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {topPerformingHotels.map((hotel) => (
-                  <TableRow key={hotel.rank} className="hover:bg-gray-50">
-                    <TableCell className="font-medium">#{hotel.rank}</TableCell>
-                    <TableCell className="font-medium text-gray-900">{hotel.name}</TableCell>
-                    <TableCell className="text-gray-600">{hotel.location}</TableCell>
-                    <TableCell className="text-right font-medium">
-                      ${hotel.monthlyRevenue.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        {hotel.occupancyRate}%
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <span className={`inline-flex items-center text-sm font-medium ${
-                        hotel.growth > 0 ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        <TrendingUp className="w-3 h-3 mr-1" />
-                        +{hotel.growth}%
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
       </div>
     </DashboardLayout>
   );
