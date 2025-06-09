@@ -275,15 +275,9 @@ const Dashboard = () => {
         {/* Top 5 Performing Hotels Table */}
         <Card className="bg-white border border-gray-100 shadow-sm">
           <CardHeader>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <CardTitle className="text-gray-900 font-system">Top 5 Performing Hotels</CardTitle>
-                <CardDescription className="text-gray-600 font-system">Best performing hotels based on revenue and occupancy</CardDescription>
-              </div>
-              <Button variant="ghost" size="sm" className="hover:bg-gray-50 font-system">
-                <Download size={16} className="mr-2" />
-                Export
-              </Button>
+            <div>
+              <CardTitle className="text-gray-900 font-system">Top 5 Performing Hotels</CardTitle>
+              <CardDescription className="text-gray-600 font-system">Best performing hotels based on revenue and occupancy</CardDescription>
             </div>
           </CardHeader>
           <CardContent>
