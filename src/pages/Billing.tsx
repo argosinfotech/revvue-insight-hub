@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Plus, Edit, Trash2, CreditCard } from "lucide-react";
@@ -60,7 +59,6 @@ interface BillingPackage {
 const addPackageSchema = z.object({
   name: z.string().min(1, "Package name is required"),
   price: z.string().min(1, "Price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
-  description: z.string().min(1, "Description is required"),
   features: z.string().min(1, "Features are required"),
   maxHotels: z.string().min(1, "Number of hotels is required").regex(/^\d+$/, "Must be a valid number"),
   maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number")
@@ -131,7 +129,6 @@ const Billing = () => {
     defaultValues: {
       name: "",
       price: "",
-      description: "",
       features: "",
       maxHotels: "",
       maxInvestors: ""
@@ -216,7 +213,6 @@ const Billing = () => {
     // Pre-populate form with package data
     form.setValue("name", pkg.name);
     form.setValue("price", pkg.price.toString());
-    form.setValue("description", ""); // Description not stored in current data structure
     form.setValue("features", pkg.features.join('\n'));
     form.setValue("maxHotels", pkg.maxHotels?.toString() || "");
     form.setValue("maxInvestors", pkg.maxInvestors?.toString() || "");
@@ -531,20 +527,6 @@ const Billing = () => {
                       <FormLabel>Price (Monthly)</FormLabel>
                       <FormControl>
                         <Input placeholder="0.00" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Brief package description" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
