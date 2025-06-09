@@ -10,7 +10,6 @@ import Investors from "@/pages/Investors";
 import Billing from "@/pages/Billing";
 import Activity from "@/pages/Activity";
 import Users from "@/pages/Users";
-import Notifications from "@/pages/Notifications";
 import NotFound from "@/pages/NotFound";
 import PortfolioManagerSignup from "@/pages/PortfolioManagerSignup";
 import Payment from "@/pages/Payment";
@@ -46,7 +45,6 @@ function App() {
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/investors" element={<Investors />} />
           <Route path="/billing" element={<Billing />} />
-          <Route path="/notifications" element={<Notifications />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/users" element={<Users />} />
           <Route path="/settings" element={<PortfolioSettings />} />

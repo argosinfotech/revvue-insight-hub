@@ -1,10 +1,8 @@
-
 import {
   BarChartBig,
   Building2,
   Users,
   Settings,
-  Bell,
   Package,
   Activity,
   TrendingUp,
@@ -30,11 +28,6 @@ export const adminNavItems = [
     to: "/billing",
     icon: Package,
     label: "Billing & Packages",
-  },
-  {
-    to: "/notifications",
-    icon: Bell,
-    label: "Notifications",
   },
   {
     to: "/activity",
