@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { ArrowLeft, Check, Building2, Phone, User, Mail } from "lucide-react";
+import { Check, Building2, Phone, User, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface PackageData {
@@ -114,10 +113,6 @@ const PortfolioManagerSignup = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Login
-          </Link>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Portfolio Manager Registration
           </h1>
