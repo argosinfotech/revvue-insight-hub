@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Plus, Edit, Trash2, CreditCard } from "lucide-react";
@@ -51,6 +52,8 @@ interface BillingPackage {
   price: number;
   features: string[];
   subscriberCount: number;
+  maxHotels?: number;
+  maxInvestors?: number;
 }
 
 // Form validation schema
@@ -58,7 +61,9 @@ const addPackageSchema = z.object({
   name: z.string().min(1, "Package name is required"),
   price: z.string().min(1, "Price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
   description: z.string().min(1, "Description is required"),
-  features: z.string().min(1, "Features are required")
+  features: z.string().min(1, "Features are required"),
+  maxHotels: z.string().min(1, "Number of hotels is required").regex(/^\d+$/, "Must be a valid number"),
+  maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number")
 });
 
 const paymentSchema = z.object({
@@ -85,21 +90,27 @@ const Billing = () => {
       name: "Basic Package",
       price: 29,
       features: ["Up to 5 hotels", "Basic analytics", "Email support"],
-      subscriberCount: 12
+      subscriberCount: 12,
+      maxHotels: 5,
+      maxInvestors: 50
     },
     {
       id: "pro", 
       name: "Pro Package",
       price: 99,
       features: ["Up to 20 hotels", "Advanced analytics", "Priority support", "API access"],
-      subscriberCount: 8
+      subscriberCount: 8,
+      maxHotels: 20,
+      maxInvestors: 100
     },
     {
       id: "enterprise",
       name: "Enterprise",
       price: 0,
       features: ["Unlimited hotels", "Custom integrations", "Dedicated support", "White label options"],
-      subscriberCount: 0
+      subscriberCount: 0,
+      maxHotels: 999,
+      maxInvestors: 999
     }
   ]);
 
@@ -121,7 +132,9 @@ const Billing = () => {
       name: "",
       price: "",
       description: "",
-      features: ""
+      features: "",
+      maxHotels: "",
+      maxInvestors: ""
     }
   });
 
@@ -144,7 +157,9 @@ const Billing = () => {
         ...editingPackage,
         name: data.name,
         price: parseFloat(data.price),
-        features: data.features.split('\n').filter(feature => feature.trim() !== '')
+        features: data.features.split('\n').filter(feature => feature.trim() !== ''),
+        maxHotels: parseInt(data.maxHotels),
+        maxInvestors: parseInt(data.maxInvestors)
       };
 
       setPackages(packages.map(pkg => 
@@ -158,7 +173,9 @@ const Billing = () => {
         name: data.name,
         price: parseFloat(data.price),
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
-        subscriberCount: 0
+        subscriberCount: 0,
+        maxHotels: parseInt(data.maxHotels),
+        maxInvestors: parseInt(data.maxInvestors)
       };
 
       setPackages([...packages, newPackage]);
@@ -201,6 +218,8 @@ const Billing = () => {
     form.setValue("price", pkg.price.toString());
     form.setValue("description", ""); // Description not stored in current data structure
     form.setValue("features", pkg.features.join('\n'));
+    form.setValue("maxHotels", pkg.maxHotels?.toString() || "");
+    form.setValue("maxInvestors", pkg.maxInvestors?.toString() || "");
     
     setIsAddPackageOpen(true);
   };
@@ -402,6 +421,8 @@ const Billing = () => {
                   <TableRow>
                     <TableHead>Package Name</TableHead>
                     <TableHead>Price</TableHead>
+                    <TableHead>Max Hotels</TableHead>
+                    <TableHead>Max Investors</TableHead>
                     <TableHead>No. of Subscribers</TableHead>
                     <TableHead>Features</TableHead>
                     <TableHead className="w-[100px]">Actions</TableHead>
@@ -414,6 +435,12 @@ const Billing = () => {
                         <TableCell className="font-medium">{pkg.name}</TableCell>
                         <TableCell>
                           {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
+                        </TableCell>
+                        <TableCell>
+                          {pkg.maxHotels === 999 ? 'Unlimited' : pkg.maxHotels}
+                        </TableCell>
+                        <TableCell>
+                          {pkg.maxInvestors === 999 ? 'Unlimited' : pkg.maxInvestors}
                         </TableCell>
                         <TableCell>
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -454,7 +481,7 @@ const Billing = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center">
+                      <TableCell colSpan={7} className="h-24 text-center">
                         No packages found.
                       </TableCell>
                     </TableRow>
@@ -523,6 +550,36 @@ const Billing = () => {
                     </FormItem>
                   )}
                 />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="maxHotels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Max Hotels</FormLabel>
+                        <FormControl>
+                          <Input placeholder="5" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="maxInvestors"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Max Investors</FormLabel>
+                        <FormControl>
+                          <Input placeholder="50" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormField
                   control={form.control}
