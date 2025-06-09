@@ -139,8 +139,8 @@ const Subscription = () => {
     e.preventDefault();
     console.log("Update billing info submitted");
     toast({
-      title: "Billing Information Updated",
-      description: "Your billing information has been successfully updated.",
+      title: "Payment Information Updated",
+      description: "Your payment information has been successfully updated.",
     });
   };
 
@@ -180,74 +180,94 @@ const Subscription = () => {
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline">
-                  <User size={16} className="mr-2" />
-                  Update Billing Info
+                  <CreditCard size={16} className="mr-2" />
+                  Update Payment Info
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Update Billing Information</SheetTitle>
+                  <SheetTitle>Update Payment Information</SheetTitle>
                   <SheetDescription>
-                    Update your billing address and contact information
+                    Update your billing name and payment card details
                   </SheetDescription>
                 </SheetHeader>
                 <form onSubmit={handleUpdateBillingInfo} className="space-y-6 mt-6">
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input id="firstName" defaultValue="John" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input id="lastName" defaultValue="Smith" />
-                      </div>
-                    </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" defaultValue="john.smith@example.com" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" defaultValue="+1 (555) 123-4567" />
+                      <Label htmlFor="billingFullName">Billing Full Name</Label>
+                      <Input id="billingFullName" defaultValue="John Smith" />
                     </div>
                     <Separator />
                     <div className="space-y-2">
-                      <Label htmlFor="address">Address</Label>
-                      <Input id="address" defaultValue="123 Main Street" />
+                      <Label htmlFor="cardNumber">Credit Card Number</Label>
+                      <Input 
+                        id="cardNumber" 
+                        placeholder="1234 5678 9012 3456"
+                        maxLength={19}
+                        onChange={(e) => {
+                          // Format card number with spaces
+                          const value = e.target.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
+                          e.target.value = value;
+                        }}
+                      />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="city">City</Label>
-                        <Input id="city" defaultValue="New York" />
+                        <Label htmlFor="cvv">CVV</Label>
+                        <Input 
+                          id="cvv" 
+                          placeholder="123"
+                          maxLength={4}
+                          onChange={(e) => {
+                            // Only allow numbers
+                            const value = e.target.value.replace(/\D/g, '');
+                            e.target.value = value;
+                          }}
+                        />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="state">State</Label>
-                        <Input id="state" defaultValue="NY" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="zipCode">ZIP Code</Label>
-                        <Input id="zipCode" defaultValue="10001" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="country">Country</Label>
-                        <Select defaultValue="us">
+                        <Label htmlFor="expiryMonth">Expiry Month</Label>
+                        <Select defaultValue="01">
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="us">United States</SelectItem>
-                            <SelectItem value="ca">Canada</SelectItem>
-                            <SelectItem value="uk">United Kingdom</SelectItem>
+                            <SelectItem value="01">01</SelectItem>
+                            <SelectItem value="02">02</SelectItem>
+                            <SelectItem value="03">03</SelectItem>
+                            <SelectItem value="04">04</SelectItem>
+                            <SelectItem value="05">05</SelectItem>
+                            <SelectItem value="06">06</SelectItem>
+                            <SelectItem value="07">07</SelectItem>
+                            <SelectItem value="08">08</SelectItem>
+                            <SelectItem value="09">09</SelectItem>
+                            <SelectItem value="10">10</SelectItem>
+                            <SelectItem value="11">11</SelectItem>
+                            <SelectItem value="12">12</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="expiryYear">Expiry Year</Label>
+                        <Select defaultValue="2024">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="2024">2024</SelectItem>
+                            <SelectItem value="2025">2025</SelectItem>
+                            <SelectItem value="2026">2026</SelectItem>
+                            <SelectItem value="2027">2027</SelectItem>
+                            <SelectItem value="2028">2028</SelectItem>
+                            <SelectItem value="2029">2029</SelectItem>
+                            <SelectItem value="2030">2030</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                   </div>
                   <Button type="submit" className="w-full">
-                    Update Billing Information
+                    Update Payment Information
                   </Button>
                 </form>
               </SheetContent>
