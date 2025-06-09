@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Building2, Plus, Trash2, Users, Search, Eye, Edit, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -389,7 +388,7 @@ const PortfolioManagerHotels = () => {
                   <TableRow>
                     <TableHead>Hotel Name</TableHead>
                     <TableHead>Address</TableHead>
-                    <TableHead>Manager Name</TableHead>
+                    <TableHead>Staff Name</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Date Added</TableHead>
                     <TableHead>No. of Investors</TableHead>
@@ -485,7 +484,7 @@ const PortfolioManagerHotels = () => {
                     <p className="text-base font-medium">{selectedHotel.name}</p>
                   </div>
                   <div>
-                    <Label className="text-muted-foreground">Manager Name</Label>
+                    <Label className="text-muted-foreground">Staff Name</Label>
                     <p className="text-base">{selectedHotel.managerName}</p>
                   </div>
                   <div>
