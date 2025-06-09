@@ -1,10 +1,12 @@
+
 import { 
   Building2, 
   Users, 
   DollarSign, 
   Calendar, 
   TrendingUp, 
-  Download
+  Download,
+  UserCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,11 +88,11 @@ const Dashboard = () => {
             trend={{ value: "+12.5%", positive: true }}
           />
           <StatCard 
-            icon={<DollarSign className="h-5 w-5" />} 
-            title="Monthly Revenue"
-            value="$8,942"
-            description="From subscriptions"
-            trend={{ value: "+4.3%", positive: true }}
+            icon={<UserCheck className="h-5 w-5" />} 
+            title="Total Staff Users"
+            value="89"
+            description="Active staff members"
+            trend={{ value: "+7.1%", positive: true }}
           />
           <StatCard 
             icon={<Calendar className="h-5 w-5" />} 
