@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar, Search, X, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -320,7 +321,7 @@ const Activity = () => {
                   <TableRow>
                     <TableHead>Timestamp</TableHead>
                     <TableHead>User Name</TableHead>
-                    <TableHead>User ID</TableHead>
+                    <TableHead>Action Type</TableHead>
                     <TableHead>Action Description</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -338,7 +339,11 @@ const Activity = () => {
                           {formatTimestamp(log.timestamp)}
                         </TableCell>
                         <TableCell className="font-medium">{log.userName}</TableCell>
-                        <TableCell className="font-mono text-sm">{log.userId}</TableCell>
+                        <TableCell>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            {log.actionType}
+                          </span>
+                        </TableCell>
                         <TableCell>{log.actionDescription}</TableCell>
                       </TableRow>
                     ))
