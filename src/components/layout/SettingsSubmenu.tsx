@@ -1,5 +1,5 @@
 
-import { Mail, HelpCircle } from "lucide-react";
+import { Mail, HelpCircle, MessageSquare } from "lucide-react";
 
 interface SettingsSubmenuProps {
   activeSection: string;
@@ -9,6 +9,7 @@ interface SettingsSubmenuProps {
 const SettingsSubmenu = ({ activeSection, onSectionChange }: SettingsSubmenuProps) => {
   const menuItems = [
     { id: "email-templates", icon: Mail, label: "Email Templates" },
+    { id: "email-sms-templates", icon: MessageSquare, label: "Email/SMS Template" },
     { id: "help", icon: HelpCircle, label: "Help & Support" }
   ];
 

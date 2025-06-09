@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { User, Bell, Shield, Save } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 import EmailTemplates from "@/components/email-templates/EmailTemplates";
+import EmailSmsTemplates from "@/components/email-sms-templates/EmailSmsTemplates";
 import SettingsSubmenu from "@/components/layout/SettingsSubmenu";
 
 const PortfolioSettings = () => {
@@ -165,7 +165,7 @@ const PortfolioSettings = () => {
                   <Switch
                     id="investor-updates"
                     checked={notifications.investorUpdates}
-                    onCheckedChange={(checked) => setNotifications({...notifications, investorUpdates: checked})}
+                    onCheckedChange={(e) => setNotifications({...notifications, investorUpdates: e.target.checked})}
                   />
                 </div>
 
@@ -282,6 +282,9 @@ const PortfolioSettings = () => {
 
       case "email-templates":
         return <EmailTemplates />;
+
+      case "email-sms-templates":
+        return <EmailSmsTemplates />;
 
       default:
         return (
