@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Calendar, Search, X, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -72,18 +71,9 @@ const actionTypes = [
   "System Configuration"
 ];
 
-const userRoles = [
-  "All Roles",
-  "Manager",
-  "Investor", 
-  "Staff",
-  "Super Admin"
-];
-
 const Activity = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedActionType, setSelectedActionType] = useState("All Types");
-  const [selectedRole, setSelectedRole] = useState("All Roles");
   const [dateFrom, setDateFrom] = useState<Date>();
   const [dateTo, setDateTo] = useState<Date>();
   const [isCST, setIsCST] = useState(true);
@@ -96,7 +86,6 @@ const Activity = () => {
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedActionType("All Types");
-    setSelectedRole("All Roles");
     setDateFrom(undefined);
     setDateTo(undefined);
   };
@@ -116,11 +105,6 @@ const Activity = () => {
     // Action type filter
     if (selectedActionType !== "All Types") {
       filtered = filtered.filter(log => log.actionType === selectedActionType);
-    }
-
-    // Role filter
-    if (selectedRole !== "All Roles") {
-      filtered = filtered.filter(log => log.userRole === selectedRole);
     }
 
     // Date range filter (simplified for demo)
@@ -199,7 +183,7 @@ const Activity = () => {
             </div>
 
             {/* Filter Controls */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Date Range */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Date From</label>
@@ -266,23 +250,6 @@ const Activity = () => {
                     {actionTypes.map((type) => (
                       <SelectItem key={type} value={type}>
                         {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* User Role Filter */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">User Role</label>
-                <Select value={selectedRole} onValueChange={setSelectedRole}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {userRoles.map((role) => (
-                      <SelectItem key={role} value={role}>
-                        {role}
                       </SelectItem>
                     ))}
                   </SelectContent>
