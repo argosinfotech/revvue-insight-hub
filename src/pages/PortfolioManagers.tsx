@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 // Mock data
 const portfolioManagers = [
@@ -33,6 +35,14 @@ const portfolioManagers = [
       email: "john.smith@luxuryhotels.com",
       phoneNumber: "+1 (555) 123-4567",
       address: "123 Business Ave, New York, NY 10001"
+    },
+    subscriptionDetails: {
+      planName: "Premium Plan",
+      planType: "Monthly",
+      status: "Active",
+      amount: "$99.99",
+      nextBillingDate: "2024-06-15",
+      subscriptionId: "sub_1234567890"
     },
     hotels: [
       {
@@ -76,6 +86,14 @@ const portfolioManagers = [
       email: "emily.davis@boutiquehotels.com",
       phoneNumber: "+1 (555) 234-5678",
       address: "456 Hotel Street, Los Angeles, CA 90210"
+    },
+    subscriptionDetails: {
+      planName: "Basic Plan",
+      planType: "Yearly",
+      status: "Active",
+      amount: "$599.99",
+      nextBillingDate: "2025-02-10",
+      subscriptionId: "sub_0987654321"
     },
     hotels: [
       {
@@ -185,31 +203,74 @@ const PortfolioManagers = () => {
                 </TabsList>
 
                 <TabsContent value="organization" className="mt-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Organization Details</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Contact Person Name</label>
-                          <p className="mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
+                  <div className="space-y-6">
+                    {/* Organization Details */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Organization Details</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Contact Person Name</label>
+                            <p className="mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Email</label>
+                            <p className="mt-1">{selectedManager.organizationDetails.email}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Phone Number</label>
+                            <p className="mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Address</label>
+                            <p className="mt-1">{selectedManager.organizationDetails.address}</p>
+                          </div>
                         </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Email</label>
-                          <p className="mt-1">{selectedManager.organizationDetails.email}</p>
+                      </CardContent>
+                    </Card>
+
+                    {/* Subscription Details */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Subscription Details</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Plan Name</label>
+                            <p className="mt-1 font-semibold">{selectedManager.subscriptionDetails.planName}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Plan Type</label>
+                            <p className="mt-1">{selectedManager.subscriptionDetails.planType}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Status</label>
+                            <div className="mt-1">
+                              <Badge variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
+                                     className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}>
+                                {selectedManager.subscriptionDetails.status}
+                              </Badge>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Amount</label>
+                            <p className="mt-1 font-semibold text-green-600">{selectedManager.subscriptionDetails.amount}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Next Billing Date</label>
+                            <p className="mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Subscription ID</label>
+                            <p className="mt-1 font-mono text-sm">{selectedManager.subscriptionDetails.subscriptionId}</p>
+                          </div>
                         </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Phone Number</label>
-                          <p className="mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Address</label>
-                          <p className="mt-1">{selectedManager.organizationDetails.address}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="hotels" className="mt-6">
