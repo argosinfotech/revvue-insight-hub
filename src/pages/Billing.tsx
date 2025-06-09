@@ -49,6 +49,7 @@ interface BillingPackage {
   id: string;
   name: string;
   price: number;
+  yearlyPrice?: number;
   features: string[];
   subscriberCount: number;
   maxHotels?: number;
@@ -58,7 +59,8 @@ interface BillingPackage {
 // Form validation schema
 const addPackageSchema = z.object({
   name: z.string().min(1, "Package name is required"),
-  price: z.string().min(1, "Price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
+  price: z.string().min(1, "Monthly price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
+  yearlyPrice: z.string().min(1, "Yearly price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
   features: z.string().min(1, "Features are required"),
   maxHotels: z.string().min(1, "Number of hotels is required").regex(/^\d+$/, "Must be a valid number"),
   maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number")
@@ -87,6 +89,7 @@ const Billing = () => {
       id: "basic",
       name: "Basic Package",
       price: 29,
+      yearlyPrice: 290,
       features: ["Up to 5 hotels", "Basic analytics", "Email support"],
       subscriberCount: 12,
       maxHotels: 5,
@@ -96,6 +99,7 @@ const Billing = () => {
       id: "pro", 
       name: "Pro Package",
       price: 99,
+      yearlyPrice: 990,
       features: ["Up to 20 hotels", "Advanced analytics", "Priority support", "API access"],
       subscriberCount: 8,
       maxHotels: 20,
@@ -105,6 +109,7 @@ const Billing = () => {
       id: "enterprise",
       name: "Enterprise",
       price: 0,
+      yearlyPrice: 0,
       features: ["Unlimited hotels", "Custom integrations", "Dedicated support", "White label options"],
       subscriberCount: 0,
       maxHotels: 999,
@@ -129,6 +134,7 @@ const Billing = () => {
     defaultValues: {
       name: "",
       price: "",
+      yearlyPrice: "",
       features: "",
       maxHotels: "",
       maxInvestors: ""
@@ -154,6 +160,7 @@ const Billing = () => {
         ...editingPackage,
         name: data.name,
         price: parseFloat(data.price),
+        yearlyPrice: parseFloat(data.yearlyPrice),
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
         maxHotels: parseInt(data.maxHotels),
         maxInvestors: parseInt(data.maxInvestors)
@@ -169,6 +176,7 @@ const Billing = () => {
         id: `package_${packages.length + 1}`,
         name: data.name,
         price: parseFloat(data.price),
+        yearlyPrice: parseFloat(data.yearlyPrice),
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
         subscriberCount: 0,
         maxHotels: parseInt(data.maxHotels),
@@ -213,6 +221,7 @@ const Billing = () => {
     // Pre-populate form with package data
     form.setValue("name", pkg.name);
     form.setValue("price", pkg.price.toString());
+    form.setValue("yearlyPrice", pkg.yearlyPrice?.toString() || "");
     form.setValue("features", pkg.features.join('\n'));
     form.setValue("maxHotels", pkg.maxHotels?.toString() || "");
     form.setValue("maxInvestors", pkg.maxInvestors?.toString() || "");
@@ -285,12 +294,20 @@ const Billing = () => {
                           <p className="text-sm text-muted-foreground">{selectedPackage.features.join(", ")}</p>
                         </div>
                         <div className="border-t pt-4">
-                          <div className="flex justify-between items-center">
+                          <div className="flex justify-between items-center mb-2">
                             <span className="font-medium">Monthly Subscription:</span>
                             <span className="text-lg font-bold">
                               {selectedPackage.price === 0 ? 'Custom' : `$${selectedPackage.price}.00`}
                             </span>
                           </div>
+                          {selectedPackage.yearlyPrice && selectedPackage.yearlyPrice > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-muted-foreground">Yearly (billed monthly):</span>
+                              <span className="text-sm text-muted-foreground">
+                                ${(selectedPackage.yearlyPrice / 12).toFixed(2)}/month
+                              </span>
+                            </div>
+                          )}
                         </div>
                         {userInfo && (
                           <div className="border-t pt-4">
@@ -416,7 +433,8 @@ const Billing = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Package Name</TableHead>
-                    <TableHead>Price</TableHead>
+                    <TableHead>Monthly Price</TableHead>
+                    <TableHead>Yearly Price</TableHead>
                     <TableHead>Max Hotels</TableHead>
                     <TableHead>Max Investors</TableHead>
                     <TableHead>No. of Subscribers</TableHead>
@@ -431,6 +449,9 @@ const Billing = () => {
                         <TableCell className="font-medium">{pkg.name}</TableCell>
                         <TableCell>
                           {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
+                        </TableCell>
+                        <TableCell>
+                          {pkg.yearlyPrice === 0 ? 'Custom' : pkg.yearlyPrice ? `$${pkg.yearlyPrice}/year` : 'N/A'}
                         </TableCell>
                         <TableCell>
                           {pkg.maxHotels === 999 ? 'Unlimited' : pkg.maxHotels}
@@ -477,7 +498,7 @@ const Billing = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={7} className="h-24 text-center">
+                      <TableCell colSpan={8} className="h-24 text-center">
                         No packages found.
                       </TableCell>
                     </TableRow>
@@ -519,19 +540,39 @@ const Billing = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price (Monthly)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="0.00" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Monthly Price</FormLabel>
+                        <FormControl>
+                          <Input placeholder="29.00" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="yearlyPrice"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Yearly Price</FormLabel>
+                        <FormControl>
+                          <Input placeholder="290.00" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <p className="text-sm text-muted-foreground">
+                  * Yearly price will be deducted monthly (yearly amount ÷ 12)
+                </p>
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
