@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -298,14 +297,6 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-between gap-2">
-              <Button variant="ghost" className="text-sm text-gray-600 hover:bg-gray-50 font-system">
-                View all data
-              </Button>
-              <Button variant="ghost" size="icon" className="hover:bg-gray-50">
-                <Download size={16} />
-              </Button>
-            </CardFooter>
           </Card>
         </div>
       </div>
