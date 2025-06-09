@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { CreditCard, Download, Calendar, DollarSign, FileText, Settings, User, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -166,6 +165,13 @@ const Subscription = () => {
 
   const handleDownloadReceipt = (paymentId: number) => {
     console.log(`Download receipt for payment ${paymentId}`);
+  };
+
+  // Function to determine if the selected plan is a downgrade
+  const isDowngrade = () => {
+    const currentPlan = "premium"; // Current plan from latestSubscription
+    const planHierarchy = { basic: 1, premium: 2, enterprise: 3 };
+    return planHierarchy[selectedPlan as keyof typeof planHierarchy] < planHierarchy[currentPlan as keyof typeof planHierarchy];
   };
 
   return (
@@ -414,13 +420,15 @@ const Subscription = () => {
                             </RadioGroup>
                           </div>
                           
-                          {/* Downgrade Disclaimer */}
-                          <Alert>
-                            <AlertCircle className="h-4 w-4" />
-                            <AlertDescription>
-                              <strong>Important:</strong> When downgrading your plan, the new features and pricing will be effective from your next payment cycle. You will continue to have access to your current plan's features until then.
-                            </AlertDescription>
-                          </Alert>
+                          {/* Downgrade Disclaimer - Only show when downgrading */}
+                          {isDowngrade() && (
+                            <Alert>
+                              <AlertCircle className="h-4 w-4" />
+                              <AlertDescription>
+                                <strong>Important:</strong> When downgrading your plan, the new features and pricing will be effective from your next payment cycle. You will continue to have access to your current plan's features until then.
+                              </AlertDescription>
+                            </Alert>
+                          )}
                         </div>
                         <Button type="submit" className="w-full">
                           Change Plan
