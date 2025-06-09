@@ -50,6 +50,7 @@ interface BillingPackage {
   name: string;
   price: number;
   features: string[];
+  subscriberCount: number;
 }
 
 // Form validation schema
@@ -83,19 +84,22 @@ const Billing = () => {
       id: "basic",
       name: "Basic Package",
       price: 29,
-      features: ["Up to 5 hotels", "Basic analytics", "Email support"]
+      features: ["Up to 5 hotels", "Basic analytics", "Email support"],
+      subscriberCount: 12
     },
     {
       id: "pro", 
       name: "Pro Package",
       price: 99,
-      features: ["Up to 20 hotels", "Advanced analytics", "Priority support", "API access"]
+      features: ["Up to 20 hotels", "Advanced analytics", "Priority support", "API access"],
+      subscriberCount: 8
     },
     {
       id: "enterprise",
       name: "Enterprise",
       price: 0,
-      features: ["Unlimited hotels", "Custom integrations", "Dedicated support", "White label options"]
+      features: ["Unlimited hotels", "Custom integrations", "Dedicated support", "White label options"],
+      subscriberCount: 0
     }
   ]);
 
@@ -153,7 +157,8 @@ const Billing = () => {
         id: `package_${packages.length + 1}`,
         name: data.name,
         price: parseFloat(data.price),
-        features: data.features.split('\n').filter(feature => feature.trim() !== '')
+        features: data.features.split('\n').filter(feature => feature.trim() !== ''),
+        subscriberCount: 0
       };
 
       setPackages([...packages, newPackage]);
@@ -183,6 +188,11 @@ const Billing = () => {
   };
 
   const handleEdit = (pkg: BillingPackage) => {
+    if (pkg.subscriberCount > 0) {
+      toast.error("Cannot edit package with active subscribers");
+      return;
+    }
+    
     console.log("Editing package:", pkg);
     setEditingPackage(pkg);
     
@@ -196,6 +206,11 @@ const Billing = () => {
   };
 
   const handleDeleteClick = (pkg: BillingPackage) => {
+    if (pkg.subscriberCount > 0) {
+      toast.error("Cannot delete package with active subscribers");
+      return;
+    }
+    
     setPackageToDelete(pkg);
     setDeleteDialogOpen(true);
   };
@@ -387,6 +402,7 @@ const Billing = () => {
                   <TableRow>
                     <TableHead>Package Name</TableHead>
                     <TableHead>Price</TableHead>
+                    <TableHead>No. of Subscribers</TableHead>
                     <TableHead>Features</TableHead>
                     <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
@@ -398,6 +414,11 @@ const Billing = () => {
                         <TableCell className="font-medium">{pkg.name}</TableCell>
                         <TableCell>
                           {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
+                        </TableCell>
+                        <TableCell>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {pkg.subscriberCount}
+                          </span>
                         </TableCell>
                         <TableCell>
                           <ul className="text-sm text-muted-foreground">
@@ -412,7 +433,9 @@ const Billing = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => handleEdit(pkg)}
-                              className="h-8 w-8 p-0"
+                              disabled={pkg.subscriberCount > 0}
+                              className={`h-8 w-8 p-0 ${pkg.subscriberCount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              title={pkg.subscriberCount > 0 ? 'Cannot edit package with active subscribers' : 'Edit package'}
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -420,7 +443,9 @@ const Billing = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDeleteClick(pkg)}
-                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                              disabled={pkg.subscriberCount > 0}
+                              className={`h-8 w-8 p-0 text-destructive hover:text-destructive ${pkg.subscriberCount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              title={pkg.subscriberCount > 0 ? 'Cannot delete package with active subscribers' : 'Delete package'}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -430,7 +455,7 @@ const Billing = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={4} className="h-24 text-center">
+                      <TableCell colSpan={5} className="h-24 text-center">
                         No packages found.
                       </TableCell>
                     </TableRow>
