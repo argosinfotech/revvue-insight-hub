@@ -17,13 +17,12 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
     { month: "Jun", revenue: selectedHotel === "all" ? 130000 : 50000 }
   ];
 
-  // Mock data for bookings percentage per week
+  // Mock data for bookings percentage per week - reduced to 4 weeks
   const weeklyBookingsData = [
     { week: "Week 1", percentage: selectedHotel === "all" ? 85 : 88 },
     { week: "Week 2", percentage: selectedHotel === "all" ? 92 : 95 },
     { week: "Week 3", percentage: selectedHotel === "all" ? 78 : 82 },
-    { week: "Week 4", percentage: selectedHotel === "all" ? 96 : 98 },
-    { week: "Week 5", percentage: selectedHotel === "all" ? 88 : 91 }
+    { week: "Week 4", percentage: selectedHotel === "all" ? 96 : 98 }
   ];
 
   return (
