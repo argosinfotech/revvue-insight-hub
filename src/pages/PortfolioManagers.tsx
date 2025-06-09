@@ -1,0 +1,292 @@
+
+import { useState } from "react";
+import { Search, Eye } from "lucide-react";
+import DashboardLayout from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+// Mock data
+const portfolioManagers = [
+  {
+    id: 1,
+    clientName: "Luxury Hotels Group",
+    numberOfHotels: 5,
+    numberOfInvestors: 12,
+    enrolledDate: "2024-01-15",
+    organizationDetails: {
+      contactPersonName: "John Smith",
+      email: "john.smith@luxuryhotels.com",
+      phoneNumber: "+1 (555) 123-4567",
+      address: "123 Business Ave, New York, NY 10001"
+    },
+    hotels: [
+      {
+        hotelName: "Grand Plaza Hotel",
+        location: "Manhattan, NY",
+        enrolledDate: "2024-01-15",
+        status: "Active"
+      },
+      {
+        hotelName: "Seaside Resort",
+        location: "Miami, FL",
+        enrolledDate: "2024-02-20",
+        status: "Active"
+      }
+    ],
+    investors: [
+      {
+        investorName: "Michael Johnson",
+        phoneNumber: "+1 (555) 987-6543",
+        shareInHotels: "25%",
+        email: "michael.j@email.com",
+        status: "Active"
+      },
+      {
+        investorName: "Sarah Wilson",
+        phoneNumber: "+1 (555) 456-7890",
+        shareInHotels: "30%",
+        email: "sarah.w@email.com",
+        status: "Active"
+      }
+    ]
+  },
+  {
+    id: 2,
+    clientName: "Boutique Hotels Inc",
+    numberOfHotels: 3,
+    numberOfInvestors: 8,
+    enrolledDate: "2024-02-10",
+    organizationDetails: {
+      contactPersonName: "Emily Davis",
+      email: "emily.davis@boutiquehotels.com",
+      phoneNumber: "+1 (555) 234-5678",
+      address: "456 Hotel Street, Los Angeles, CA 90210"
+    },
+    hotels: [
+      {
+        hotelName: "Vintage Inn",
+        location: "Beverly Hills, CA",
+        enrolledDate: "2024-02-10",
+        status: "Active"
+      }
+    ],
+    investors: [
+      {
+        investorName: "Robert Brown",
+        phoneNumber: "+1 (555) 345-6789",
+        shareInHotels: "40%",
+        email: "robert.b@email.com",
+        status: "Active"
+      }
+    ]
+  }
+];
+
+const PortfolioManagers = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedManager, setSelectedManager] = useState(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+
+  const filteredManagers = portfolioManagers.filter(manager =>
+    manager.clientName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleViewDetails = (manager) => {
+    setSelectedManager(manager);
+    setIsViewDialogOpen(true);
+  };
+
+  return (
+    <DashboardLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Portfolio Manager</h1>
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex items-center space-x-4">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search by client name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+
+        {/* Table */}
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Client Name</TableHead>
+                  <TableHead>No. of Hotels</TableHead>
+                  <TableHead>No. of Investors</TableHead>
+                  <TableHead>Enrolled Date</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredManagers.map((manager) => (
+                  <TableRow key={manager.id}>
+                    <TableCell className="font-medium">{manager.clientName}</TableCell>
+                    <TableCell>{manager.numberOfHotels}</TableCell>
+                    <TableCell>{manager.numberOfInvestors}</TableCell>
+                    <TableCell>{new Date(manager.enrolledDate).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewDetails(manager)}
+                        className="flex items-center gap-2"
+                      >
+                        <Eye className="h-4 w-4" />
+                        View Details
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        {/* View Details Dialog */}
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Portfolio Manager Details</DialogTitle>
+            </DialogHeader>
+
+            {selectedManager && (
+              <div className="space-y-6">
+                {/* Organization Details */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Organization Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Contact Person Name</label>
+                        <p className="mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Email</label>
+                        <p className="mt-1">{selectedManager.organizationDetails.email}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Phone Number</label>
+                        <p className="mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Address</label>
+                        <p className="mt-1">{selectedManager.organizationDetails.address}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Hotel Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Hotel Information</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Hotel Name</TableHead>
+                          <TableHead>Location</TableHead>
+                          <TableHead>Enrolled Date</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {selectedManager.hotels.map((hotel, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{hotel.hotelName}</TableCell>
+                            <TableCell>{hotel.location}</TableCell>
+                            <TableCell>{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                hotel.status === 'Active' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : 'bg-red-100 text-red-800'
+                              }`}>
+                                {hotel.status}
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+
+                {/* Investors */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Investors</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Investor Name</TableHead>
+                          <TableHead>Phone Number</TableHead>
+                          <TableHead>Share in Hotels</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {selectedManager.investors.map((investor, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{investor.investorName}</TableCell>
+                            <TableCell>{investor.phoneNumber}</TableCell>
+                            <TableCell>{investor.shareInHotels}</TableCell>
+                            <TableCell>{investor.email}</TableCell>
+                            <TableCell>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                investor.status === 'Active' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : 'bg-red-100 text-red-800'
+                              }`}>
+                                {investor.status}
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </DashboardLayout>
+  );
+};
+
+export default PortfolioManagers;

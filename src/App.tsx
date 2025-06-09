@@ -25,6 +25,7 @@ import MyEntries from "@/pages/MyEntries";
 import Profile from "@/pages/Profile";
 import ChangePassword from "@/pages/ChangePassword";
 import Revenue from "@/pages/Revenue";
+import PortfolioManagers from "@/pages/PortfolioManagers";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ function App() {
           
           {/* Admin routes */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/portfolio-managers" element={<PortfolioManagers />} />
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/investors" element={<Investors />} />
           <Route path="/billing" element={<Billing />} />

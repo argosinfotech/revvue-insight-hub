@@ -11,7 +11,8 @@ import {
   UserCog,
   CreditCard,
   FileText,
-  DollarSign
+  DollarSign,
+  UserCheck
 } from "lucide-react";
 
 export const adminNavItems = [
@@ -19,6 +20,11 @@ export const adminNavItems = [
     to: "/dashboard",
     icon: BarChartBig,
     label: "Dashboard",
+  },
+  {
+    to: "/portfolio-managers",
+    icon: UserCheck,
+    label: "Portfolio Manager",
   },
   {
     to: "/billing",
