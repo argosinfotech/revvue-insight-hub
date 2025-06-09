@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -19,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Mock data
 const portfolioManagers = [
@@ -169,7 +169,7 @@ const PortfolioManagers = () => {
           </CardContent>
         </Card>
 
-        {/* View Details Dialog */}
+        {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
@@ -177,110 +177,119 @@ const PortfolioManagers = () => {
             </DialogHeader>
 
             {selectedManager && (
-              <div className="space-y-6">
-                {/* Organization Details */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Organization Details</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Contact Person Name</label>
-                        <p className="mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Email</label>
-                        <p className="mt-1">{selectedManager.organizationDetails.email}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Phone Number</label>
-                        <p className="mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Address</label>
-                        <p className="mt-1">{selectedManager.organizationDetails.address}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <Tabs defaultValue="organization" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="organization">Organization Details</TabsTrigger>
+                  <TabsTrigger value="hotels">Hotel Information</TabsTrigger>
+                  <TabsTrigger value="investors">Investors</TabsTrigger>
+                </TabsList>
 
-                {/* Hotel Information */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Hotel Information</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Hotel Name</TableHead>
-                          <TableHead>Location</TableHead>
-                          <TableHead>Enrolled Date</TableHead>
-                          <TableHead>Status</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {selectedManager.hotels.map((hotel, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{hotel.hotelName}</TableCell>
-                            <TableCell>{hotel.location}</TableCell>
-                            <TableCell>{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
-                            <TableCell>
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                hotel.status === 'Active' 
-                                  ? 'bg-green-100 text-green-800' 
-                                  : 'bg-red-100 text-red-800'
-                              }`}>
-                                {hotel.status}
-                              </span>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                <TabsContent value="organization" className="mt-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Organization Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium text-gray-500">Contact Person Name</label>
+                          <p className="mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-500">Email</label>
+                          <p className="mt-1">{selectedManager.organizationDetails.email}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-500">Phone Number</label>
+                          <p className="mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-500">Address</label>
+                          <p className="mt-1">{selectedManager.organizationDetails.address}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
 
-                {/* Investors */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Investors</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Investor Name</TableHead>
-                          <TableHead>Phone Number</TableHead>
-                          <TableHead>Share in Hotels</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Status</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {selectedManager.investors.map((investor, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{investor.investorName}</TableCell>
-                            <TableCell>{investor.phoneNumber}</TableCell>
-                            <TableCell>{investor.shareInHotels}</TableCell>
-                            <TableCell>{investor.email}</TableCell>
-                            <TableCell>
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                investor.status === 'Active' 
-                                  ? 'bg-green-100 text-green-800' 
-                                  : 'bg-red-100 text-red-800'
-                              }`}>
-                                {investor.status}
-                              </span>
-                            </TableCell>
+                <TabsContent value="hotels" className="mt-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Hotel Information</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Hotel Name</TableHead>
+                            <TableHead>Location</TableHead>
+                            <TableHead>Enrolled Date</TableHead>
+                            <TableHead>Status</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </div>
+                        </TableHeader>
+                        <TableBody>
+                          {selectedManager.hotels.map((hotel, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{hotel.hotelName}</TableCell>
+                              <TableCell>{hotel.location}</TableCell>
+                              <TableCell>{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
+                              <TableCell>
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  hotel.status === 'Active' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {hotel.status}
+                                </span>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="investors" className="mt-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Investors</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Investor Name</TableHead>
+                            <TableHead>Phone Number</TableHead>
+                            <TableHead>Share in Hotels</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Status</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {selectedManager.investors.map((investor, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{investor.investorName}</TableCell>
+                              <TableCell>{investor.phoneNumber}</TableCell>
+                              <TableCell>{investor.shareInHotels}</TableCell>
+                              <TableCell>{investor.email}</TableCell>
+                              <TableCell>
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  investor.status === 'Active' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {investor.status}
+                                </span>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
             )}
           </DialogContent>
         </Dialog>
