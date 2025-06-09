@@ -320,16 +320,14 @@ const Activity = () => {
                   <TableRow>
                     <TableHead>Timestamp</TableHead>
                     <TableHead>User Name</TableHead>
-                    <TableHead>User Role</TableHead>
                     <TableHead>User ID</TableHead>
-                    <TableHead>Action Type</TableHead>
                     <TableHead>Action Description</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredLogs.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                         No activity logs found matching your filters.
                       </TableCell>
                     </TableRow>
@@ -340,20 +338,7 @@ const Activity = () => {
                           {formatTimestamp(log.timestamp)}
                         </TableCell>
                         <TableCell className="font-medium">{log.userName}</TableCell>
-                        <TableCell>
-                          <span className={cn(
-                            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                            getRoleBadgeColor(log.userRole)
-                          )}>
-                            {log.userRole}
-                          </span>
-                        </TableCell>
                         <TableCell className="font-mono text-sm">{log.userId}</TableCell>
-                        <TableCell>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            {log.actionType}
-                          </span>
-                        </TableCell>
                         <TableCell>{log.actionDescription}</TableCell>
                       </TableRow>
                     ))
