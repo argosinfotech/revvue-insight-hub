@@ -66,12 +66,11 @@ const sampleUsers = [
   }
 ];
 
-// Form validation schema - removed company field
+// Form validation schema - removed password field
 const addUserSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email format"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
   userType: z.enum(USER_TYPES, { required_error: "User type is required" })
 });
 
@@ -90,13 +89,12 @@ const Users = () => {
       firstName: "",
       lastName: "",
       email: "",
-      password: "",
       userType: undefined
     }
   });
 
-  const editForm = useForm<Omit<AddUserFormData, 'password'>>({
-    resolver: zodResolver(addUserSchema.omit({ password: true })),
+  const editForm = useForm<AddUserFormData>({
+    resolver: zodResolver(addUserSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -129,7 +127,7 @@ const Users = () => {
     form.reset();
   };
 
-  const onEditSubmit = (data: Omit<AddUserFormData, 'password'>) => {
+  const onEditSubmit = (data: AddUserFormData) => {
     if (!editingUser) return;
     
     console.log("Editing user:", data);
@@ -330,20 +328,6 @@ const Users = () => {
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input type="email" placeholder="Enter email address" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="Enter password (min 8 chars)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
