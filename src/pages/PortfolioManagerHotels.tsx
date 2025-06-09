@@ -499,15 +499,6 @@ const PortfolioManagerHotels = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-muted-foreground">Recent Activity</Label>
-                  <div className="text-sm space-y-1">
-                    {selectedHotel.recentActivity.map((activity, index) => (
-                      <p key={index} className="text-muted-foreground">• {activity}</p>
-                    ))}
-                  </div>
-                </div>
-
                 {selectedHotel.investors.length > 0 && (
                   <div className="space-y-2">
                     <Label className="text-muted-foreground">Investors</Label>
