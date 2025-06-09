@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,7 @@ const Profile = () => {
     state: "NY",
     zipCode: "10002",
     manager: "Sarah Johnson",
+    managerContact: "+1 (555) 987-6543",
     enrollmentDate: "2023-10-15"
   };
 
@@ -428,17 +430,23 @@ const Profile = () => {
                       </div>
                     </div>
                     
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-1">
+                        <Label className="text-muted-foreground text-sm">Manager Contact Number</Label>
+                        <p className="font-medium">{enrolledHotel.managerContact}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-muted-foreground text-sm">Enrollment Date</Label>
+                        <p className="font-medium">{new Date(enrolledHotel.enrollmentDate).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    
                     <div className="space-y-1">
                       <Label className="text-muted-foreground text-sm">Hotel Address</Label>
                       <p className="font-medium">
                         {enrolledHotel.address}<br />
                         {enrolledHotel.city}, {enrolledHotel.state} {enrolledHotel.zipCode}
                       </p>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <Label className="text-muted-foreground text-sm">Enrollment Date</Label>
-                      <p className="font-medium">{new Date(enrolledHotel.enrollmentDate).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>
