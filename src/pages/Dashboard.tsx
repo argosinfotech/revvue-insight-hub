@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -272,7 +273,10 @@ const Dashboard = () => {
                   >
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
                     <XAxis dataKey="month" stroke="#6b7280" />
-                    <YAxis stroke="#6b7280" />
+                    <YAxis 
+                      stroke="#6b7280"
+                      tickFormatter={(value) => `$${value / 1000}k`}
+                    />
                     <Tooltip 
                       contentStyle={{
                         backgroundColor: 'white',
@@ -280,6 +284,7 @@ const Dashboard = () => {
                         borderRadius: '12px',
                         boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
                       }}
+                      formatter={(value) => [`$${value.toLocaleString()}`, 'Revenue']}
                     />
                     <Line 
                       type="monotone" 
