@@ -425,10 +425,6 @@ const PortfolioManagerHotels = () => {
                                 <Eye size={14} className="mr-2" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => openEditForm(hotel)}>
-                                <Edit size={14} className="mr-2" />
-                                Edit
-                              </DropdownMenuItem>
                               <DropdownMenuItem 
                                 className="text-red-600"
                                 onClick={() => handleDeleteHotel(hotel.id)}
