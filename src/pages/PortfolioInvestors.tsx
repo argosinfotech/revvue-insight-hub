@@ -724,10 +724,8 @@ const PortfolioInvestors = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="invite_sent">Invite Sent</SelectItem>
                           <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="deactivated">Deactivated</SelectItem>
-                          <SelectItem value="invite_rejected">Invite Rejected</SelectItem>
+                          <SelectItem value="deactive">Deactive</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
