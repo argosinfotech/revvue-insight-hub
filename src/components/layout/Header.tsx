@@ -1,5 +1,6 @@
+
 import { useNavigate } from "react-router-dom";
-import { User, Lock, LogOut } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -80,10 +81,6 @@ const Header = ({ userRole }: HeaderProps) => {
           <DropdownMenuItem onClick={() => navigate('/profile')} className="hover:bg-gray-50">
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/change-password')} className="hover:bg-gray-50">
-            <Lock className="mr-2 h-4 w-4" />
-            <span>Change Password</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator className="bg-gray-100" />
           <DropdownMenuItem onClick={handleLogout} className="hover:bg-gray-50">
