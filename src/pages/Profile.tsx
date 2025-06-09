@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Mail, Phone, Camera } from "lucide-react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
+import { useUserRole } from "@/utils/userRole";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +18,8 @@ const Profile = () => {
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567"
   });
+
+  const userRole = useUserRole();
 
   // Mock hotel data - in real app this would come from API based on user's enrollment
   const enrolledHotel = {
@@ -44,6 +48,9 @@ const Profile = () => {
     setIsEditing(false);
     // Reset form data if needed
   };
+
+  // Determine if user should see hotel information (not for Super Admin)
+  const shouldShowHotelInfo = userRole !== 'admin';
 
   return (
     <DashboardLayout>
@@ -161,45 +168,47 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          {/* Enrolled Hotel Information Card */}
-          <Card className="md:col-span-3">
-            <CardHeader>
-              <CardTitle>Enrolled Hotel Information</CardTitle>
-              <CardDescription>
-                Details about your enrolled hotel
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Hotel Information Section */}
-              <div className="space-y-4">
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-1">
-                      <Label className="text-muted-foreground text-sm">Hotel Name</Label>
-                      <p className="font-semibold">{enrolledHotel.name}</p>
+          {/* Enrolled Hotel Information Card - Only show for non-admin users */}
+          {shouldShowHotelInfo && (
+            <Card className="md:col-span-3">
+              <CardHeader>
+                <CardTitle>Enrolled Hotel Information</CardTitle>
+                <CardDescription>
+                  Details about your enrolled hotel
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Hotel Information Section */}
+                <div className="space-y-4">
+                  <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-1">
+                        <Label className="text-muted-foreground text-sm">Hotel Name</Label>
+                        <p className="font-semibold">{enrolledHotel.name}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-muted-foreground text-sm">Hotel Manager</Label>
+                        <p className="font-medium">{enrolledHotel.manager}</p>
+                      </div>
                     </div>
+                    
                     <div className="space-y-1">
-                      <Label className="text-muted-foreground text-sm">Hotel Manager</Label>
-                      <p className="font-medium">{enrolledHotel.manager}</p>
+                      <Label className="text-muted-foreground text-sm">Hotel Address</Label>
+                      <p className="font-medium">
+                        {enrolledHotel.address}<br />
+                        {enrolledHotel.city}, {enrolledHotel.state} {enrolledHotel.zipCode}
+                      </p>
                     </div>
-                  </div>
-                  
-                  <div className="space-y-1">
-                    <Label className="text-muted-foreground text-sm">Hotel Address</Label>
-                    <p className="font-medium">
-                      {enrolledHotel.address}<br />
-                      {enrolledHotel.city}, {enrolledHotel.state} {enrolledHotel.zipCode}
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-1">
-                    <Label className="text-muted-foreground text-sm">Enrollment Date</Label>
-                    <p className="font-medium">{new Date(enrolledHotel.enrollmentDate).toLocaleDateString()}</p>
+                    
+                    <div className="space-y-1">
+                      <Label className="text-muted-foreground text-sm">Enrollment Date</Label>
+                      <p className="font-medium">{new Date(enrolledHotel.enrollmentDate).toLocaleDateString()}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </DashboardLayout>
