@@ -443,9 +443,8 @@ const Billing = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDeleteClick(pkg)}
-                              disabled={pkg.subscriberCount > 0}
-                              className={`h-8 w-8 p-0 text-destructive hover:text-destructive ${pkg.subscriberCount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              title={pkg.subscriberCount > 0 ? 'Cannot delete package with active subscribers' : 'Delete package'}
+                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                              title="Delete package"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
