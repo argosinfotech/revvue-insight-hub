@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Phone, Camera } from "lucide-react";
+import { User, Mail, Phone, Camera, Lock, Eye, EyeOff, Shield, CheckCircle, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useUserRole } from "@/utils/userRole";
 
@@ -18,6 +19,19 @@ const Profile = () => {
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567"
   });
+
+  // Password change state
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const userRole = useUserRole();
 
@@ -39,6 +53,39 @@ const Profile = () => {
     }));
   };
 
+  const handlePasswordChange = (field: string, value: string) => {
+    setPasswordData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
+  const validatePassword = (password: string) => {
+    const requirements = [
+      { regex: /.{8,}/, text: "At least 8 characters" },
+      { regex: /[A-Z]/, text: "One uppercase letter" },
+      { regex: /[a-z]/, text: "One lowercase letter" },
+      { regex: /\d/, text: "One number" },
+      { regex: /[!@#$%^&*(),.?":{}|<>]/, text: "One special character" }
+    ];
+
+    return requirements.map(req => ({
+      ...req,
+      met: req.regex.test(password)
+    }));
+  };
+
+  const passwordRequirements = validatePassword(passwordData.newPassword);
+  const allRequirementsMet = passwordRequirements.every(req => req.met);
+  const passwordsMatch = passwordData.newPassword === passwordData.confirmPassword;
+
   const handleSave = () => {
     setIsEditing(false);
     toast.success("Profile updated successfully");
@@ -47,6 +94,29 @@ const Profile = () => {
   const handleCancel = () => {
     setIsEditing(false);
     // Reset form data if needed
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!allRequirementsMet) {
+      toast.error("Please ensure your password meets all requirements");
+      return;
+    }
+
+    if (!passwordsMatch) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setIsChangingPassword(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsChangingPassword(false);
+      toast.success("Password changed successfully");
+      setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    }, 1000);
   };
 
   // Determine if user should see hotel information (not for Super Admin)
@@ -165,6 +235,173 @@ const Profile = () => {
                   </Button>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Change Password Card */}
+          <Card className="md:col-span-3">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Change Password
+              </CardTitle>
+              <CardDescription>
+                Update your password to keep your account secure
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handlePasswordSubmit} className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-3">
+                  {/* Current Password */}
+                  <div className="space-y-2">
+                    <Label htmlFor="currentPassword">Current Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="currentPassword"
+                        type={showPasswords.current ? "text" : "password"}
+                        value={passwordData.currentPassword}
+                        onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
+                        placeholder="Enter current password"
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                        onClick={() => togglePasswordVisibility('current')}
+                      >
+                        {showPasswords.current ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* New Password */}
+                  <div className="space-y-2">
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="newPassword"
+                        type={showPasswords.new ? "text" : "password"}
+                        value={passwordData.newPassword}
+                        onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
+                        placeholder="Enter new password"
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                        onClick={() => togglePasswordVisibility('new')}
+                      >
+                        {showPasswords.new ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="confirmPassword"
+                        type={showPasswords.confirm ? "text" : "password"}
+                        value={passwordData.confirmPassword}
+                        onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
+                        placeholder="Confirm new password"
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                        onClick={() => togglePasswordVisibility('confirm')}
+                      >
+                        {showPasswords.confirm ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Password Requirements and Match Indicator */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* Password Requirements */}
+                  {passwordData.newPassword && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Password Requirements:</p>
+                      <div className="grid gap-1">
+                        {passwordRequirements.map((req, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm">
+                            {req.met ? (
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            ) : (
+                              <AlertCircle className="h-4 w-4 text-gray-400" />
+                            )}
+                            <span className={cn(
+                              req.met ? "text-green-700" : "text-gray-500"
+                            )}>
+                              {req.text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Password Match Indicator */}
+                  {passwordData.confirmPassword && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Password Confirmation:</p>
+                      <div className="flex items-center gap-2 text-sm">
+                        {passwordsMatch ? (
+                          <>
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span className="text-green-700">Passwords match</span>
+                          </>
+                        ) : (
+                          <>
+                            <AlertCircle className="h-4 w-4 text-red-500" />
+                            <span className="text-red-700">Passwords do not match</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button type="button" variant="outline">
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={!allRequirementsMet || !passwordsMatch || isChangingPassword}
+                    className="bg-brand-purple hover:bg-brand-purple-dark"
+                  >
+                    {isChangingPassword ? "Changing..." : "Change Password"}
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
 
