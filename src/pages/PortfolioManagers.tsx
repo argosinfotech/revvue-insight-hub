@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -30,6 +29,7 @@ const portfolioManagers = [
     numberOfHotels: 5,
     numberOfInvestors: 12,
     enrolledDate: "2024-01-15",
+    status: "Active",
     organizationDetails: {
       contactPersonName: "John Smith",
       email: "john.smith@luxuryhotels.com",
@@ -42,7 +42,8 @@ const portfolioManagers = [
       status: "Active",
       amount: "$99.99",
       nextBillingDate: "2024-06-15",
-      subscriptionId: "sub_1234567890"
+      subscriptionId: "sub_1234567890",
+      expirationDate: "2024-06-15"
     },
     hotels: [
       {
@@ -81,6 +82,7 @@ const portfolioManagers = [
     numberOfHotels: 3,
     numberOfInvestors: 8,
     enrolledDate: "2024-02-10",
+    status: "Inactive",
     organizationDetails: {
       contactPersonName: "Emily Davis",
       email: "emily.davis@boutiquehotels.com",
@@ -90,10 +92,11 @@ const portfolioManagers = [
     subscriptionDetails: {
       planName: "Basic Plan",
       planType: "Yearly",
-      status: "Active",
+      status: "Expired",
       amount: "$599.99",
       nextBillingDate: "2025-02-10",
-      subscriptionId: "sub_0987654321"
+      subscriptionId: "sub_0987654321",
+      expirationDate: "2024-02-10"
     },
     hotels: [
       {
@@ -158,6 +161,9 @@ const PortfolioManagers = () => {
                   <TableHead>Client Name</TableHead>
                   <TableHead>No. of Hotels</TableHead>
                   <TableHead>No. of Investors</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Subscription Plan</TableHead>
+                  <TableHead>Expiration Date</TableHead>
                   <TableHead>Enrolled Date</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
@@ -168,6 +174,16 @@ const PortfolioManagers = () => {
                     <TableCell className="font-medium">{manager.clientName}</TableCell>
                     <TableCell>{manager.numberOfHotels}</TableCell>
                     <TableCell>{manager.numberOfInvestors}</TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant={manager.status === "Active" ? "default" : "secondary"}
+                        className={manager.status === "Active" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}
+                      >
+                        {manager.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{manager.subscriptionDetails.planName}</TableCell>
+                    <TableCell>{new Date(manager.subscriptionDetails.expirationDate).toLocaleDateString()}</TableCell>
                     <TableCell>{new Date(manager.enrolledDate).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <Button
@@ -262,6 +278,10 @@ const PortfolioManagers = () => {
                           <div>
                             <label className="text-sm font-medium text-gray-500">Next Billing Date</label>
                             <p className="mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Expiration Date</label>
+                            <p className="mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
                           </div>
                           <div>
                             <label className="text-sm font-medium text-gray-500">Subscription ID</label>
