@@ -458,18 +458,8 @@ const PortfolioManagerHotels = () => {
         <Dialog open={isViewDetailsOpen} onOpenChange={setIsViewDetailsOpen}>
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
-              <DialogTitle className="flex items-center justify-between">
+              <DialogTitle>
                 Hotel Details
-                <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => selectedHotel && openEditForm(selectedHotel)}
-                  >
-                    <Edit size={14} className="mr-1" />
-                    Edit
-                  </Button>
-                </div>
               </DialogTitle>
               <DialogDescription>
                 Complete information about the selected hotel
