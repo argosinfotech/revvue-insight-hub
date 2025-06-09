@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { Plus, Edit, Trash2, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -59,13 +60,24 @@ const addPackageSchema = z.object({
   features: z.string().min(1, "Features are required")
 });
 
+const paymentSchema = z.object({
+  cardNumber: z.string().min(16, "Card number must be 16 digits"),
+  expiryDate: z.string().min(5, "Expiry date is required (MM/YY)"),
+  cvv: z.string().min(3, "CVV must be 3 digits"),
+  cardholderName: z.string().min(1, "Cardholder name is required"),
+});
+
 type AddPackageFormData = z.infer<typeof addPackageSchema>;
+type PaymentFormData = z.infer<typeof paymentSchema>;
 
 const Billing = () => {
+  const location = useLocation();
   const [isAddPackageOpen, setIsAddPackageOpen] = useState(false);
   const [editingPackage, setEditingPackage] = useState<BillingPackage | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [packageToDelete, setPackageToDelete] = useState<BillingPackage | null>(null);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [packages, setPackages] = useState([
     {
       id: "basic",
@@ -87,6 +99,18 @@ const Billing = () => {
     }
   ]);
 
+  // Check if coming from registration
+  const selectedPackageFromRegistration = location.state?.selectedPackage;
+  const userInfo = location.state?.userInfo;
+
+  useEffect(() => {
+    if (selectedPackageFromRegistration) {
+      setShowPaymentForm(true);
+    }
+  }, [selectedPackageFromRegistration]);
+
+  const selectedPackage = packages.find(pkg => pkg.id === selectedPackageFromRegistration);
+
   const form = useForm<AddPackageFormData>({
     resolver: zodResolver(addPackageSchema),
     defaultValues: {
@@ -94,6 +118,16 @@ const Billing = () => {
       price: "",
       description: "",
       features: ""
+    }
+  });
+
+  const paymentForm = useForm<PaymentFormData>({
+    resolver: zodResolver(paymentSchema),
+    defaultValues: {
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+      cardholderName: "",
     }
   });
 
@@ -129,6 +163,23 @@ const Billing = () => {
     setIsAddPackageOpen(false);
     setEditingPackage(null);
     form.reset();
+  };
+
+  const onPaymentSubmit = async (data: PaymentFormData) => {
+    setIsProcessingPayment(true);
+    
+    try {
+      // Simulate payment processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast.success("Payment successful! Your subscription is now active.");
+      setShowPaymentForm(false);
+      // Here you would typically redirect to dashboard or confirmation page
+    } catch (error) {
+      toast.error("Payment failed. Please try again.");
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   const handleEdit = (pkg: BillingPackage) => {
@@ -179,6 +230,130 @@ const Billing = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
+        {/* Payment Form for New Registration */}
+        {showPaymentForm && selectedPackage && (
+          <Card className="border-primary">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                Complete Your Payment
+              </CardTitle>
+              <CardDescription>
+                Complete your registration by providing payment details for your selected package.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Payment Summary */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Payment Summary</h3>
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-medium">{selectedPackage.name}</h4>
+                          <p className="text-sm text-muted-foreground">{selectedPackage.features.join(", ")}</p>
+                        </div>
+                        <div className="border-t pt-4">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">Monthly Subscription:</span>
+                            <span className="text-lg font-bold">
+                              {selectedPackage.price === 0 ? 'Custom' : `$${selectedPackage.price}.00`}
+                            </span>
+                          </div>
+                        </div>
+                        {userInfo && (
+                          <div className="border-t pt-4">
+                            <h5 className="font-medium mb-2">Account Details:</h5>
+                            <p className="text-sm text-muted-foreground">{userInfo.firstName} {userInfo.lastName}</p>
+                            <p className="text-sm text-muted-foreground">{userInfo.email}</p>
+                            <p className="text-sm text-muted-foreground">{userInfo.organizationName}</p>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Payment Form */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Payment Details</h3>
+                  <Form {...paymentForm}>
+                    <form onSubmit={paymentForm.handleSubmit(onPaymentSubmit)} className="space-y-4">
+                      <FormField
+                        control={paymentForm.control}
+                        name="cardholderName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Cardholder Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="John Doe" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={paymentForm.control}
+                        name="cardNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Card Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="1234 5678 9012 3456" maxLength={19} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={paymentForm.control}
+                          name="expiryDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Expiry Date</FormLabel>
+                              <FormControl>
+                                <Input placeholder="MM/YY" maxLength={5} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={paymentForm.control}
+                          name="cvv"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>CVV</FormLabel>
+                              <FormControl>
+                                <Input placeholder="123" maxLength={3} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-brand-purple hover:bg-brand-purple-dark"
+                        disabled={isProcessingPayment}
+                      >
+                        {isProcessingPayment ? "Processing..." : `Pay Now - $${selectedPackage.price}.00`}
+                      </Button>
+                    </form>
+                  </Form>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Existing Billing Management */}
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Billing & Packages</h1>

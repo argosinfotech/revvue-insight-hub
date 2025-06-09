@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -95,10 +96,15 @@ const PortfolioManagerSignup = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      toast.success("Registration successful! Welcome to RevVue Insight Hub.");
+      toast.success("Registration successful! Please complete your payment to activate your account.");
       
-      // Redirect to portfolio manager hotels page
-      navigate("/portfolio-hotels");
+      // Redirect to billing page with selected package info
+      navigate("/billing", { 
+        state: { 
+          selectedPackage: formData.selectedPackage,
+          userInfo: formData 
+        } 
+      });
     } catch (error) {
       toast.error("Registration failed. Please try again.");
     } finally {
