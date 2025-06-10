@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Building2, Plus, Trash2, Users, Search, Eye, Edit, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -61,9 +62,9 @@ interface Hotel {
   address2?: string;
   city: string;
   state: string;
-  area: string;
+  totalRooms: number;
   zipCode: string;
-  status: "active" | "inactive";
+  status: "active" | "inactive" | "in-maintenance";
   dateAdded: string;
   investors: Investor[];
   recentActivity: string[];
@@ -79,7 +80,7 @@ const PortfolioManagerHotels = () => {
       address2: "Suite 100",
       city: "New York",
       state: "NY",
-      area: "Manhattan",
+      totalRooms: 150,
       zipCode: "10001",
       status: "active",
       dateAdded: "2023-10-15",
@@ -100,7 +101,7 @@ const PortfolioManagerHotels = () => {
       address1: "456 Beach Road",
       city: "Miami",
       state: "FL",
-      area: "South Beach",
+      totalRooms: 200,
       zipCode: "33139",
       status: "active",
       dateAdded: "2023-11-02",
@@ -126,9 +127,9 @@ const PortfolioManagerHotels = () => {
     address2: "",
     city: "",
     state: "",
-    area: "",
+    totalRooms: "",
     zipCode: "",
-    status: "active" as "active" | "inactive",
+    status: "active" as "active" | "inactive" | "in-maintenance",
   });
 
   const filteredHotels = hotels.filter(hotel =>
@@ -142,7 +143,7 @@ const PortfolioManagerHotels = () => {
       address2: "",
       city: "",
       state: "",
-      area: "",
+      totalRooms: "",
       zipCode: "",
       status: "active",
     });
@@ -151,8 +152,14 @@ const PortfolioManagerHotels = () => {
 
   const handleAddHotel = () => {
     if (!hotelForm.name || !hotelForm.address1 || 
-        !hotelForm.city || !hotelForm.state || !hotelForm.area || !hotelForm.zipCode) {
+        !hotelForm.city || !hotelForm.state || !hotelForm.totalRooms || !hotelForm.zipCode) {
       toast.error("All required fields must be filled");
+      return;
+    }
+
+    const totalRoomsNum = parseInt(hotelForm.totalRooms);
+    if (isNaN(totalRoomsNum) || totalRoomsNum <= 0) {
+      toast.error("Total rooms must be a valid positive number");
       return;
     }
 
@@ -164,7 +171,7 @@ const PortfolioManagerHotels = () => {
       address2: hotelForm.address2,
       city: hotelForm.city,
       state: hotelForm.state,
-      area: hotelForm.area,
+      totalRooms: totalRoomsNum,
       zipCode: hotelForm.zipCode,
       status: hotelForm.status,
       dateAdded: new Date().toISOString().split('T')[0],
@@ -182,8 +189,14 @@ const PortfolioManagerHotels = () => {
     if (!editingHotel) return;
     
     if (!hotelForm.name || !hotelForm.address1 || 
-        !hotelForm.city || !hotelForm.state || !hotelForm.area || !hotelForm.zipCode) {
+        !hotelForm.city || !hotelForm.state || !hotelForm.totalRooms || !hotelForm.zipCode) {
       toast.error("All required fields must be filled");
+      return;
+    }
+
+    const totalRoomsNum = parseInt(hotelForm.totalRooms);
+    if (isNaN(totalRoomsNum) || totalRoomsNum <= 0) {
+      toast.error("Total rooms must be a valid positive number");
       return;
     }
 
@@ -196,7 +209,7 @@ const PortfolioManagerHotels = () => {
           address2: hotelForm.address2,
           city: hotelForm.city,
           state: hotelForm.state,
-          area: hotelForm.area,
+          totalRooms: totalRoomsNum,
           zipCode: hotelForm.zipCode,
           status: hotelForm.status,
         };
@@ -229,12 +242,25 @@ const PortfolioManagerHotels = () => {
       address2: hotel.address2 || "",
       city: hotel.city,
       state: hotel.state,
-      area: hotel.area,
+      totalRooms: hotel.totalRooms.toString(),
       zipCode: hotel.zipCode,
       status: hotel.status,
     });
     setIsViewDetailsOpen(false);
     setIsAddHotelOpen(true);
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "active":
+        return <Badge variant="default" className="bg-green-500 hover:bg-green-600">Active</Badge>;
+      case "inactive":
+        return <Badge variant="secondary">Inactive</Badge>;
+      case "in-maintenance":
+        return <Badge variant="secondary" className="bg-yellow-500 hover:bg-yellow-600 text-white">In Maintenance</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
+    }
   };
 
   return (
@@ -314,12 +340,14 @@ const PortfolioManagerHotels = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="area">Area *</Label>
+                    <Label htmlFor="totalRooms">Total Rooms *</Label>
                     <Input
-                      id="area"
-                      value={hotelForm.area}
-                      onChange={(e) => setHotelForm({ ...hotelForm, area: e.target.value })}
-                      placeholder="Enter area"
+                      id="totalRooms"
+                      type="number"
+                      value={hotelForm.totalRooms}
+                      onChange={(e) => setHotelForm({ ...hotelForm, totalRooms: e.target.value })}
+                      placeholder="Enter total rooms"
+                      min="1"
                     />
                   </div>
                   <div className="space-y-2">
@@ -335,13 +363,14 @@ const PortfolioManagerHotels = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="status">Status *</Label>
-                  <Select value={hotelForm.status} onValueChange={(value: "active" | "inactive") => setHotelForm({ ...hotelForm, status: value })}>
+                  <Select value={hotelForm.status} onValueChange={(value: "active" | "inactive" | "in-maintenance") => setHotelForm({ ...hotelForm, status: value })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="active">Active</SelectItem>
                       <SelectItem value="inactive">Inactive</SelectItem>
+                      <SelectItem value="in-maintenance">In Maintenance</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -389,6 +418,7 @@ const PortfolioManagerHotels = () => {
                     <TableHead>Hotel Name</TableHead>
                     <TableHead>Address</TableHead>
                     <TableHead>Staff Name</TableHead>
+                    <TableHead>Total Rooms</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Date Added</TableHead>
                     <TableHead>No. of Investors</TableHead>
@@ -404,11 +434,9 @@ const PortfolioManagerHotels = () => {
                           {hotel.address1}, {hotel.city}, {hotel.state} {hotel.zipCode}
                         </TableCell>
                         <TableCell>{hotel.managerName}</TableCell>
+                        <TableCell>{hotel.totalRooms}</TableCell>
                         <TableCell>
-                          <Badge variant={hotel.status === "active" ? "default" : "secondary"} 
-                                 className={hotel.status === "active" ? "bg-green-500 hover:bg-green-600" : ""}>
-                            {hotel.status === "active" ? "Active" : "Inactive"}
-                          </Badge>
+                          {getStatusBadge(hotel.status)}
                         </TableCell>
                         <TableCell>{new Date(hotel.dateAdded).toLocaleDateString()}</TableCell>
                         <TableCell>{hotel.investors.length}</TableCell>
@@ -439,7 +467,7 @@ const PortfolioManagerHotels = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={7} className="h-24 text-center">
+                      <TableCell colSpan={8} className="h-24 text-center">
                         No hotels found.
                       </TableCell>
                     </TableRow>
@@ -483,6 +511,10 @@ const PortfolioManagerHotels = () => {
                     </p>
                   </div>
                   <div>
+                    <Label className="text-muted-foreground">Total Rooms</Label>
+                    <p className="text-base">{selectedHotel.totalRooms}</p>
+                  </div>
+                  <div>
                     <Label className="text-muted-foreground">Number of Investors</Label>
                     <p className="text-base">{selectedHotel.investors.length}</p>
                   </div>
@@ -492,10 +524,7 @@ const PortfolioManagerHotels = () => {
                   </div>
                   <div>
                     <Label className="text-muted-foreground">Status</Label>
-                    <Badge variant={selectedHotel.status === "active" ? "default" : "secondary"} 
-                           className={selectedHotel.status === "active" ? "bg-green-500" : ""}>
-                      {selectedHotel.status === "active" ? "Active" : "Inactive"}
-                    </Badge>
+                    {getStatusBadge(selectedHotel.status)}
                   </div>
                 </div>
 
