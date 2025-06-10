@@ -66,7 +66,7 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
         <CardHeader>
           <CardTitle>Weekly Booking Percentage</CardTitle>
           <CardDescription>
-            Booking percentage per week for the current month
+            Booking percentage per week for the past 4 weeks
           </CardDescription>
         </CardHeader>
         <CardContent>
