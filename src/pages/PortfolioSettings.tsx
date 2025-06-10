@@ -3,16 +3,13 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardLayout from "@/components/DashboardLayout";
 import SettingsSubmenu from "@/components/layout/SettingsSubmenu";
-import EmailTemplates from "@/components/email-templates/EmailTemplates";
 import EmailSmsTemplates from "@/components/email-sms-templates/EmailSmsTemplates";
 
 const PortfolioSettings = () => {
-  const [activeSection, setActiveSection] = useState("email-templates");
+  const [activeSection, setActiveSection] = useState("email-sms-templates");
 
   const renderContent = () => {
     switch (activeSection) {
-      case "email-templates":
-        return <EmailTemplates />;
       case "email-sms-templates":
         return <EmailSmsTemplates />;
       case "help":
@@ -63,7 +60,7 @@ const PortfolioSettings = () => {
           </Card>
         );
       default:
-        return <EmailTemplates />;
+        return <EmailSmsTemplates />;
     }
   };
 
