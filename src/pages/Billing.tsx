@@ -278,6 +278,11 @@ const Billing = () => {
     setIsAddPackageOpen(true);
   };
 
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setPackageToDelete(null);
+  };
+
   const activePackages = packages.filter(pkg => pkg.isActive);
   const inactivePackages = packages.filter(pkg => !pkg.isActive);
 
