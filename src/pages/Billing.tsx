@@ -570,10 +570,6 @@ const Billing = () => {
                   />
                 </div>
 
-                <p className="text-sm text-muted-foreground">
-                  * Yearly price will be deducted monthly (yearly amount ÷ 12)
-                </p>
-
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
