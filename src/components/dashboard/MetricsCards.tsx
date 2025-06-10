@@ -62,7 +62,7 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
       value: metrics.totalInvestors.toString(),
       description: selectedHotel === "all" ? "Across all hotels" : "In this hotel",
       icon: Users,
-      trend: { value: "+12.5%", positive: true },
+      trend: { value: "+12.5", positive: true },
       clickable: true,
       onClick: handleInvestorsClick,
       onAddClick: handleAddInvestor
@@ -72,40 +72,40 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
       value: `$${metrics.monthlyRevenue.toLocaleString()}`,
       description: "From hotels",
       icon: DollarSign,
-      trend: { value: "+8.2%", positive: true }
+      trend: { value: "+8.2", positive: true }
     },
     {
       title: "Revenue Entries",
       value: `${metrics.revenueEntries.audited}/${metrics.revenueEntries.expected}`,
       description: "Audited/Expected",
       icon: FileText,
-      trend: { value: `${Math.round((metrics.revenueEntries.audited / metrics.revenueEntries.expected) * 100)}%`, positive: true }
+      trend: { value: `${Math.round((metrics.revenueEntries.audited / metrics.revenueEntries.expected) * 100)}`, positive: true }
     },
     {
       title: "Avg Occupancy",
       value: `${metrics.avgOccupancy}%`,
       description: selectedHotel === "all" ? "All properties" : "This property",
       icon: Bed,
-      trend: { value: "+2.1%", positive: true }
+      trend: { value: "+2.1", positive: true }
     },
     {
       title: "Avg Daily Rate",
       value: `$${metrics.avgDailyRate}`,
       description: selectedHotel === "all" ? "All properties" : "This property",
       icon: TrendingUp,
-      trend: { value: "+5.8%", positive: true }
+      trend: { value: "+5.8", positive: true }
     }
   ];
 
   return (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 w-full">
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 w-full">
       {cards.map((card, index) => (
         <Card 
           key={index} 
           className={`relative ${card.clickable ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
           onClick={card.onClick}
         >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
             <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
             <div className="flex items-center gap-2">
               <card.icon className="h-4 w-4 text-muted-foreground" />
@@ -120,8 +120,8 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
               )}
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{card.value}</div>
+          <CardContent className="pb-4">
+            <div className="text-xl font-bold">{card.value}</div>
             {card.trend && (
               <span className={`text-xs ${card.trend.positive ? 'text-green-500' : 'text-red-500'}`}>
                 {card.trend.value}
