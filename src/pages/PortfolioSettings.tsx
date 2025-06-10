@@ -16,7 +16,7 @@ const PortfolioSettings = () => {
         return (
           <Card>
             <CardHeader>
-              <CardTitle>Help & Support</CardTitle>
+              <CardTitle>Helpdesk</CardTitle>
               <CardDescription>
                 Get help and support for your account
               </CardDescription>

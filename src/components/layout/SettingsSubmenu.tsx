@@ -9,7 +9,7 @@ interface SettingsSubmenuProps {
 const SettingsSubmenu = ({ activeSection, onSectionChange }: SettingsSubmenuProps) => {
   const menuItems = [
     { id: "email-sms-templates", icon: MessageSquare, label: "Email/SMS Template" },
-    { id: "help", icon: HelpCircle, label: "Help & Support" }
+    { id: "help", icon: HelpCircle, label: "Helpdesk" }
   ];
 
   return (
