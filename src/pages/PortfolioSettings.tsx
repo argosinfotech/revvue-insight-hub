@@ -1,6 +1,6 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import DashboardLayout from "@/components/DashboardLayout";
 import SettingsSubmenu from "@/components/layout/SettingsSubmenu";
 import EmailSmsTemplates from "@/components/email-sms-templates/EmailSmsTemplates";
@@ -23,6 +23,15 @@ const PortfolioSettings = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
+                <div>
+                  <Button 
+                    className="mb-6"
+                    onClick={() => window.open('https://argos-helpdesk.com', '_blank')}
+                  >
+                    Go to Argos Helpdesk
+                  </Button>
+                </div>
+
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Contact Support</h3>
                   <p className="text-muted-foreground mb-4">
