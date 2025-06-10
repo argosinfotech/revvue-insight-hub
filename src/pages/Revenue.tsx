@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -124,7 +125,7 @@ const Revenue = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Revenue Management</h1>
@@ -134,33 +135,33 @@ const Revenue = () => {
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Compact Filters */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Filter className="h-4 w-4" />
               Filters
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <div className="space-y-2">
+          <CardContent className="pt-0">
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+              <div className="space-y-1">
                 <label className="text-sm font-medium">Search</label>
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Staff name, hotel name..."
+                    placeholder="Staff, hotel name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-8"
+                    className="pl-8 h-9"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-sm font-medium">Date Range</label>
                 <Select value={dateRange} onValueChange={setDateRange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -171,10 +172,10 @@ const Revenue = () => {
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-sm font-medium">Hotel</label>
                 <Select value={selectedHotel} onValueChange={setSelectedHotel}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -187,10 +188,10 @@ const Revenue = () => {
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-sm font-medium">Status</label>
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
