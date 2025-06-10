@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -177,8 +178,8 @@ const PortfolioManagers = () => {
                 {filteredManagers.map((manager) => (
                   <TableRow key={manager.id}>
                     <TableCell className="font-medium">{manager.clientName}</TableCell>
-                    <TableCell>{manager.numberOfHotels}</TableCell>
-                    <TableCell>{manager.numberOfInvestors}</TableCell>
+                    <TableCell>{manager.numberOfHotels}/{manager.subscriptionDetails.maxHotels}</TableCell>
+                    <TableCell>{manager.numberOfInvestors}/{manager.subscriptionDetails.maxInvestors}</TableCell>
                     <TableCell>
                       <Badge 
                         variant={manager.status === "Active" ? "default" : "secondary"}
@@ -393,3 +394,4 @@ const PortfolioManagers = () => {
 };
 
 export default PortfolioManagers;
+
