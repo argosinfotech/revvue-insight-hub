@@ -206,43 +206,43 @@ const PortfolioManagers = () => {
 
         {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
+          <DialogContent className="max-w-5xl h-[90vh] overflow-hidden flex flex-col">
+            <DialogHeader className="pb-2">
               <DialogTitle>Portfolio Manager Details</DialogTitle>
             </DialogHeader>
 
             {selectedManager && (
-              <Tabs defaultValue="organization" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
+              <Tabs defaultValue="organization" className="flex-1 flex flex-col overflow-hidden">
+                <TabsList className="grid w-full grid-cols-3 mb-3">
                   <TabsTrigger value="organization">Organization Details</TabsTrigger>
                   <TabsTrigger value="hotels">Hotel Information</TabsTrigger>
                   <TabsTrigger value="investors">Investors</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="organization" className="mt-6">
-                  <div className="space-y-6">
+                <TabsContent value="organization" className="flex-1 overflow-y-auto">
+                  <div className="space-y-4">
                     {/* Organization Details */}
                     <Card>
-                      <CardHeader>
-                        <CardTitle className="text-lg">Organization Details</CardTitle>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base">Organization Details</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                      <CardContent className="pt-0">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Contact Person Name</label>
-                            <p className="mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Contact Person Name</label>
+                            <p className="text-sm mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Email</label>
-                            <p className="mt-1">{selectedManager.organizationDetails.email}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Email</label>
+                            <p className="text-sm mt-1">{selectedManager.organizationDetails.email}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Phone Number</label>
-                            <p className="mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Phone Number</label>
+                            <p className="text-sm mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Address</label>
-                            <p className="mt-1">{selectedManager.organizationDetails.address}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Address</label>
+                            <p className="text-sm mt-1">{selectedManager.organizationDetails.address}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -250,21 +250,21 @@ const PortfolioManagers = () => {
 
                     {/* Subscription Details */}
                     <Card>
-                      <CardHeader>
-                        <CardTitle className="text-lg">Subscription Details</CardTitle>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base">Subscription Details</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                      <CardContent className="pt-0">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Plan Name</label>
-                            <p className="mt-1 font-semibold">{selectedManager.subscriptionDetails.planName}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
+                            <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Plan Type</label>
-                            <p className="mt-1">{selectedManager.subscriptionDetails.planType}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Plan Type</label>
+                            <p className="text-sm mt-1">{selectedManager.subscriptionDetails.planType}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Status</label>
+                            <label className="text-xs font-medium text-muted-foreground">Status</label>
                             <div className="mt-1">
                               <Badge variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
                                      className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}>
@@ -273,20 +273,20 @@ const PortfolioManagers = () => {
                             </div>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Amount</label>
-                            <p className="mt-1 font-semibold text-green-600">{selectedManager.subscriptionDetails.amount}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Amount</label>
+                            <p className="text-sm font-semibold text-green-600 mt-1">{selectedManager.subscriptionDetails.amount}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Next Billing Date</label>
-                            <p className="mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Next Billing Date</label>
+                            <p className="text-sm mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-500">Expiration Date</label>
-                            <p className="mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
+                            <label className="text-xs font-medium text-muted-foreground">Expiration Date</label>
+                            <p className="text-sm mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
                           </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Subscription ID</label>
-                            <p className="mt-1 font-mono text-sm">{selectedManager.subscriptionDetails.subscriptionId}</p>
+                          <div className="col-span-2">
+                            <label className="text-xs font-medium text-muted-foreground">Subscription ID</label>
+                            <p className="text-sm font-mono mt-1">{selectedManager.subscriptionDetails.subscriptionId}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -294,27 +294,27 @@ const PortfolioManagers = () => {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="hotels" className="mt-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Hotel Information</CardTitle>
+                <TabsContent value="hotels" className="flex-1 overflow-y-auto">
+                  <Card className="h-full">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">Hotel Information</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-0">
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Hotel Name</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Enrolled Date</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead className="text-xs">Hotel Name</TableHead>
+                            <TableHead className="text-xs">Location</TableHead>
+                            <TableHead className="text-xs">Enrolled Date</TableHead>
+                            <TableHead className="text-xs">Status</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {selectedManager.hotels.map((hotel, index) => (
                             <TableRow key={index}>
-                              <TableCell>{hotel.hotelName}</TableCell>
-                              <TableCell>{hotel.location}</TableCell>
-                              <TableCell>{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
+                              <TableCell className="text-sm">{hotel.hotelName}</TableCell>
+                              <TableCell className="text-sm">{hotel.location}</TableCell>
+                              <TableCell className="text-sm">{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
                               <TableCell>
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   hotel.status === 'Active' 
@@ -332,29 +332,29 @@ const PortfolioManagers = () => {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="investors" className="mt-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Investors</CardTitle>
+                <TabsContent value="investors" className="flex-1 overflow-y-auto">
+                  <Card className="h-full">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">Investors</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-0">
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Investor Name</TableHead>
-                            <TableHead>Phone Number</TableHead>
-                            <TableHead>Share in Hotels</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead className="text-xs">Investor Name</TableHead>
+                            <TableHead className="text-xs">Phone Number</TableHead>
+                            <TableHead className="text-xs">Share in Hotels</TableHead>
+                            <TableHead className="text-xs">Email</TableHead>
+                            <TableHead className="text-xs">Status</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {selectedManager.investors.map((investor, index) => (
                             <TableRow key={index}>
-                              <TableCell>{investor.investorName}</TableCell>
-                              <TableCell>{investor.phoneNumber}</TableCell>
-                              <TableCell>{investor.shareInHotels}</TableCell>
-                              <TableCell>{investor.email}</TableCell>
+                              <TableCell className="text-sm">{investor.investorName}</TableCell>
+                              <TableCell className="text-sm">{investor.phoneNumber}</TableCell>
+                              <TableCell className="text-sm">{investor.shareInHotels}</TableCell>
+                              <TableCell className="text-sm">{investor.email}</TableCell>
                               <TableCell>
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   investor.status === 'Active' 
