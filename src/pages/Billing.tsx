@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Plus, Edit, Trash2, CreditCard, Calendar } from "lucide-react";
@@ -21,6 +22,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Form,
   FormControl,
@@ -593,7 +595,7 @@ const Billing = () => {
 
         {/* Add/Edit Package Panel */}
         <Sheet open={isAddPackageOpen} onOpenChange={setIsAddPackageOpen}>
-          <SheetContent className="sm:max-w-md">
+          <SheetContent className="sm:max-w-md flex flex-col">
             <SheetHeader>
               <SheetTitle>
                 {editingPackage ? 'Edit Package' : 'Add New Package'}
@@ -606,175 +608,177 @@ const Billing = () => {
               </SheetDescription>
             </SheetHeader>
             
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Package Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter package name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
+            <ScrollArea className="flex-1 px-1">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-6">
                   <FormField
                     control={form.control}
-                    name="price"
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Monthly Price</FormLabel>
+                        <FormLabel>Package Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="29.00" {...field} />
+                          <Input placeholder="Enter package name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="yearlyPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Yearly Price</FormLabel>
-                        <FormControl>
-                          <Input placeholder="290.00" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="maxHotels"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Max Hotels</FormLabel>
-                        <FormControl>
-                          <Input placeholder="5" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="maxInvestors"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Max Investors</FormLabel>
-                        <FormControl>
-                          <Input placeholder="50" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="effectiveDate"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Effective Date</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="price"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Monthly Price</FormLabel>
                           <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick an effective date</span>
-                              )}
-                              <Calendar className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
+                            <Input placeholder="29.00" {...field} />
                           </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <CalendarComponent
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                            className={cn("p-3 pointer-events-auto")}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                    <FormField
+                      control={form.control}
+                      name="yearlyPrice"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Yearly Price</FormLabel>
+                          <FormControl>
+                            <Input placeholder="290.00" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="maxHotels"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Max Hotels</FormLabel>
+                          <FormControl>
+                            <Input placeholder="5" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="maxInvestors"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Max Investors</FormLabel>
+                          <FormControl>
+                            <Input placeholder="50" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="effectiveDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Effective Date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick an effective date</span>
+                                )}
+                                <Calendar className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <CalendarComponent
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date < new Date("1900-01-01")
+                              }
+                              initialFocus
+                              className={cn("p-3 pointer-events-auto")}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select status" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="features"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Features</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select status" />
-                          </SelectTrigger>
+                          <Textarea 
+                            placeholder="Enter features (one per line)&#10;• Feature 1&#10;• Feature 2&#10;• Feature 3"
+                            className="min-h-[120px]"
+                            {...field} 
+                          />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="inactive">Inactive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="features"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Features</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Enter features (one per line)&#10;• Feature 1&#10;• Feature 2&#10;• Feature 3"
-                          className="min-h-[120px]"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <SheetFooter className="gap-2">
-                  <Button type="button" variant="outline" onClick={handleCancel}>
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="bg-brand-purple hover:bg-brand-purple-dark">
-                    {editingPackage ? 'Update Package' : 'Save Package'}
-                  </Button>
-                </SheetFooter>
-              </form>
-            </Form>
+                  <SheetFooter className="gap-2 pb-6">
+                    <Button type="button" variant="outline" onClick={handleCancel}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="bg-brand-purple hover:bg-brand-purple-dark">
+                      {editingPackage ? 'Update Package' : 'Save Package'}
+                    </Button>
+                  </SheetFooter>
+                </form>
+              </Form>
+            </ScrollArea>
           </SheetContent>
         </Sheet>
 
