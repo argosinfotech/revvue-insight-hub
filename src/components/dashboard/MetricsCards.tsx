@@ -50,9 +50,7 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
     {
       title: "Hotels",
       value: metrics.totalHotels.toString(),
-      description: "Total properties",
       icon: Building2,
-      trend: null,
       clickable: true,
       onClick: handleHotelsClick,
       onAddClick: handleAddHotel
@@ -60,9 +58,7 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
     {
       title: "Investors",
       value: metrics.totalInvestors.toString(),
-      description: selectedHotel === "all" ? "Across all hotels" : "In this hotel",
       icon: Users,
-      trend: { value: "+12.5", positive: true },
       clickable: true,
       onClick: handleInvestorsClick,
       onAddClick: handleAddInvestor
@@ -70,30 +66,22 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
     {
       title: "Monthly Revenue",
       value: `$${metrics.monthlyRevenue.toLocaleString()}`,
-      description: "From hotels",
-      icon: DollarSign,
-      trend: { value: "+8.2", positive: true }
+      icon: DollarSign
     },
     {
       title: "Revenue Entries",
       value: `${metrics.revenueEntries.audited}/${metrics.revenueEntries.expected}`,
-      description: "Audited/Expected",
-      icon: FileText,
-      trend: { value: `${Math.round((metrics.revenueEntries.audited / metrics.revenueEntries.expected) * 100)}`, positive: true }
+      icon: FileText
     },
     {
       title: "Avg Occupancy",
       value: `${metrics.avgOccupancy}%`,
-      description: selectedHotel === "all" ? "All properties" : "This property",
-      icon: Bed,
-      trend: { value: "+2.1", positive: true }
+      icon: Bed
     },
     {
       title: "Avg Daily Rate",
       value: `$${metrics.avgDailyRate}`,
-      description: selectedHotel === "all" ? "All properties" : "This property",
-      icon: TrendingUp,
-      trend: { value: "+5.8", positive: true }
+      icon: TrendingUp
     }
   ];
 
@@ -122,11 +110,6 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
           </CardHeader>
           <CardContent className="pb-4">
             <div className="text-xl font-bold">{card.value}</div>
-            {card.trend && (
-              <span className={`text-xs ${card.trend.positive ? 'text-green-500' : 'text-red-500'}`}>
-                {card.trend.value}
-              </span>
-            )}
           </CardContent>
         </Card>
       ))}
