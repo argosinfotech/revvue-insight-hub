@@ -135,18 +135,18 @@ const Revenue = () => {
           </div>
         </div>
 
-        {/* Compact Filters */}
+        {/* Ultra Compact Filters */}
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
+          <CardHeader className="pb-2 pt-4">
+            <CardTitle className="flex items-center gap-2 text-base">
               <Filter className="h-4 w-4" />
               Filters
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-0">
+          <CardContent className="pt-0 pb-4">
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium">Search</label>
+                <label className="text-xs font-medium text-muted-foreground">Search</label>
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -159,7 +159,7 @@ const Revenue = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-sm font-medium">Date Range</label>
+                <label className="text-xs font-medium text-muted-foreground">Date Range</label>
                 <Select value={dateRange} onValueChange={setDateRange}>
                   <SelectTrigger className="h-9">
                     <SelectValue />
@@ -173,7 +173,7 @@ const Revenue = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-sm font-medium">Hotel</label>
+                <label className="text-xs font-medium text-muted-foreground">Hotel</label>
                 <Select value={selectedHotel} onValueChange={setSelectedHotel}>
                   <SelectTrigger className="h-9">
                     <SelectValue />
@@ -189,7 +189,7 @@ const Revenue = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-sm font-medium">Status</label>
+                <label className="text-xs font-medium text-muted-foreground">Status</label>
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                   <SelectTrigger className="h-9">
                     <SelectValue />
