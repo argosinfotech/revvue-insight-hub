@@ -122,14 +122,11 @@ const MetricsCards = ({ selectedHotel }: MetricsCardsProps) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{card.value}</div>
-            <div className="flex items-center space-x-1 mt-1">
-              {card.trend && (
-                <span className={`text-xs ${card.trend.positive ? 'text-green-500' : 'text-red-500'}`}>
-                  {card.trend.value}
-                </span>
-              )}
-              <p className="text-xs text-muted-foreground">{card.description}</p>
-            </div>
+            {card.trend && (
+              <span className={`text-xs ${card.trend.positive ? 'text-green-500' : 'text-red-500'}`}>
+                {card.trend.value}
+              </span>
+            )}
           </CardContent>
         </Card>
       ))}
