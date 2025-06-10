@@ -42,6 +42,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -73,6 +74,9 @@ const addPackageSchema = z.object({
   maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number"),
   effectiveDate: z.date({
     required_error: "Effective date is required",
+  }),
+  status: z.enum(["active", "inactive"], {
+    required_error: "Status is required",
   }),
 });
 
@@ -154,7 +158,8 @@ const Billing = () => {
       features: "",
       maxHotels: "",
       maxInvestors: "",
-      effectiveDate: new Date()
+      effectiveDate: new Date(),
+      status: "active"
     }
   });
 
@@ -181,7 +186,8 @@ const Billing = () => {
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
         maxHotels: parseInt(data.maxHotels),
         maxInvestors: parseInt(data.maxInvestors),
-        effectiveDate: data.effectiveDate
+        effectiveDate: data.effectiveDate,
+        isActive: data.status === "active"
       };
 
       setPackages(packages.map(pkg => 
@@ -199,7 +205,7 @@ const Billing = () => {
         subscriberCount: 0,
         maxHotels: parseInt(data.maxHotels),
         maxInvestors: parseInt(data.maxInvestors),
-        isActive: true,
+        isActive: data.status === "active",
         effectiveDate: data.effectiveDate
       };
 
@@ -246,6 +252,7 @@ const Billing = () => {
     form.setValue("maxHotels", pkg.maxHotels?.toString() || "");
     form.setValue("maxInvestors", pkg.maxInvestors?.toString() || "");
     form.setValue("effectiveDate", pkg.effectiveDate || new Date());
+    form.setValue("status", pkg.isActive ? "active" : "inactive");
     
     setIsAddPackageOpen(true);
   };
@@ -713,6 +720,41 @@ const Billing = () => {
 
                 <FormField
                   control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>Status</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          className="flex flex-col space-y-1"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="active" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Active
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="inactive" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Inactive
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="features"
                   render={({ field }) => (
                     <FormItem>
@@ -769,3 +811,5 @@ const Billing = () => {
 };
 
 export default Billing;
+
+}
