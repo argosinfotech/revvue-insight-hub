@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Plus, Edit, Trash2, CreditCard } from "lucide-react";
+import { Plus, Edit, Trash2, CreditCard, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,10 +40,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import DashboardLayout from "@/components/DashboardLayout";
 
 interface BillingPackage {
@@ -56,6 +60,7 @@ interface BillingPackage {
   maxHotels?: number;
   maxInvestors?: number;
   isActive: boolean;
+  effectiveDate?: Date;
 }
 
 // Form validation schema
@@ -65,7 +70,10 @@ const addPackageSchema = z.object({
   yearlyPrice: z.string().min(1, "Yearly price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
   features: z.string().min(1, "Features are required"),
   maxHotels: z.string().min(1, "Number of hotels is required").regex(/^\d+$/, "Must be a valid number"),
-  maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number")
+  maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number"),
+  effectiveDate: z.date({
+    required_error: "Effective date is required",
+  }),
 });
 
 const paymentSchema = z.object({
@@ -86,7 +94,7 @@ const Billing = () => {
   const [packageToDelete, setPackageToDelete] = useState<BillingPackage | null>(null);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [packages, setPackages] = useState([
+  const [packages, setPackages] = useState<BillingPackage[]>([
     {
       id: "basic",
       name: "Basic Package",
@@ -96,7 +104,8 @@ const Billing = () => {
       subscriberCount: 12,
       maxHotels: 5,
       maxInvestors: 50,
-      isActive: true
+      isActive: true,
+      effectiveDate: new Date('2024-01-01')
     },
     {
       id: "pro", 
@@ -107,7 +116,8 @@ const Billing = () => {
       subscriberCount: 8,
       maxHotels: 20,
       maxInvestors: 100,
-      isActive: true
+      isActive: true,
+      effectiveDate: new Date('2024-01-15')
     },
     {
       id: "enterprise",
@@ -118,7 +128,8 @@ const Billing = () => {
       subscriberCount: 0,
       maxHotels: 999,
       maxInvestors: 999,
-      isActive: true
+      isActive: true,
+      effectiveDate: new Date('2024-02-01')
     }
   ]);
 
@@ -142,7 +153,8 @@ const Billing = () => {
       yearlyPrice: "",
       features: "",
       maxHotels: "",
-      maxInvestors: ""
+      maxInvestors: "",
+      effectiveDate: new Date()
     }
   });
 
@@ -168,7 +180,8 @@ const Billing = () => {
         yearlyPrice: parseFloat(data.yearlyPrice),
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
         maxHotels: parseInt(data.maxHotels),
-        maxInvestors: parseInt(data.maxInvestors)
+        maxInvestors: parseInt(data.maxInvestors),
+        effectiveDate: data.effectiveDate
       };
 
       setPackages(packages.map(pkg => 
@@ -186,7 +199,8 @@ const Billing = () => {
         subscriberCount: 0,
         maxHotels: parseInt(data.maxHotels),
         maxInvestors: parseInt(data.maxInvestors),
-        isActive: true
+        isActive: true,
+        effectiveDate: data.effectiveDate
       };
 
       setPackages([...packages, newPackage]);
@@ -231,6 +245,7 @@ const Billing = () => {
     form.setValue("features", pkg.features.join('\n'));
     form.setValue("maxHotels", pkg.maxHotels?.toString() || "");
     form.setValue("maxInvestors", pkg.maxInvestors?.toString() || "");
+    form.setValue("effectiveDate", pkg.effectiveDate || new Date());
     
     setIsAddPackageOpen(true);
   };
@@ -296,6 +311,7 @@ const Billing = () => {
             <TableHead>Yearly Price</TableHead>
             <TableHead>Max Hotels</TableHead>
             <TableHead>Max Investors</TableHead>
+            <TableHead>Effective Date</TableHead>
             <TableHead>No. of Subscribers</TableHead>
             <TableHead>Features</TableHead>
             <TableHead className="w-[100px]">Actions</TableHead>
@@ -317,6 +333,9 @@ const Billing = () => {
                 </TableCell>
                 <TableCell>
                   {pkg.maxInvestors === 999 ? 'Unlimited' : pkg.maxInvestors}
+                </TableCell>
+                <TableCell>
+                  {pkg.effectiveDate ? format(pkg.effectiveDate, "MMM dd, yyyy") : 'N/A'}
                 </TableCell>
                 <TableCell>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -371,7 +390,7 @@ const Billing = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={8} className="h-24 text-center">
+              <TableCell colSpan={9} className="h-24 text-center">
                 No packages found.
               </TableCell>
             </TableRow>
@@ -648,6 +667,49 @@ const Billing = () => {
                     )}
                   />
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="effectiveDate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Effective Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick an effective date</span>
+                              )}
+                              <Calendar className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <CalendarComponent
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}
