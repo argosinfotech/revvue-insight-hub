@@ -206,28 +206,28 @@ const PortfolioManagers = () => {
 
         {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-5xl h-[90vh] overflow-hidden flex flex-col">
-            <DialogHeader className="pb-2">
+          <DialogContent className="max-w-5xl h-[85vh] overflow-hidden flex flex-col">
+            <DialogHeader className="pb-2 flex-shrink-0">
               <DialogTitle>Portfolio Manager Details</DialogTitle>
             </DialogHeader>
 
             {selectedManager && (
-              <Tabs defaultValue="organization" className="flex-1 flex flex-col overflow-hidden">
-                <TabsList className="grid w-full grid-cols-3 mb-3">
+              <Tabs defaultValue="organization" className="flex-1 flex flex-col min-h-0">
+                <TabsList className="grid w-full grid-cols-3 mb-3 flex-shrink-0">
                   <TabsTrigger value="organization">Organization Details</TabsTrigger>
                   <TabsTrigger value="hotels">Hotel Information</TabsTrigger>
                   <TabsTrigger value="investors">Investors</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="organization" className="flex-1 overflow-y-auto">
-                  <div className="space-y-4">
+                <TabsContent value="organization" className="flex-1 min-h-0 overflow-hidden">
+                  <div className="space-y-3 h-full">
                     {/* Organization Details */}
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-base">Organization Details</CardTitle>
+                    <Card className="flex-shrink-0">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg">Organization Details</CardTitle>
                       </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                      <CardContent className="pt-0 pb-3">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                           <div>
                             <label className="text-xs font-medium text-muted-foreground">Contact Person Name</label>
                             <p className="text-sm mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
@@ -249,12 +249,12 @@ const PortfolioManagers = () => {
                     </Card>
 
                     {/* Subscription Details */}
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-base">Subscription Details</CardTitle>
+                    <Card className="flex-shrink-0">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg">Subscription Details</CardTitle>
                       </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                      <CardContent className="pt-0 pb-3">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                           <div>
                             <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
                             <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
@@ -294,80 +294,84 @@ const PortfolioManagers = () => {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="hotels" className="flex-1 overflow-y-auto">
-                  <Card className="h-full">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base">Hotel Information</CardTitle>
+                <TabsContent value="hotels" className="flex-1 min-h-0 overflow-hidden">
+                  <Card className="h-full flex flex-col">
+                    <CardHeader className="pb-2 flex-shrink-0">
+                      <CardTitle className="text-lg">Hotel Information</CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-0">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="text-xs">Hotel Name</TableHead>
-                            <TableHead className="text-xs">Location</TableHead>
-                            <TableHead className="text-xs">Enrolled Date</TableHead>
-                            <TableHead className="text-xs">Status</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {selectedManager.hotels.map((hotel, index) => (
-                            <TableRow key={index}>
-                              <TableCell className="text-sm">{hotel.hotelName}</TableCell>
-                              <TableCell className="text-sm">{hotel.location}</TableCell>
-                              <TableCell className="text-sm">{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
-                              <TableCell>
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  hotel.status === 'Active' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : 'bg-red-100 text-red-800'
-                                }`}>
-                                  {hotel.status}
-                                </span>
-                              </TableCell>
+                    <CardContent className="pt-0 pb-3 flex-1 min-h-0">
+                      <div className="h-full">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="text-xs h-8">Hotel Name</TableHead>
+                              <TableHead className="text-xs h-8">Location</TableHead>
+                              <TableHead className="text-xs h-8">Enrolled Date</TableHead>
+                              <TableHead className="text-xs h-8">Status</TableHead>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
+                          </TableHeader>
+                          <TableBody>
+                            {selectedManager.hotels.map((hotel, index) => (
+                              <TableRow key={index} className="h-10">
+                                <TableCell className="text-sm py-2">{hotel.hotelName}</TableCell>
+                                <TableCell className="text-sm py-2">{hotel.location}</TableCell>
+                                <TableCell className="text-sm py-2">{new Date(hotel.enrolledDate).toLocaleDateString()}</TableCell>
+                                <TableCell className="py-2">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    hotel.status === 'Active' 
+                                      ? 'bg-green-100 text-green-800' 
+                                      : 'bg-red-100 text-red-800'
+                                  }`}>
+                                    {hotel.status}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="investors" className="flex-1 overflow-y-auto">
-                  <Card className="h-full">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base">Investors</CardTitle>
+                <TabsContent value="investors" className="flex-1 min-h-0 overflow-hidden">
+                  <Card className="h-full flex flex-col">
+                    <CardHeader className="pb-2 flex-shrink-0">
+                      <CardTitle className="text-lg">Investors</CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-0">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="text-xs">Investor Name</TableHead>
-                            <TableHead className="text-xs">Phone Number</TableHead>
-                            <TableHead className="text-xs">Share in Hotels</TableHead>
-                            <TableHead className="text-xs">Email</TableHead>
-                            <TableHead className="text-xs">Status</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {selectedManager.investors.map((investor, index) => (
-                            <TableRow key={index}>
-                              <TableCell className="text-sm">{investor.investorName}</TableCell>
-                              <TableCell className="text-sm">{investor.phoneNumber}</TableCell>
-                              <TableCell className="text-sm">{investor.shareInHotels}</TableCell>
-                              <TableCell className="text-sm">{investor.email}</TableCell>
-                              <TableCell>
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  investor.status === 'Active' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : 'bg-red-100 text-red-800'
-                                }`}>
-                                  {investor.status}
-                                </span>
-                              </TableCell>
+                    <CardContent className="pt-0 pb-3 flex-1 min-h-0">
+                      <div className="h-full">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="text-xs h-8">Investor Name</TableHead>
+                              <TableHead className="text-xs h-8">Phone Number</TableHead>
+                              <TableHead className="text-xs h-8">Share in Hotels</TableHead>
+                              <TableHead className="text-xs h-8">Email</TableHead>
+                              <TableHead className="text-xs h-8">Status</TableHead>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
+                          </TableHeader>
+                          <TableBody>
+                            {selectedManager.investors.map((investor, index) => (
+                              <TableRow key={index} className="h-10">
+                                <TableCell className="text-sm py-2">{investor.investorName}</TableCell>
+                                <TableCell className="text-sm py-2">{investor.phoneNumber}</TableCell>
+                                <TableCell className="text-sm py-2">{investor.shareInHotels}</TableCell>
+                                <TableCell className="text-sm py-2">{investor.email}</TableCell>
+                                <TableCell className="py-2">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    investor.status === 'Active' 
+                                      ? 'bg-green-100 text-green-800' 
+                                      : 'bg-red-100 text-red-800'
+                                  }`}>
+                                    {investor.status}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
