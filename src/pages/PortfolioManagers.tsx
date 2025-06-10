@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -223,7 +224,7 @@ const PortfolioManagers = () => {
                     {/* Organization Details */}
                     <Card>
                       <CardHeader>
-                        <CardTitle>Organization Details</CardTitle>
+                        <CardTitle className="text-lg">Organization Details</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
@@ -250,7 +251,7 @@ const PortfolioManagers = () => {
                     {/* Subscription Details */}
                     <Card>
                       <CardHeader>
-                        <CardTitle>Subscription Details</CardTitle>
+                        <CardTitle className="text-lg">Subscription Details</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
