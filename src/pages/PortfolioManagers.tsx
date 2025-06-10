@@ -210,7 +210,7 @@ const PortfolioManagers = () => {
 
         {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+          <DialogContent className="max-w-4xl h-[95vh] flex flex-col">
             <DialogHeader className="pb-4 flex-shrink-0">
               <DialogTitle>Portfolio Manager Details</DialogTitle>
             </DialogHeader>
@@ -223,17 +223,17 @@ const PortfolioManagers = () => {
                   <TabsTrigger value="investors">Investors</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="organization" className="flex-1 space-y-4 pb-4">
+                <TabsContent value="organization" className="flex-1 space-y-6 pb-4 overflow-y-auto">
                   {/* Organization Details */}
                   <Card className="flex-shrink-0">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg">Organization Details</CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0 pb-4">
-                      <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Contact Person Name</label>
-                          <p className="text-sm mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
+                          <p className="text-sm mt-1 font-medium">{selectedManager.organizationDetails.contactPersonName}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Email</label>
@@ -257,7 +257,7 @@ const PortfolioManagers = () => {
                       <CardTitle className="text-lg">Subscription Details</CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0 pb-4">
-                      <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Plan Name</label>
                           <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
@@ -269,8 +269,10 @@ const PortfolioManagers = () => {
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Status</label>
                           <div className="mt-1">
-                            <Badge variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
-                                   className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}>
+                            <Badge 
+                              variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
+                              className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}
+                            >
                               {selectedManager.subscriptionDetails.status}
                             </Badge>
                           </div>
@@ -297,7 +299,7 @@ const PortfolioManagers = () => {
                         </div>
                         <div className="col-span-2">
                           <label className="text-sm font-medium text-muted-foreground">Subscription ID</label>
-                          <p className="text-sm font-mono mt-1">{selectedManager.subscriptionDetails.subscriptionId}</p>
+                          <p className="text-sm font-mono mt-1 bg-muted px-2 py-1 rounded">{selectedManager.subscriptionDetails.subscriptionId}</p>
                         </div>
                       </div>
                     </CardContent>
