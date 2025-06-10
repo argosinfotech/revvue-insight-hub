@@ -17,12 +17,43 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
     { month: "Jun", revenue: selectedHotel === "all" ? 130000 : 50000 }
   ];
 
-  // Mock data for bookings percentage per week - reduced to 4 weeks
+  // Get current date and calculate past 4 weeks
+  const today = new Date();
+  const getWeekRange = (weeksAgo: number) => {
+    const endDate = new Date(today);
+    endDate.setDate(today.getDate() - (weeksAgo * 7));
+    const startDate = new Date(endDate);
+    startDate.setDate(endDate.getDate() - 6);
+    
+    const formatDate = (date: Date) => {
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    };
+    
+    return `${formatDate(startDate)}-${formatDate(endDate)}`;
+  };
+
+  // Mock data for bookings percentage per week with actual date ranges
   const weeklyBookingsData = [
-    { week: "Week 1", percentage: selectedHotel === "all" ? 85 : 88 },
-    { week: "Week 2", percentage: selectedHotel === "all" ? 92 : 95 },
-    { week: "Week 3", percentage: selectedHotel === "all" ? 78 : 82 },
-    { week: "Week 4", percentage: selectedHotel === "all" ? 96 : 98 }
+    { 
+      week: "Week 1", 
+      dateRange: getWeekRange(0),
+      percentage: selectedHotel === "all" ? 85 : 88 
+    },
+    { 
+      week: "Week 2", 
+      dateRange: getWeekRange(1),
+      percentage: selectedHotel === "all" ? 92 : 95 
+    },
+    { 
+      week: "Week 3", 
+      dateRange: getWeekRange(2),
+      percentage: selectedHotel === "all" ? 78 : 82 
+    },
+    { 
+      week: "Week 4", 
+      dateRange: getWeekRange(3),
+      percentage: selectedHotel === "all" ? 96 : 98 
+    }
   ];
 
   return (
@@ -74,17 +105,38 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={weeklyBookingsData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="week" />
+                <XAxis 
+                  dataKey="week"
+                  tick={{ fontSize: 12 }}
+                />
                 <YAxis 
                   tickFormatter={(value) => `${value}%`}
                   domain={[0, 100]}
                 />
                 <Tooltip 
-                  formatter={(value) => [`${value}%`, 'Booking Percentage']}
+                  formatter={(value, name, props) => [
+                    `${value}%`, 
+                    'Booking Percentage'
+                  ]}
+                  labelFormatter={(label, payload) => {
+                    if (payload && payload[0]) {
+                      return `${payload[0].payload.week} (${payload[0].payload.dateRange})`;
+                    }
+                    return label;
+                  }}
                 />
                 <Bar dataKey="percentage" fill="#9b87f5" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+          {/* Date ranges at bottom */}
+          <div className="mt-4 grid grid-cols-4 gap-2 text-xs text-muted-foreground text-center">
+            {weeklyBookingsData.map((item, index) => (
+              <div key={index}>
+                <div className="font-medium">{item.week}</div>
+                <div>{item.dateRange}</div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
