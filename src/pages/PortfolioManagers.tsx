@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -209,41 +210,41 @@ const PortfolioManagers = () => {
 
         {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
-            <DialogHeader className="pb-2 flex-shrink-0">
+          <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+            <DialogHeader className="pb-4 flex-shrink-0">
               <DialogTitle>Portfolio Manager Details</DialogTitle>
             </DialogHeader>
 
             {selectedManager && (
               <Tabs defaultValue="organization" className="flex-1 flex flex-col min-h-0">
-                <TabsList className="grid w-full grid-cols-3 mb-3 flex-shrink-0">
+                <TabsList className="grid w-full grid-cols-3 mb-4 flex-shrink-0">
                   <TabsTrigger value="organization">Organization Details</TabsTrigger>
                   <TabsTrigger value="hotels">Hotel Information</TabsTrigger>
                   <TabsTrigger value="investors">Investors</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="organization" className="flex-1 space-y-3">
+                <TabsContent value="organization" className="flex-1 space-y-4 pb-4">
                   {/* Organization Details */}
                   <Card className="flex-shrink-0">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Organization Details</CardTitle>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">Organization Details</CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-0 pb-3">
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                    <CardContent className="pt-0 pb-4">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Contact Person Name</label>
+                          <label className="text-sm font-medium text-muted-foreground">Contact Person Name</label>
                           <p className="text-sm mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Email</label>
+                          <label className="text-sm font-medium text-muted-foreground">Email</label>
                           <p className="text-sm mt-1">{selectedManager.organizationDetails.email}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Phone Number</label>
+                          <label className="text-sm font-medium text-muted-foreground">Phone Number</label>
                           <p className="text-sm mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Address</label>
+                          <label className="text-sm font-medium text-muted-foreground">Address</label>
                           <p className="text-sm mt-1">{selectedManager.organizationDetails.address}</p>
                         </div>
                       </div>
@@ -252,21 +253,21 @@ const PortfolioManagers = () => {
 
                   {/* Subscription Details */}
                   <Card className="flex-shrink-0">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Subscription Details</CardTitle>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">Subscription Details</CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-0 pb-3">
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                    <CardContent className="pt-0 pb-4">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
+                          <label className="text-sm font-medium text-muted-foreground">Plan Name</label>
                           <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Plan Type</label>
+                          <label className="text-sm font-medium text-muted-foreground">Plan Type</label>
                           <p className="text-sm mt-1">{selectedManager.subscriptionDetails.planType}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Status</label>
+                          <label className="text-sm font-medium text-muted-foreground">Status</label>
                           <div className="mt-1">
                             <Badge variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
                                    className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}>
@@ -275,27 +276,27 @@ const PortfolioManagers = () => {
                           </div>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Amount</label>
+                          <label className="text-sm font-medium text-muted-foreground">Amount</label>
                           <p className="text-sm font-semibold text-green-600 mt-1">{selectedManager.subscriptionDetails.amount}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Max Hotels Allowed</label>
+                          <label className="text-sm font-medium text-muted-foreground">Max Hotels Allowed</label>
                           <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.maxHotels}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Max Investors Allowed</label>
+                          <label className="text-sm font-medium text-muted-foreground">Max Investors Allowed</label>
                           <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.maxInvestors}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Next Billing Date</label>
+                          <label className="text-sm font-medium text-muted-foreground">Next Billing Date</label>
                           <p className="text-sm mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">Expiration Date</label>
+                          <label className="text-sm font-medium text-muted-foreground">Expiration Date</label>
                           <p className="text-sm mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
                         </div>
                         <div className="col-span-2">
-                          <label className="text-xs font-medium text-muted-foreground">Subscription ID</label>
+                          <label className="text-sm font-medium text-muted-foreground">Subscription ID</label>
                           <p className="text-sm font-mono mt-1">{selectedManager.subscriptionDetails.subscriptionId}</p>
                         </div>
                       </div>
