@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -24,12 +23,11 @@ const revenueData = [
   { month: "Jun", revenue: 18000 },
 ];
 
-const StatCard = ({ icon, title, value, description, trend }: { 
+const StatCard = ({ icon, title, value, description }: { 
   icon: React.ReactNode, 
   title: string, 
   value: string, 
-  description: string,
-  trend?: { value: string, positive: boolean } 
+  description: string
 }) => (
   <Card className="bg-white border border-gray-100 hover:shadow-md transition-all duration-200 shadow-sm">
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -40,14 +38,7 @@ const StatCard = ({ icon, title, value, description, trend }: {
     </CardHeader>
     <CardContent className="p-0">
       <div className="text-3xl font-bold text-gray-900 font-system">{value}</div>
-      <div className="flex items-center space-x-1 mt-1">
-        {trend && (
-          <span className={`text-xs font-medium ${trend.positive ? 'text-green-600' : 'text-red-500'}`}>
-            {trend.value}
-          </span>
-        )}
-        <p className="text-xs text-gray-600">{description}</p>
-      </div>
+      <p className="text-xs text-gray-600 mt-1">{description}</p>
     </CardContent>
   </Card>
 );
@@ -69,28 +60,24 @@ const Dashboard = () => {
             title="Total Hotels"
             value="67"
             description="Total registered hotels"
-            trend={{ value: "+5.2%", positive: true }}
           />
           <StatCard 
             icon={<Users className="h-5 w-5" />} 
             title="Active Investors"
             value="243"
             description="Across all hotels"
-            trend={{ value: "+12.5%", positive: true }}
           />
           <StatCard 
             icon={<UserCheck className="h-5 w-5" />} 
             title="Total Staff Users"
             value="89"
             description="Active staff members"
-            trend={{ value: "+7.1%", positive: true }}
           />
           <StatCard 
             icon={<Calendar className="h-5 w-5" />} 
             title="Revenue Entries"
             value="1,289"
             description="Last 30 days"
-            trend={{ value: "+18.7%", positive: true }}
           />
         </div>
 
