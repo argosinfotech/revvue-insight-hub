@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -165,8 +163,8 @@ const PortfolioManagers = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Client Name</TableHead>
-                  <TableHead>No. of Hotels</TableHead>
-                  <TableHead>No. of Investors</TableHead>
+                  <TableHead>No. of Hotels/Max Allowed</TableHead>
+                  <TableHead>No. of Investors/Max Allowed</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Subscription Plan</TableHead>
                   <TableHead>Expiration Date</TableHead>
@@ -394,4 +392,3 @@ const PortfolioManagers = () => {
 };
 
 export default PortfolioManagers;
-
