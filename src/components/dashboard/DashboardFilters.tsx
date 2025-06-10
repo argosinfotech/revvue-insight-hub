@@ -11,9 +11,10 @@ interface DashboardFiltersProps {
 }
 
 const DashboardFilters = ({ onDateRangeChange, onHotelChange, selectedHotel }: DashboardFiltersProps) => {
+  const today = new Date();
   const [dateRange, setDateRange] = useState({
-    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-    to: new Date()
+    from: today,
+    to: today
   });
 
   // Mock hotels data

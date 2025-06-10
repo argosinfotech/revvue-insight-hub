@@ -19,9 +19,10 @@ import {
 const PortfolioDashboard = () => {
   const [selectedHotel, setSelectedHotel] = useState("all");
   const [showRevenuePanel, setShowRevenuePanel] = useState(false);
+  const today = new Date();
   const [dateRange, setDateRange] = useState({
-    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-    to: new Date()
+    from: today,
+    to: today
   });
 
   const handleDateRangeChange = (range: { from: Date; to: Date }) => {
