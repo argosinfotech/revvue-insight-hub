@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -44,7 +43,9 @@ const portfolioManagers = [
       amount: "$99.99",
       nextBillingDate: "2024-06-15",
       subscriptionId: "sub_1234567890",
-      expirationDate: "2024-06-15"
+      expirationDate: "2024-06-15",
+      maxHotels: 10,
+      maxInvestors: 50
     },
     hotels: [
       {
@@ -97,7 +98,9 @@ const portfolioManagers = [
       amount: "$599.99",
       nextBillingDate: "2025-02-10",
       subscriptionId: "sub_0987654321",
-      expirationDate: "2024-02-10"
+      expirationDate: "2024-02-10",
+      maxHotels: 5,
+      maxInvestors: 20
     },
     hotels: [
       {
@@ -206,7 +209,7 @@ const PortfolioManagers = () => {
 
         {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-5xl h-[85vh] overflow-hidden flex flex-col">
+          <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
             <DialogHeader className="pb-2 flex-shrink-0">
               <DialogTitle>Portfolio Manager Details</DialogTitle>
             </DialogHeader>
@@ -219,79 +222,85 @@ const PortfolioManagers = () => {
                   <TabsTrigger value="investors">Investors</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="organization" className="flex-1 min-h-0 overflow-hidden">
-                  <div className="space-y-3 h-full">
-                    {/* Organization Details */}
-                    <Card className="flex-shrink-0">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Organization Details</CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-0 pb-3">
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Contact Person Name</label>
-                            <p className="text-sm mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Email</label>
-                            <p className="text-sm mt-1">{selectedManager.organizationDetails.email}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Phone Number</label>
-                            <p className="text-sm mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Address</label>
-                            <p className="text-sm mt-1">{selectedManager.organizationDetails.address}</p>
-                          </div>
+                <TabsContent value="organization" className="flex-1 space-y-3">
+                  {/* Organization Details */}
+                  <Card className="flex-shrink-0">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Organization Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0 pb-3">
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Contact Person Name</label>
+                          <p className="text-sm mt-1">{selectedManager.organizationDetails.contactPersonName}</p>
                         </div>
-                      </CardContent>
-                    </Card>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Email</label>
+                          <p className="text-sm mt-1">{selectedManager.organizationDetails.email}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Phone Number</label>
+                          <p className="text-sm mt-1">{selectedManager.organizationDetails.phoneNumber}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Address</label>
+                          <p className="text-sm mt-1">{selectedManager.organizationDetails.address}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
 
-                    {/* Subscription Details */}
-                    <Card className="flex-shrink-0">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Subscription Details</CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-0 pb-3">
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
-                            <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Plan Type</label>
-                            <p className="text-sm mt-1">{selectedManager.subscriptionDetails.planType}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Status</label>
-                            <div className="mt-1">
-                              <Badge variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
-                                     className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}>
-                                {selectedManager.subscriptionDetails.status}
-                              </Badge>
-                            </div>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Amount</label>
-                            <p className="text-sm font-semibold text-green-600 mt-1">{selectedManager.subscriptionDetails.amount}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Next Billing Date</label>
-                            <p className="text-sm mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
-                          </div>
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">Expiration Date</label>
-                            <p className="text-sm mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
-                          </div>
-                          <div className="col-span-2">
-                            <label className="text-xs font-medium text-muted-foreground">Subscription ID</label>
-                            <p className="text-sm font-mono mt-1">{selectedManager.subscriptionDetails.subscriptionId}</p>
+                  {/* Subscription Details */}
+                  <Card className="flex-shrink-0">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Subscription Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0 pb-3">
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Plan Name</label>
+                          <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Plan Type</label>
+                          <p className="text-sm mt-1">{selectedManager.subscriptionDetails.planType}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Status</label>
+                          <div className="mt-1">
+                            <Badge variant={selectedManager.subscriptionDetails.status === "Active" ? "default" : "secondary"} 
+                                   className={selectedManager.subscriptionDetails.status === "Active" ? "bg-green-500 hover:bg-green-600" : ""}>
+                              {selectedManager.subscriptionDetails.status}
+                            </Badge>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Amount</label>
+                          <p className="text-sm font-semibold text-green-600 mt-1">{selectedManager.subscriptionDetails.amount}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Max Hotels Allowed</label>
+                          <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.maxHotels}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Max Investors Allowed</label>
+                          <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.maxInvestors}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Next Billing Date</label>
+                          <p className="text-sm mt-1">{selectedManager.subscriptionDetails.nextBillingDate}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground">Expiration Date</label>
+                          <p className="text-sm mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
+                        </div>
+                        <div className="col-span-2">
+                          <label className="text-xs font-medium text-muted-foreground">Subscription ID</label>
+                          <p className="text-sm font-mono mt-1">{selectedManager.subscriptionDetails.subscriptionId}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="hotels" className="flex-1 min-h-0 overflow-hidden">
