@@ -29,7 +29,7 @@ const revenueEntrySchema = z.object({
   hotelId: z.string().optional(),
   date: z.string(),
   totalRevenue: z.number().min(0, "Total revenue must be positive"),
-  occupancyPercent: z.number().min(0).max(100, "Occupancy must be between 0-100%"),
+  totalRoomsOccupied: z.number().min(0, "Total rooms occupied must be positive"),
   adr: z.number().min(0, "ADR must be positive"),
   otherRevenue: z.number().min(0, "Other revenue must be positive"),
   notes: z.string().optional(),
@@ -73,7 +73,7 @@ const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: Revenue
       hotelId: "",
       date: format(entry?.date || today, "yyyy-MM-dd"),
       totalRevenue: entry?.totalRevenue || 0,
-      occupancyPercent: entry?.occupancyPercent || 0,
+      totalRoomsOccupied: 0,
       adr: entry?.adr || 0,
       otherRevenue: entry?.otherRevenue || 0,
       notes: entry?.notes || "",
@@ -167,15 +167,14 @@ const RevenueEntryForm = ({ entry, onClose, showHotelSelector = false }: Revenue
 
               <FormField
                 control={form.control}
-                name="occupancyPercent"
+                name="totalRoomsOccupied"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Occupancy %</FormLabel>
+                    <FormLabel>Total Rooms Occupied</FormLabel>
                     <FormControl>
                       <Input 
                         type="number" 
                         placeholder="0"
-                        max="100"
                         min="0"
                         {...field}
                         onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
