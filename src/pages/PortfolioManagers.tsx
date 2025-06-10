@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -260,11 +259,11 @@ const PortfolioManagers = () => {
                       <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Plan Name</label>
-                          <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName}</p>
+                          <p className="text-sm font-semibold mt-1">{selectedManager.subscriptionDetails.planName} / {selectedManager.subscriptionDetails.planType}</p>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-muted-foreground">Plan Type</label>
-                          <p className="text-sm mt-1">{selectedManager.subscriptionDetails.planType}</p>
+                          <label className="text-sm font-medium text-muted-foreground">Subscription ID</label>
+                          <p className="text-sm font-mono mt-1 bg-muted px-2 py-1 rounded">{selectedManager.subscriptionDetails.subscriptionId}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Status</label>
@@ -296,10 +295,6 @@ const PortfolioManagers = () => {
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">Expiration Date</label>
                           <p className="text-sm mt-1">{selectedManager.subscriptionDetails.expirationDate}</p>
-                        </div>
-                        <div className="col-span-2">
-                          <label className="text-sm font-medium text-muted-foreground">Subscription ID</label>
-                          <p className="text-sm font-mono mt-1 bg-muted px-2 py-1 rounded">{selectedManager.subscriptionDetails.subscriptionId}</p>
                         </div>
                       </div>
                     </CardContent>
