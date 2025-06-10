@@ -32,6 +32,23 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
     return `${formatDate(startDate)}-${formatDate(endDate)}`;
   };
 
+  // Custom tick component for X-axis with date ranges
+  const CustomXAxisTick = (props: any) => {
+    const { x, y, payload } = props;
+    const weekData = weeklyBookingsData.find(item => item.week === payload.value);
+    
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={16} textAnchor="middle" fill="#666" fontSize="12">
+          {payload.value}
+        </text>
+        <text x={0} y={0} dy={32} textAnchor="middle" fill="#999" fontSize="10">
+          {weekData?.dateRange}
+        </text>
+      </g>
+    );
+  };
+
   // Mock data for bookings percentage per week with actual date ranges
   const weeklyBookingsData = [
     { 
@@ -103,11 +120,12 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
         <CardContent>
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={weeklyBookingsData}>
+              <BarChart data={weeklyBookingsData} margin={{ bottom: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis 
                   dataKey="week"
-                  tick={{ fontSize: 12 }}
+                  tick={<CustomXAxisTick />}
+                  height={60}
                 />
                 <YAxis 
                   tickFormatter={(value) => `${value}%`}
@@ -128,15 +146,6 @@ const DashboardCharts = ({ selectedHotel }: DashboardChartsProps) => {
                 <Bar dataKey="percentage" fill="#9b87f5" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-          {/* Date ranges at bottom */}
-          <div className="mt-4 grid grid-cols-4 gap-2 text-xs text-muted-foreground text-center">
-            {weeklyBookingsData.map((item, index) => (
-              <div key={index}>
-                <div className="font-medium">{item.week}</div>
-                <div>{item.dateRange}</div>
-              </div>
-            ))}
           </div>
         </CardContent>
       </Card>
