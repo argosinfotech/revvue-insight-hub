@@ -39,6 +39,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -54,6 +55,7 @@ interface BillingPackage {
   subscriberCount: number;
   maxHotels?: number;
   maxInvestors?: number;
+  isActive: boolean;
 }
 
 // Form validation schema
@@ -93,7 +95,8 @@ const Billing = () => {
       features: ["Up to 5 hotels", "Basic analytics", "Email support"],
       subscriberCount: 12,
       maxHotels: 5,
-      maxInvestors: 50
+      maxInvestors: 50,
+      isActive: true
     },
     {
       id: "pro", 
@@ -103,7 +106,8 @@ const Billing = () => {
       features: ["Up to 20 hotels", "Advanced analytics", "Priority support", "API access"],
       subscriberCount: 8,
       maxHotels: 20,
-      maxInvestors: 100
+      maxInvestors: 100,
+      isActive: true
     },
     {
       id: "enterprise",
@@ -113,7 +117,8 @@ const Billing = () => {
       features: ["Unlimited hotels", "Custom integrations", "Dedicated support", "White label options"],
       subscriberCount: 0,
       maxHotels: 999,
-      maxInvestors: 999
+      maxInvestors: 999,
+      isActive: true
     }
   ]);
 
@@ -180,7 +185,8 @@ const Billing = () => {
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
         subscriberCount: 0,
         maxHotels: parseInt(data.maxHotels),
-        maxInvestors: parseInt(data.maxInvestors)
+        maxInvestors: parseInt(data.maxInvestors),
+        isActive: true
       };
 
       setPackages([...packages, newPackage]);
@@ -249,9 +255,15 @@ const Billing = () => {
     setPackageToDelete(null);
   };
 
-  const handleCancelDelete = () => {
-    setDeleteDialogOpen(false);
-    setPackageToDelete(null);
+  const handleToggleStatus = (pkg: BillingPackage) => {
+    if (pkg.subscriberCount > 0 && pkg.isActive) {
+      toast.error("Cannot deactivate package with active subscribers");
+      return;
+    }
+    
+    const updatedPackage = { ...pkg, isActive: !pkg.isActive };
+    setPackages(packages.map(p => p.id === pkg.id ? updatedPackage : p));
+    toast.success(`Package ${pkg.isActive ? 'deactivated' : 'activated'} successfully!`);
   };
 
   const handleCancel = () => {
@@ -265,6 +277,104 @@ const Billing = () => {
     form.reset();
     setIsAddPackageOpen(true);
   };
+
+  const activePackages = packages.filter(pkg => pkg.isActive);
+  const inactivePackages = packages.filter(pkg => !pkg.isActive);
+
+  const renderPackageTable = (packageList: BillingPackage[]) => (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Package Name</TableHead>
+            <TableHead>Monthly Price</TableHead>
+            <TableHead>Yearly Price</TableHead>
+            <TableHead>Max Hotels</TableHead>
+            <TableHead>Max Investors</TableHead>
+            <TableHead>No. of Subscribers</TableHead>
+            <TableHead>Features</TableHead>
+            <TableHead className="w-[100px]">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {packageList.length > 0 ? (
+            packageList.map((pkg) => (
+              <TableRow key={pkg.id}>
+                <TableCell className="font-medium">{pkg.name}</TableCell>
+                <TableCell>
+                  {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
+                </TableCell>
+                <TableCell>
+                  {pkg.yearlyPrice === 0 ? 'Custom' : pkg.yearlyPrice ? `$${pkg.yearlyPrice}/year` : 'N/A'}
+                </TableCell>
+                <TableCell>
+                  {pkg.maxHotels === 999 ? 'Unlimited' : pkg.maxHotels}
+                </TableCell>
+                <TableCell>
+                  {pkg.maxInvestors === 999 ? 'Unlimited' : pkg.maxInvestors}
+                </TableCell>
+                <TableCell>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {pkg.subscriberCount}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <ul className="text-sm text-muted-foreground">
+                    {pkg.features.map((feature, index) => (
+                      <li key={index}>• {feature}</li>
+                    ))}
+                  </ul>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(pkg)}
+                      disabled={pkg.subscriberCount > 0}
+                      className={`h-8 w-8 p-0 ${pkg.subscriberCount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={pkg.subscriberCount > 0 ? 'Cannot edit package with active subscribers' : 'Edit package'}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleToggleStatus(pkg)}
+                      disabled={pkg.subscriberCount > 0 && pkg.isActive}
+                      className="h-8 w-8 p-0"
+                      title={pkg.isActive ? 'Deactivate package' : 'Activate package'}
+                    >
+                      {pkg.isActive ? (
+                        <span className="text-green-600 text-xs">Active</span>
+                      ) : (
+                        <span className="text-gray-600 text-xs">Inactive</span>
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteClick(pkg)}
+                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                      title="Delete package"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={8} className="h-24 text-center">
+                No packages found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
 
   return (
     <DashboardLayout>
@@ -417,7 +527,7 @@ const Billing = () => {
           </Button>
         </div>
         
-        {/* Packages List */}
+        {/* Packages List with Tabs */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
@@ -428,84 +538,18 @@ const Billing = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Package Name</TableHead>
-                    <TableHead>Monthly Price</TableHead>
-                    <TableHead>Yearly Price</TableHead>
-                    <TableHead>Max Hotels</TableHead>
-                    <TableHead>Max Investors</TableHead>
-                    <TableHead>No. of Subscribers</TableHead>
-                    <TableHead>Features</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {packages.length > 0 ? (
-                    packages.map((pkg) => (
-                      <TableRow key={pkg.id}>
-                        <TableCell className="font-medium">{pkg.name}</TableCell>
-                        <TableCell>
-                          {pkg.price === 0 ? 'Custom' : `$${pkg.price}/month`}
-                        </TableCell>
-                        <TableCell>
-                          {pkg.yearlyPrice === 0 ? 'Custom' : pkg.yearlyPrice ? `$${pkg.yearlyPrice}/year` : 'N/A'}
-                        </TableCell>
-                        <TableCell>
-                          {pkg.maxHotels === 999 ? 'Unlimited' : pkg.maxHotels}
-                        </TableCell>
-                        <TableCell>
-                          {pkg.maxInvestors === 999 ? 'Unlimited' : pkg.maxInvestors}
-                        </TableCell>
-                        <TableCell>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {pkg.subscriberCount}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <ul className="text-sm text-muted-foreground">
-                            {pkg.features.map((feature, index) => (
-                              <li key={index}>• {feature}</li>
-                            ))}
-                          </ul>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEdit(pkg)}
-                              disabled={pkg.subscriberCount > 0}
-                              className={`h-8 w-8 p-0 ${pkg.subscriberCount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              title={pkg.subscriberCount > 0 ? 'Cannot edit package with active subscribers' : 'Edit package'}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteClick(pkg)}
-                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                              title="Delete package"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={8} className="h-24 text-center">
-                        No packages found.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+            <Tabs defaultValue="active" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="active">Active Packages ({activePackages.length})</TabsTrigger>
+                <TabsTrigger value="inactive">Inactive Packages ({inactivePackages.length})</TabsTrigger>
+              </TabsList>
+              <TabsContent value="active" className="mt-4">
+                {renderPackageTable(activePackages)}
+              </TabsContent>
+              <TabsContent value="inactive" className="mt-4">
+                {renderPackageTable(inactivePackages)}
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
 
@@ -658,3 +702,5 @@ const Billing = () => {
 };
 
 export default Billing;
+
+}
