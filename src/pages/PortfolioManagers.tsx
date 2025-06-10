@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -209,20 +210,20 @@ const PortfolioManagers = () => {
 
         {/* View Details Dialog with Tabs */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="max-w-4xl h-[95vh] flex flex-col">
+          <DialogContent className="max-w-4xl h-[95vh] flex flex-col overflow-hidden">
             <DialogHeader className="pb-4 flex-shrink-0">
               <DialogTitle>Portfolio Manager Details</DialogTitle>
             </DialogHeader>
 
             {selectedManager && (
-              <Tabs defaultValue="organization" className="flex-1 flex flex-col min-h-0">
+              <Tabs defaultValue="organization" className="flex-1 flex flex-col min-h-0 overflow-hidden">
                 <TabsList className="grid w-full grid-cols-3 mb-4 flex-shrink-0">
                   <TabsTrigger value="organization">Organization Details</TabsTrigger>
                   <TabsTrigger value="hotels">Hotel Information</TabsTrigger>
                   <TabsTrigger value="investors">Investors</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="organization" className="flex-1 space-y-6 pb-4 overflow-y-auto">
+                <TabsContent value="organization" className="flex-1 space-y-6 pb-4 overflow-hidden">
                   {/* Organization Details */}
                   <Card className="flex-shrink-0">
                     <CardHeader className="pb-3">
@@ -306,8 +307,8 @@ const PortfolioManagers = () => {
                     <CardHeader className="pb-2 flex-shrink-0">
                       <CardTitle className="text-lg">Hotel Information</CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-0 pb-3 flex-1 min-h-0">
-                      <div className="h-full">
+                    <CardContent className="pt-0 pb-3 flex-1 min-h-0 overflow-hidden">
+                      <div className="h-full overflow-hidden">
                         <Table>
                           <TableHeader>
                             <TableRow>
@@ -346,8 +347,8 @@ const PortfolioManagers = () => {
                     <CardHeader className="pb-2 flex-shrink-0">
                       <CardTitle className="text-lg">Investors</CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-0 pb-3 flex-1 min-h-0">
-                      <div className="h-full">
+                    <CardContent className="pt-0 pb-3 flex-1 min-h-0 overflow-hidden">
+                      <div className="h-full overflow-hidden">
                         <Table>
                           <TableHeader>
                             <TableRow>
