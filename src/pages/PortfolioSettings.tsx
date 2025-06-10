@@ -31,39 +31,6 @@ const PortfolioSettings = () => {
                     Go to Argos Helpdesk
                   </Button>
                 </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Contact Support</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Need help? Our support team is here to assist you.
-                  </p>
-                  <div className="space-y-2">
-                    <p><strong>Email:</strong> support@example.com</p>
-                    <p><strong>Phone:</strong> +1 (555) 123-4567</p>
-                    <p><strong>Hours:</strong> Monday - Friday, 9 AM - 6 PM EST</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Documentation</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Access our comprehensive documentation and guides.
-                  </p>
-                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                    <li>Getting Started Guide</li>
-                    <li>API Documentation</li>
-                    <li>Integration Tutorials</li>
-                    <li>Best Practices</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">System Status</h3>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-muted-foreground">All systems operational</span>
-                  </div>
-                </div>
               </div>
             </CardContent>
           </Card>
