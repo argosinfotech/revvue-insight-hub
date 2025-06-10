@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Plus, Edit, Trash2, CreditCard, Calendar } from "lucide-react";
@@ -245,11 +244,6 @@ const Billing = () => {
   };
 
   const handleEdit = (pkg: BillingPackage) => {
-    if (pkg.subscriberCount > 0) {
-      toast.error("Cannot edit package with active subscribers");
-      return;
-    }
-    
     console.log("Editing package:", pkg);
     setEditingPackage(pkg);
     
@@ -267,13 +261,8 @@ const Billing = () => {
   };
 
   const handleDeleteClick = (pkg: BillingPackage) => {
-    if (pkg.subscriberCount > 0) {
-      toast.error("Cannot delete package with active subscribers");
-      return;
-    }
-    
-    setPackageToDelete(pkg);
-    setDeleteDialogOpen(true);
+    toast.error("Package deletion is not allowed");
+    return;
   };
 
   const handleConfirmDelete = () => {
@@ -371,34 +360,10 @@ const Billing = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEdit(pkg)}
-                      disabled={pkg.subscriberCount > 0}
-                      className={`h-8 w-8 p-0 ${pkg.subscriberCount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      title={pkg.subscriberCount > 0 ? 'Cannot edit package with active subscribers' : 'Edit package'}
+                      className="h-8 w-8 p-0"
+                      title="Edit package"
                     >
                       <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleToggleStatus(pkg)}
-                      disabled={pkg.subscriberCount > 0 && pkg.isActive}
-                      className="h-8 w-8 p-0"
-                      title={pkg.isActive ? 'Deactivate package' : 'Activate package'}
-                    >
-                      {pkg.isActive ? (
-                        <span className="text-green-600 text-xs">Active</span>
-                      ) : (
-                        <span className="text-gray-600 text-xs">Inactive</span>
-                      )}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteClick(pkg)}
-                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                      title="Delete package"
-                    >
-                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </TableCell>
@@ -809,3 +774,5 @@ const Billing = () => {
 };
 
 export default Billing;
+
+}
