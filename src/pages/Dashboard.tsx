@@ -11,19 +11,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import DashboardLayout from "@/components/DashboardLayout";
-
-const hotelSignups = [
-  { day: "1", count: 4 },
-  { day: "5", count: 2 },
-  { day: "10", count: 7 },
-  { day: "15", count: 3 },
-  { day: "20", count: 6 },
-  { day: "25", count: 4 },
-  { day: "30", count: 8 },
-];
 
 const revenueData = [
   { month: "Jan", revenue: 12000 },
@@ -104,71 +94,8 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Charts Section */}
-        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
-          <Card className="bg-white border border-gray-100 shadow-sm">
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <CardTitle className="text-gray-900 font-system">Hotel Signups</CardTitle>
-                  <CardDescription className="text-gray-600 font-system">New hotels registered in the last 30 days</CardDescription>
-                </div>
-                <Select defaultValue="30">
-                  <SelectTrigger className="w-full sm:w-[120px] bg-white border-gray-200">
-                    <SelectValue placeholder="Time period" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="7">Last 7 days</SelectItem>
-                    <SelectItem value="30">Last 30 days</SelectItem>
-                    <SelectItem value="90">Last quarter</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-2">
-              <div className="h-80 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={hotelSignups}
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                    <XAxis dataKey="day" stroke="#6b7280" />
-                    <YAxis stroke="#6b7280" />
-                    <Tooltip 
-                      contentStyle={{
-                        backgroundColor: 'white',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '12px',
-                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
-                      }}
-                    />
-                    <Bar dataKey="count" fill="url(#gradient)" radius={[8, 8, 0, 0]} />
-                    <defs>
-                      <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#667eea" />
-                        <stop offset="100%" stopColor="#764ba2" />
-                      </linearGradient>
-                    </defs>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-between gap-2">
-              <Button variant="ghost" className="text-sm text-gray-600 hover:bg-gray-50 font-system">
-                View all data
-              </Button>
-              <Button variant="ghost" size="icon" className="hover:bg-gray-50">
-                <Download size={16} />
-              </Button>
-            </CardFooter>
-          </Card>
-
+        {/* Revenue Chart Section */}
+        <div className="grid gap-6 grid-cols-1">
           <Card className="bg-white border border-gray-100 shadow-sm">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
