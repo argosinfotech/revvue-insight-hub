@@ -6,7 +6,7 @@ import MetricsCards from "@/components/dashboard/MetricsCards";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 import RevenueEntryForm from "@/components/RevenueEntryForm";
 import { Button } from "@/components/ui/button";
-import { FileDown, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -34,18 +34,6 @@ const PortfolioDashboard = () => {
     console.log("Hotel changed:", hotelId);
   };
 
-  const handleExportToExcel = () => {
-    // Mock export functionality - in real app this would call an API
-    console.log("Exporting data to Excel...", {
-      selectedHotel,
-      dateRange,
-      timestamp: new Date().toISOString()
-    });
-    
-    // Simulate export process
-    toast.success("Portfolio data exported to Excel successfully!");
-  };
-
   const handleAddRevenue = () => {
     setShowRevenuePanel(true);
   };
@@ -69,10 +57,6 @@ const PortfolioDashboard = () => {
             <Button onClick={handleAddRevenue} className="bg-purple-600 hover:bg-purple-700">
               <Plus className="h-4 w-4 mr-2" />
               Add Daily Revenue
-            </Button>
-            <Button onClick={handleExportToExcel} className="bg-green-600 hover:bg-green-700">
-              <FileDown className="h-4 w-4 mr-2" />
-              Export to Excel
             </Button>
           </div>
         </div>
