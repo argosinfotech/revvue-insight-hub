@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -39,11 +39,6 @@ const EmailSmsTemplates = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<EmailSmsTemplate | null>(null);
 
-  const handleAddTemplate = () => {
-    setEditingTemplate(null);
-    setIsSheetOpen(true);
-  };
-
   const handleEditTemplate = (template: EmailSmsTemplate) => {
     setEditingTemplate(template);
     setIsSheetOpen(true);
@@ -63,15 +58,6 @@ const EmailSmsTemplates = () => {
           : template
       ));
       toast.success("Template updated successfully!");
-    } else {
-      // Add new template
-      const newTemplate: EmailSmsTemplate = {
-        id: Date.now().toString(),
-        ...templateData,
-        createdDate: new Date().toISOString().split('T')[0]
-      };
-      setTemplates([...templates, newTemplate]);
-      toast.success("Template created successfully!");
     }
     setIsSheetOpen(false);
     setEditingTemplate(null);
@@ -93,10 +79,6 @@ const EmailSmsTemplates = () => {
                 Manage email and SMS templates for different notification types
               </CardDescription>
             </div>
-            <Button onClick={handleAddTemplate} className="bg-brand-purple hover:bg-brand-purple-dark">
-              <Plus className="h-4 w-4 mr-2" />
-              Add New Template
-            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -153,15 +135,15 @@ const EmailSmsTemplates = () => {
         </CardContent>
       </Card>
 
-      {/* Add/Edit Email/SMS Template Panel */}
+      {/* Edit Email/SMS Template Panel */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent className="sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
             <SheetTitle>
-              {editingTemplate ? "Edit Email/SMS Template" : "Add New Email/SMS Template"}
+              Edit Email/SMS Template
             </SheetTitle>
             <SheetDescription>
-              {editingTemplate ? "Update the template details below." : "Create a new email or SMS template for notifications."}
+              Update the template details below.
             </SheetDescription>
           </SheetHeader>
           
