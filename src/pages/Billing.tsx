@@ -534,14 +534,6 @@ const Billing = () => {
         
         {/* Packages List with Tabs */}
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2">
-              Packages List
-            </CardTitle>
-            <CardDescription>
-              Showing {packages.length} packages
-            </CardDescription>
-          </CardHeader>
           <CardContent>
             <Tabs defaultValue="active" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
