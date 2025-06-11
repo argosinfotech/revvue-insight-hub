@@ -1,11 +1,11 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Phone, Camera, Lock, Eye, EyeOff, Shield, CheckCircle, AlertCircle } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { User, Mail, Phone, Camera, Lock, Eye, EyeOff, Shield, CheckCircle, AlertCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -17,7 +17,8 @@ const Profile = () => {
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567"
+    phone: "+1 (555) 123-4567",
+    timezone: "America/New_York"
   });
 
   // Password change state
@@ -46,6 +47,22 @@ const Profile = () => {
     managerContact: "+1 (555) 987-6543",
     enrollmentDate: "2023-10-15"
   };
+
+  // Common timezones for the dropdown
+  const timezones = [
+    { value: "America/New_York", label: "Eastern Time (UTC-5/-4)" },
+    { value: "America/Chicago", label: "Central Time (UTC-6/-5)" },
+    { value: "America/Denver", label: "Mountain Time (UTC-7/-6)" },
+    { value: "America/Los_Angeles", label: "Pacific Time (UTC-8/-7)" },
+    { value: "UTC", label: "UTC (UTC+0)" },
+    { value: "Europe/London", label: "London (UTC+0/+1)" },
+    { value: "Europe/Paris", label: "Paris (UTC+1/+2)" },
+    { value: "Europe/Berlin", label: "Berlin (UTC+1/+2)" },
+    { value: "Asia/Tokyo", label: "Tokyo (UTC+9)" },
+    { value: "Asia/Shanghai", label: "Shanghai (UTC+8)" },
+    { value: "Asia/Kolkata", label: "Mumbai (UTC+5:30)" },
+    { value: "Australia/Sydney", label: "Sydney (UTC+10/+11)" },
+  ];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -223,6 +240,29 @@ const Profile = () => {
                     disabled={!isEditing}
                     className="pl-10"
                   />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="timezone">Timezone</Label>
+                <div className="relative">
+                  <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground z-10" />
+                  <Select
+                    value={formData.timezone}
+                    onValueChange={(value) => handleInputChange('timezone', value)}
+                    disabled={!isEditing}
+                  >
+                    <SelectTrigger className="pl-10">
+                      <SelectValue placeholder="Select your timezone" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timezones.map((timezone) => (
+                        <SelectItem key={timezone.value} value={timezone.value}>
+                          {timezone.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
