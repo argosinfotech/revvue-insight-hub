@@ -633,5 +633,3 @@ const PortfolioManagerHotels = () => {
 };
 
 export default PortfolioManagerHotels;
-
-}
