@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Send, Filter, Search, Calendar } from "lucide-react";
+import { Eye, Send, Search, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import {
   Select,
@@ -137,13 +136,7 @@ const Revenue = () => {
 
         {/* Ultra Compact Filters */}
         <Card>
-          <CardHeader className="pb-2 pt-4">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Filter className="h-4 w-4" />
-              Filters
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0 pb-4">
+          <CardContent className="pt-4 pb-4">
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div className="space-y-1">
                 <label className="text-xs font-medium text-muted-foreground">Search</label>
