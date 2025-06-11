@@ -487,7 +487,7 @@ const PortfolioManagerHotels = () => {
                                 <Eye size={14} className="mr-2" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => openEditRooms(hotel)}>
+                              <DropdownMenuItem onClick={() => openEditForm(hotel)}>
                                 <Edit size={14} className="mr-2" />
                                 Edit
                               </DropdownMenuItem>
@@ -633,5 +633,3 @@ const PortfolioManagerHotels = () => {
 };
 
 export default PortfolioManagerHotels;
-
-}
