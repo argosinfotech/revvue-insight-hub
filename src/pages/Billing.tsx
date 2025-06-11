@@ -68,6 +68,8 @@ interface BillingPackage {
   subscriberCount: number;
   maxHotels?: number;
   maxInvestors?: number;
+  maxHotelsYearly?: number;
+  maxInvestorsYearly?: number;
   isActive: boolean;
   effectiveDate?: Date;
 }
@@ -80,6 +82,8 @@ const addPackageSchema = z.object({
   features: z.string().min(1, "Features are required"),
   maxHotels: z.string().min(1, "Number of hotels is required").regex(/^\d+$/, "Must be a valid number"),
   maxInvestors: z.string().min(1, "Number of investors is required").regex(/^\d+$/, "Must be a valid number"),
+  maxHotelsYearly: z.string().min(1, "Number of hotels for yearly is required").regex(/^\d+$/, "Must be a valid number"),
+  maxInvestorsYearly: z.string().min(1, "Number of investors for yearly is required").regex(/^\d+$/, "Must be a valid number"),
   effectiveDate: z.date({
     required_error: "Effective date is required",
   }),
@@ -116,6 +120,8 @@ const Billing = () => {
       subscriberCount: 12,
       maxHotels: 5,
       maxInvestors: 50,
+      maxHotelsYearly: 7,
+      maxInvestorsYearly: 70,
       isActive: true,
       effectiveDate: new Date('2024-01-01')
     },
@@ -128,6 +134,8 @@ const Billing = () => {
       subscriberCount: 8,
       maxHotels: 20,
       maxInvestors: 100,
+      maxHotelsYearly: 25,
+      maxInvestorsYearly: 150,
       isActive: true,
       effectiveDate: new Date('2024-01-15')
     },
@@ -140,6 +148,8 @@ const Billing = () => {
       subscriberCount: 0,
       maxHotels: 999,
       maxInvestors: 999,
+      maxHotelsYearly: 999,
+      maxInvestorsYearly: 999,
       isActive: true,
       effectiveDate: new Date('2024-02-01')
     }
@@ -166,6 +176,8 @@ const Billing = () => {
       features: "",
       maxHotels: "",
       maxInvestors: "",
+      maxHotelsYearly: "",
+      maxInvestorsYearly: "",
       effectiveDate: new Date(),
       status: "active"
     }
@@ -194,6 +206,8 @@ const Billing = () => {
         features: data.features.split('\n').filter(feature => feature.trim() !== ''),
         maxHotels: parseInt(data.maxHotels),
         maxInvestors: parseInt(data.maxInvestors),
+        maxHotelsYearly: parseInt(data.maxHotelsYearly),
+        maxInvestorsYearly: parseInt(data.maxInvestorsYearly),
         effectiveDate: data.effectiveDate,
         isActive: data.status === "active"
       };
@@ -213,6 +227,8 @@ const Billing = () => {
         subscriberCount: 0,
         maxHotels: parseInt(data.maxHotels),
         maxInvestors: parseInt(data.maxInvestors),
+        maxHotelsYearly: parseInt(data.maxHotelsYearly),
+        maxInvestorsYearly: parseInt(data.maxInvestorsYearly),
         isActive: data.status === "active",
         effectiveDate: data.effectiveDate
       };
@@ -254,6 +270,8 @@ const Billing = () => {
     form.setValue("features", pkg.features.join('\n'));
     form.setValue("maxHotels", pkg.maxHotels?.toString() || "");
     form.setValue("maxInvestors", pkg.maxInvestors?.toString() || "");
+    form.setValue("maxHotelsYearly", pkg.maxHotelsYearly?.toString() || "");
+    form.setValue("maxInvestorsYearly", pkg.maxInvestorsYearly?.toString() || "");
     form.setValue("effectiveDate", pkg.effectiveDate || new Date());
     form.setValue("status", pkg.isActive ? "active" : "inactive");
     
@@ -314,8 +332,8 @@ const Billing = () => {
             <TableHead>Package Name</TableHead>
             <TableHead>Monthly Price</TableHead>
             <TableHead>Yearly Price</TableHead>
-            <TableHead>Max Hotels</TableHead>
-            <TableHead>Max Investors</TableHead>
+            <TableHead>Max Hotels (M/Y)</TableHead>
+            <TableHead>Max Investors (M/Y)</TableHead>
             <TableHead>Effective Date</TableHead>
             <TableHead>No. of Subscribers</TableHead>
             <TableHead>Features</TableHead>
@@ -334,10 +352,10 @@ const Billing = () => {
                   {pkg.yearlyPrice === 0 ? 'Custom' : pkg.yearlyPrice ? `$${pkg.yearlyPrice}/year` : 'N/A'}
                 </TableCell>
                 <TableCell>
-                  {pkg.maxHotels === 999 ? 'Unlimited' : pkg.maxHotels}
+                  {pkg.maxHotels === 999 ? 'Unlimited' : pkg.maxHotels} / {pkg.maxHotelsYearly === 999 ? 'Unlimited' : pkg.maxHotelsYearly}
                 </TableCell>
                 <TableCell>
-                  {pkg.maxInvestors === 999 ? 'Unlimited' : pkg.maxInvestors}
+                  {pkg.maxInvestors === 999 ? 'Unlimited' : pkg.maxInvestors} / {pkg.maxInvestorsYearly === 999 ? 'Unlimited' : pkg.maxInvestorsYearly}
                 </TableCell>
                 <TableCell>
                   {pkg.effectiveDate ? format(pkg.effectiveDate, "MMM dd, yyyy") : 'N/A'}
@@ -582,7 +600,10 @@ const Billing = () => {
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* Monthly Pricing Section */}
+                  <div className="space-y-4 border rounded-lg p-4">
+                    <h4 className="font-semibold text-sm">Monthly Pricing</h4>
+                    
                     <FormField
                       control={form.control}
                       name="price"
@@ -597,6 +618,41 @@ const Billing = () => {
                       )}
                     />
 
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="maxHotels"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Max Hotels</FormLabel>
+                            <FormControl>
+                              <Input placeholder="5" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="maxInvestors"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Max Investors</FormLabel>
+                            <FormControl>
+                              <Input placeholder="50" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Yearly Pricing Section */}
+                  <div className="space-y-4 border rounded-lg p-4">
+                    <h4 className="font-semibold text-sm">Yearly Pricing</h4>
+                    
                     <FormField
                       control={form.control}
                       name="yearlyPrice"
@@ -610,36 +666,36 @@ const Billing = () => {
                         </FormItem>
                       )}
                     />
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="maxHotels"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Max Hotels</FormLabel>
-                          <FormControl>
-                            <Input placeholder="5" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="maxHotelsYearly"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Max Hotels</FormLabel>
+                            <FormControl>
+                              <Input placeholder="7" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="maxInvestors"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Max Investors</FormLabel>
-                          <FormControl>
-                            <Input placeholder="50" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={form.control}
+                        name="maxInvestorsYearly"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Max Investors</FormLabel>
+                            <FormControl>
+                              <Input placeholder="70" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   <FormField
