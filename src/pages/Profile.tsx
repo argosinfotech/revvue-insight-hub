@@ -48,20 +48,12 @@ const Profile = () => {
     enrollmentDate: "2023-10-15"
   };
 
-  // Common timezones for the dropdown
+  // US timezones only - CST/PST/EST/MST
   const timezones = [
-    { value: "America/New_York", label: "Eastern Time (UTC-5/-4)" },
-    { value: "America/Chicago", label: "Central Time (UTC-6/-5)" },
-    { value: "America/Denver", label: "Mountain Time (UTC-7/-6)" },
-    { value: "America/Los_Angeles", label: "Pacific Time (UTC-8/-7)" },
-    { value: "UTC", label: "UTC (UTC+0)" },
-    { value: "Europe/London", label: "London (UTC+0/+1)" },
-    { value: "Europe/Paris", label: "Paris (UTC+1/+2)" },
-    { value: "Europe/Berlin", label: "Berlin (UTC+1/+2)" },
-    { value: "Asia/Tokyo", label: "Tokyo (UTC+9)" },
-    { value: "Asia/Shanghai", label: "Shanghai (UTC+8)" },
-    { value: "Asia/Kolkata", label: "Mumbai (UTC+5:30)" },
-    { value: "Australia/Sydney", label: "Sydney (UTC+10/+11)" },
+    { value: "America/New_York", label: "EST - Eastern Time" },
+    { value: "America/Chicago", label: "CST - Central Time" },
+    { value: "America/Denver", label: "MST - Mountain Time" },
+    { value: "America/Los_Angeles", label: "PST - Pacific Time" },
   ];
 
   const handleInputChange = (field: string, value: string) => {
