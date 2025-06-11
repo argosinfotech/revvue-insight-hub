@@ -58,9 +58,9 @@ const Dashboard = () => {
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <StatCard 
             icon={<UserPlus className="h-5 w-5" />} 
-            title="New Signup in Past 30 Days"
+            title="New Signup"
             value="23"
-            description="New portfolio managers joined"
+            description="in Past 30 Days"
           />
           <StatCard 
             icon={<UserCog className="h-5 w-5" />} 
