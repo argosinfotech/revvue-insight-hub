@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -112,7 +113,7 @@ const Dashboard = () => {
                   )}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogContent className="max-w-4xl h-[600px]">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
                     <Bell className="h-5 w-5" />
@@ -123,7 +124,7 @@ const Dashboard = () => {
                   </DialogDescription>
                 </DialogHeader>
                 
-                <div className="space-y-4">
+                <div className="space-y-4 h-full flex flex-col">
                   {/* Summary Stats */}
                   <div className="grid grid-cols-3 gap-4">
                     <Card>
@@ -147,11 +148,11 @@ const Dashboard = () => {
                   </div>
 
                   {/* Issues List */}
-                  <Card>
+                  <Card className="flex-1 flex flex-col">
                     <CardHeader>
                       <CardTitle className="text-lg">Recent Issues</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1">
                       <Table>
                         <TableHeader>
                           <TableRow>
