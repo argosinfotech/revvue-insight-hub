@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -5,7 +6,8 @@ import {
   Calendar, 
   TrendingUp, 
   Download,
-  UserCheck
+  UserPlus,
+  UserCog
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,10 +58,16 @@ const Dashboard = () => {
         {/* Stats Cards */}
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard 
-            icon={<Building2 className="h-5 w-5" />} 
-            title="Total Hotels"
-            value="67"
-            description="Total registered hotels"
+            icon={<UserPlus className="h-5 w-5" />} 
+            title="New Signup in Past 30 Days"
+            value="23"
+            description="New portfolio managers joined"
+          />
+          <StatCard 
+            icon={<UserCog className="h-5 w-5" />} 
+            title="Total Portfolio Managers"
+            value="156"
+            description="Active portfolio managers"
           />
           <StatCard 
             icon={<Users className="h-5 w-5" />} 
@@ -68,16 +76,10 @@ const Dashboard = () => {
             description="Across all hotels"
           />
           <StatCard 
-            icon={<UserCheck className="h-5 w-5" />} 
-            title="Total Staff Users"
-            value="89"
-            description="Active staff members"
-          />
-          <StatCard 
-            icon={<Calendar className="h-5 w-5" />} 
-            title="Revenue Entries"
-            value="1,289"
-            description="Last 30 days"
+            icon={<Building2 className="h-5 w-5" />} 
+            title="Total Hotels"
+            value="67"
+            description="Total registered hotels"
           />
         </div>
 
