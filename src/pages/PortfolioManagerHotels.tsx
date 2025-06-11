@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Building2, Plus, Trash2, Users, Search, Eye, Edit, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -120,7 +119,10 @@ const PortfolioManagerHotels = () => {
   const [isViewDetailsOpen, setIsViewDetailsOpen] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [editingHotel, setEditingHotel] = useState<Hotel | null>(null);
-  
+  const [isEditRoomsOpen, setIsEditRoomsOpen] = useState(false);
+  const [editingRoomsHotel, setEditingRoomsHotel] = useState<Hotel | null>(null);
+  const [editRoomsValue, setEditRoomsValue] = useState("");
+
   const [hotelForm, setHotelForm] = useState({
     name: "",
     address1: "",
@@ -248,6 +250,38 @@ const PortfolioManagerHotels = () => {
     });
     setIsViewDetailsOpen(false);
     setIsAddHotelOpen(true);
+  };
+
+  const openEditRooms = (hotel: Hotel) => {
+    setEditingRoomsHotel(hotel);
+    setEditRoomsValue(hotel.totalRooms.toString());
+    setIsEditRoomsOpen(true);
+  };
+
+  const handleEditRooms = () => {
+    if (!editingRoomsHotel) return;
+    
+    const totalRoomsNum = parseInt(editRoomsValue);
+    if (isNaN(totalRoomsNum) || totalRoomsNum <= 0) {
+      toast.error("Total rooms must be a valid positive number");
+      return;
+    }
+
+    const updatedHotels = hotels.map(hotel => {
+      if (hotel.id === editingRoomsHotel.id) {
+        return {
+          ...hotel,
+          totalRooms: totalRoomsNum,
+        };
+      }
+      return hotel;
+    });
+
+    setHotels(updatedHotels);
+    setIsEditRoomsOpen(false);
+    setEditingRoomsHotel(null);
+    setEditRoomsValue("");
+    toast.success("Total rooms updated successfully!");
   };
 
   const getStatusBadge = (status: string) => {
@@ -453,6 +487,10 @@ const PortfolioManagerHotels = () => {
                                 <Eye size={14} className="mr-2" />
                                 View Details
                               </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => openEditRooms(hotel)}>
+                                <Edit size={14} className="mr-2" />
+                                Edit
+                              </DropdownMenuItem>
                               <DropdownMenuItem 
                                 className="text-red-600"
                                 onClick={() => handleDeleteHotel(hotel.id)}
@@ -477,6 +515,41 @@ const PortfolioManagerHotels = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Edit Rooms Dialog */}
+        <Dialog open={isEditRoomsOpen} onOpenChange={setIsEditRoomsOpen}>
+          <DialogContent className="sm:max-w-[400px]">
+            <DialogHeader>
+              <DialogTitle>Edit Total Rooms</DialogTitle>
+              <DialogDescription>
+                Update the total number of rooms for {editingRoomsHotel?.name}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="totalRooms">Total Rooms *</Label>
+                <Input
+                  id="totalRooms"
+                  type="number"
+                  value={editRoomsValue}
+                  onChange={(e) => setEditRoomsValue(e.target.value)}
+                  placeholder="Enter total rooms"
+                  min="1"
+                />
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditRoomsOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleEditRooms} className="bg-brand-purple hover:bg-brand-purple-dark">
+                Update Rooms
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* View Details Dialog */}
         <Dialog open={isViewDetailsOpen} onOpenChange={setIsViewDetailsOpen}>
@@ -560,3 +633,5 @@ const PortfolioManagerHotels = () => {
 };
 
 export default PortfolioManagerHotels;
+
+}
