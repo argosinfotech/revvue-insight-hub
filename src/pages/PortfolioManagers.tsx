@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -67,14 +68,16 @@ const portfolioManagers = [
         phoneNumber: "+1 (555) 987-6543",
         shareInHotels: "25%",
         email: "michael.j@email.com",
-        status: "Active"
+        status: "Active",
+        hotelName: "Grand Plaza Hotel"
       },
       {
         investorName: "Sarah Wilson",
         phoneNumber: "+1 (555) 456-7890",
         shareInHotels: "30%",
         email: "sarah.w@email.com",
-        status: "Active"
+        status: "Active",
+        hotelName: "Seaside Resort"
       }
     ]
   },
@@ -116,7 +119,8 @@ const portfolioManagers = [
         phoneNumber: "+1 (555) 345-6789",
         shareInHotels: "40%",
         email: "robert.b@email.com",
-        status: "Active"
+        status: "Active",
+        hotelName: "Vintage Inn"
       }
     ]
   }
@@ -355,6 +359,7 @@ const PortfolioManagers = () => {
                               <TableHead className="text-xs h-8">Phone Number</TableHead>
                               <TableHead className="text-xs h-8">Share in Hotels</TableHead>
                               <TableHead className="text-xs h-8">Email</TableHead>
+                              <TableHead className="text-xs h-8">Hotel Name</TableHead>
                               <TableHead className="text-xs h-8">Status</TableHead>
                             </TableRow>
                           </TableHeader>
@@ -365,6 +370,7 @@ const PortfolioManagers = () => {
                                 <TableCell className="text-sm py-2">{investor.phoneNumber}</TableCell>
                                 <TableCell className="text-sm py-2">{investor.shareInHotels}</TableCell>
                                 <TableCell className="text-sm py-2">{investor.email}</TableCell>
+                                <TableCell className="text-sm py-2">{investor.hotelName}</TableCell>
                                 <TableCell className="py-2">
                                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                     investor.status === 'Active' 
