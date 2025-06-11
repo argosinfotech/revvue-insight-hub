@@ -4,7 +4,7 @@ import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import DashboardLayout from "@/components/DashboardLayout";
 import { StaffForm } from "./portfolio-staffs/StaffForm";
 import { StaffTable } from "./portfolio-staffs/StaffTable";
@@ -43,15 +43,28 @@ const PortfolioStaffs = () => {
               Manage all hotel staff members
             </p>
           </div>
-          <SheetTrigger asChild>
-            <Button 
-              className="gap-1 bg-brand-purple hover:bg-brand-purple-dark"
-              onClick={() => setIsAddStaffOpen(true)}
-            >
-              <Plus size={16} />
-              Add Staff
-            </Button>
-          </SheetTrigger>
+          <Sheet open={isAddStaffOpen} onOpenChange={setIsAddStaffOpen}>
+            <SheetTrigger asChild>
+              <Button 
+                className="gap-1 bg-brand-purple hover:bg-brand-purple-dark"
+                onClick={() => setIsAddStaffOpen(true)}
+              >
+                <Plus size={16} />
+                Add Staff
+              </Button>
+            </SheetTrigger>
+            <StaffForm
+              isOpen={isAddStaffOpen}
+              onOpenChange={setIsAddStaffOpen}
+              editingStaff={editingStaff}
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              hotels={hotels}
+              onSubmit={handleSubmit}
+              onClose={handleCloseSheet}
+            />
+          </Sheet>
         </div>
 
         <div className="flex items-center pb-4">
@@ -81,18 +94,6 @@ const PortfolioStaffs = () => {
             />
           </CardContent>
         </Card>
-
-        <StaffForm
-          isOpen={isAddStaffOpen}
-          onOpenChange={setIsAddStaffOpen}
-          editingStaff={editingStaff}
-          formData={formData}
-          setFormData={setFormData}
-          errors={errors}
-          hotels={hotels}
-          onSubmit={handleSubmit}
-          onClose={handleCloseSheet}
-        />
       </div>
     </DashboardLayout>
   );
