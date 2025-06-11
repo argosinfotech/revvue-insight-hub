@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -56,7 +55,7 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <StatCard 
             icon={<UserPlus className="h-5 w-5" />} 
             title="New Signup in Past 30 Days"
@@ -74,12 +73,6 @@ const Dashboard = () => {
             title="Active Investors"
             value="243"
             description="Across all hotels"
-          />
-          <StatCard 
-            icon={<Building2 className="h-5 w-5" />} 
-            title="Total Hotels"
-            value="67"
-            description="Total registered hotels"
           />
         </div>
 
