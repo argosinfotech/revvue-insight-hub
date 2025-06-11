@@ -4,7 +4,6 @@ import {
   Users,
   Settings,
   Package,
-  Activity,
   TrendingUp,
   UserCog,
   CreditCard,
@@ -28,11 +27,6 @@ export const adminNavItems = [
     to: "/billing",
     icon: Package,
     label: "Billing & Packages",
-  },
-  {
-    to: "/activity",
-    icon: Activity,
-    label: "Activity Logs",
   },
   {
     to: "/users",
