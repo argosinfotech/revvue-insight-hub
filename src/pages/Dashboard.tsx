@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -7,7 +6,8 @@ import {
   TrendingUp, 
   Download,
   UserPlus,
-  UserCog
+  UserCog,
+  Bell
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const revenueData = [
   { month: "Jan", revenue: 12000 },
@@ -46,13 +48,41 @@ const StatCard = ({ icon, title, value, description }: {
 );
 
 const Dashboard = () => {
+  // Mock data for tickets - in real app this would come from API
+  const pendingTickets = 5;
+
+  const handleViewTickets = () => {
+    toast.info("Opening ticket notifications from Portfolio Managers");
+    // In real app, this would navigate to tickets page or open a modal
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 font-system">Dashboard</h1>
-          <p className="text-gray-600 mt-2 font-system">Welcome back! Here's what's happening with your hotels today.</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 font-system">Dashboard</h1>
+              <p className="text-gray-600 mt-2 font-system">Welcome back! Here's what's happening with your hotels today.</p>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={handleViewTickets}
+              className="relative"
+            >
+              <Bell className="h-4 w-4 mr-2" />
+              Portfolio Manager Tickets
+              {pendingTickets > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                >
+                  {pendingTickets}
+                </Badge>
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
