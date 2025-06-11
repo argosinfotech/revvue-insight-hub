@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -21,6 +20,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Mock data
 const portfolioManagers = [
@@ -170,6 +176,7 @@ const PortfolioManagers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedManager, setSelectedManager] = useState(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedHotelFilter, setSelectedHotelFilter] = useState("all");
 
   const filteredManagers = portfolioManagers.filter(manager =>
     manager.clientName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -177,7 +184,23 @@ const PortfolioManagers = () => {
 
   const handleViewDetails = (manager) => {
     setSelectedManager(manager);
+    setSelectedHotelFilter("all"); // Reset filter when opening dialog
     setIsViewDialogOpen(true);
+  };
+
+  // Filter investors based on selected hotel
+  const getFilteredInvestors = (investors) => {
+    if (selectedHotelFilter === "all") {
+      return investors;
+    }
+    return investors.filter(investor => investor.hotelName === selectedHotelFilter);
+  };
+
+  // Get unique hotels for the selected manager
+  const getUniqueHotels = (manager) => {
+    if (!manager) return [];
+    const hotels = manager.investors.map(investor => investor.hotelName);
+    return [...new Set(hotels)];
   };
 
   return (
@@ -388,7 +411,24 @@ const PortfolioManagers = () => {
                 <TabsContent value="investors" className="flex-1 min-h-0 overflow-hidden">
                   <Card className="h-full flex flex-col">
                     <CardHeader className="pb-2 flex-shrink-0">
-                      <CardTitle className="text-lg">Investors</CardTitle>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Investors</CardTitle>
+                        <div className="flex items-center gap-2">
+                          <Select value={selectedHotelFilter} onValueChange={setSelectedHotelFilter}>
+                            <SelectTrigger className="w-48">
+                              <SelectValue placeholder="Filter by hotel" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Hotels</SelectItem>
+                              {getUniqueHotels(selectedManager).map((hotel) => (
+                                <SelectItem key={hotel} value={hotel}>
+                                  {hotel}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent className="pt-0 pb-3 flex-1 min-h-0 overflow-hidden">
                       <div className="h-full overflow-hidden">
@@ -404,7 +444,7 @@ const PortfolioManagers = () => {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {selectedManager.investors.map((investor, index) => (
+                            {getFilteredInvestors(selectedManager.investors).map((investor, index) => (
                               <TableRow key={index} className="h-10">
                                 <TableCell className="text-sm py-2">{investor.investorName}</TableCell>
                                 <TableCell className="text-sm py-2">{investor.phoneNumber}</TableCell>
