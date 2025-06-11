@@ -11,6 +11,7 @@ interface EmailSmsTemplate {
   notificationType: "Email" | "SMS";
   title: string;
   subject?: string;
+  token?: string;
   body: string;
   createdDate: string;
 }
@@ -26,6 +27,7 @@ const EmailSmsTemplateForm = ({ template, onSave, onCancel }: EmailSmsTemplateFo
     notificationType: "Email" as "Email" | "SMS",
     title: "",
     subject: "",
+    token: "",
     body: ""
   });
 
@@ -35,6 +37,7 @@ const EmailSmsTemplateForm = ({ template, onSave, onCancel }: EmailSmsTemplateFo
         notificationType: template.notificationType,
         title: template.title,
         subject: template.subject || "",
+        token: template.token || "",
         body: template.body
       });
     } else {
@@ -42,6 +45,7 @@ const EmailSmsTemplateForm = ({ template, onSave, onCancel }: EmailSmsTemplateFo
         notificationType: "Email",
         title: "",
         subject: "",
+        token: "",
         body: ""
       });
     }
@@ -58,6 +62,11 @@ const EmailSmsTemplateForm = ({ template, onSave, onCancel }: EmailSmsTemplateFo
     // Only include subject for Email templates
     if (formData.notificationType === "Email" && formData.subject) {
       submitData.subject = formData.subject;
+    }
+
+    // Include token if provided
+    if (formData.token) {
+      submitData.token = formData.token;
     }
     
     onSave(submitData);
@@ -86,12 +95,12 @@ const EmailSmsTemplateForm = ({ template, onSave, onCancel }: EmailSmsTemplateFo
       </div>
 
       <div>
-        <Label htmlFor="title">Title</Label>
+        <Label htmlFor="title">Template Name</Label>
         <Input
           id="title"
           value={formData.title}
           onChange={(e) => handleInputChange('title', e.target.value)}
-          placeholder="Enter template title"
+          placeholder="Enter template name"
           required
         />
       </div>
@@ -107,6 +116,16 @@ const EmailSmsTemplateForm = ({ template, onSave, onCancel }: EmailSmsTemplateFo
           />
         </div>
       )}
+
+      <div>
+        <Label htmlFor="token">Token</Label>
+        <Input
+          id="token"
+          value={formData.token}
+          onChange={(e) => handleInputChange('token', e.target.value)}
+          placeholder="Enter token (e.g., {{user_name}}, {{reset_code}})"
+        />
+      </div>
 
       <div>
         <Label htmlFor="body">Body</Label>
