@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -8,7 +7,8 @@ import {
   Download,
   UserPlus,
   UserCog,
-  Bell
+  Bell,
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const revenueData = [
   { month: "Jan", revenue: 12000 },
@@ -49,12 +51,36 @@ const StatCard = ({ icon, title, value, description }: {
 );
 
 const Dashboard = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   // Mock data for tickets - in real app this would come from API
   const pendingTickets = 5;
+  
+  const mockReportedIssues = [
+    { id: 1, title: "AC not working in Room 205", priority: "High", hotel: "Grand Plaza Hotel", reporter: "John Manager", date: "2024-06-10" },
+    { id: 2, title: "WiFi connectivity issues", priority: "Medium", hotel: "Ocean View Resort", reporter: "Sarah Wilson", date: "2024-06-09" },
+    { id: 3, title: "Elevator maintenance needed", priority: "High", hotel: "City Center Inn", reporter: "Mike Johnson", date: "2024-06-08" },
+    { id: 4, title: "Pool cleaning equipment broken", priority: "Low", hotel: "Seaside Hotel", reporter: "Emma Davis", date: "2024-06-07" },
+    { id: 5, title: "Kitchen ventilation system fault", priority: "High", hotel: "Downtown Suites", reporter: "David Chen", date: "2024-06-06" }
+  ];
 
   const handleViewTickets = () => {
-    toast.info("Opening reported issues from Portfolio Managers");
-    // In real app, this would navigate to tickets page or open a modal
+    setIsDialogOpen(true);
+  };
+
+  const handleViewAllIssues = () => {
+    toast.info("Navigating to full issues management page");
+    setIsDialogOpen(false);
+    // In real app, this would navigate to the full issues page
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "High": return "destructive";
+      case "Medium": return "secondary";
+      case "Low": return "outline";
+      default: return "outline";
+    }
   };
 
   return (
@@ -67,22 +93,102 @@ const Dashboard = () => {
               <h1 className="text-2xl font-bold text-gray-900 font-system">Dashboard</h1>
               <p className="text-gray-600 mt-2 font-system">Welcome back! Here's what's happening with your hotels today.</p>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={handleViewTickets}
-              className="relative"
-            >
-              <Bell className="h-4 w-4 mr-2" />
-              Reported Issues
-              {pendingTickets > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  onClick={handleViewTickets}
+                  className="relative"
                 >
-                  {pendingTickets}
-                </Badge>
-              )}
-            </Button>
+                  <Bell className="h-4 w-4 mr-2" />
+                  Reported Issues
+                  {pendingTickets > 0 && (
+                    <Badge 
+                      variant="destructive" 
+                      className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                    >
+                      {pendingTickets}
+                    </Badge>
+                  )}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Bell className="h-5 w-5" />
+                    Reported Issues Summary
+                  </DialogTitle>
+                  <DialogDescription>
+                    Quick overview of recent issues reported by Portfolio Managers
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-4">
+                  {/* Summary Stats */}
+                  <div className="grid grid-cols-3 gap-4">
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="text-2xl font-bold text-red-600">3</div>
+                        <div className="text-sm text-gray-600">High Priority</div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="text-2xl font-bold text-yellow-600">1</div>
+                        <div className="text-sm text-gray-600">Medium Priority</div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="text-2xl font-bold text-green-600">1</div>
+                        <div className="text-sm text-gray-600">Low Priority</div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Issues List */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Recent Issues</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Issue</TableHead>
+                            <TableHead>Hotel</TableHead>
+                            <TableHead>Reporter</TableHead>
+                            <TableHead>Priority</TableHead>
+                            <TableHead>Date</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {mockReportedIssues.map((issue) => (
+                            <TableRow key={issue.id}>
+                              <TableCell className="font-medium">{issue.title}</TableCell>
+                              <TableCell>{issue.hotel}</TableCell>
+                              <TableCell>{issue.reporter}</TableCell>
+                              <TableCell>
+                                <Badge variant={getPriorityColor(issue.priority) as any}>
+                                  {issue.priority}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{issue.date}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                    <CardFooter>
+                      <Button onClick={handleViewAllIssues} className="w-full">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        View All Issues
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
