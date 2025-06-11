@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -52,7 +53,7 @@ const Dashboard = () => {
   const pendingTickets = 5;
 
   const handleViewTickets = () => {
-    toast.info("Opening task notifications from Portfolio Managers");
+    toast.info("Opening reported issues from Portfolio Managers");
     // In real app, this would navigate to tickets page or open a modal
   };
 
@@ -72,7 +73,7 @@ const Dashboard = () => {
               className="relative"
             >
               <Bell className="h-4 w-4 mr-2" />
-              Tasks
+              Reported Issues
               {pendingTickets > 0 && (
                 <Badge 
                   variant="destructive" 
