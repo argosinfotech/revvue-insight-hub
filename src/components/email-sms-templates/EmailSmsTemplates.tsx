@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -42,11 +42,6 @@ const EmailSmsTemplates = () => {
   const handleEditTemplate = (template: EmailSmsTemplate) => {
     setEditingTemplate(template);
     setIsSheetOpen(true);
-  };
-
-  const handleDeleteTemplate = (id: string) => {
-    setTemplates(templates.filter(template => template.id !== id));
-    toast.success("Template deleted successfully!");
   };
 
   const handleSaveTemplate = (templateData: Omit<EmailSmsTemplate, 'id' | 'createdDate'>) => {
@@ -109,23 +104,13 @@ const EmailSmsTemplates = () => {
                     <TableCell>{template.subject || "N/A"}</TableCell>
                     <TableCell>{new Date(template.createdDate).toLocaleDateString()}</TableCell>
                     <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditTemplate(template)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteTemplate(template.id)}
-                          className="text-red-600 hover:text-red-700"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditTemplate(template)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
