@@ -1,3 +1,4 @@
+
 import { 
   Building2, 
   Users, 
@@ -70,7 +71,7 @@ const Dashboard = () => {
           />
           <StatCard 
             icon={<Users className="h-5 w-5" />} 
-            title="Active Investors"
+            title="Total Investors"
             value="243"
             description="Across all hotels"
           />
