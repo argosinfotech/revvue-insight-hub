@@ -1,4 +1,3 @@
-
 import { 
   Building2, 
   Users, 
@@ -160,7 +159,12 @@ const Dashboard = () => {
                             <TableHead>Hotel</TableHead>
                             <TableHead>Reporter</TableHead>
                             <TableHead>Priority</TableHead>
-                            <TableHead>Date</TableHead>
+                            <TableHead>
+                              <Button onClick={handleViewAllIssues} variant="ghost" size="sm">
+                                <ExternalLink className="h-4 w-4 mr-2" />
+                                View All Issues
+                              </Button>
+                            </TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -180,12 +184,6 @@ const Dashboard = () => {
                         </TableBody>
                       </Table>
                     </CardContent>
-                    <CardFooter>
-                      <Button onClick={handleViewAllIssues} className="w-full">
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        View All Issues
-                      </Button>
-                    </CardFooter>
                   </Card>
                 </div>
               </DialogContent>
