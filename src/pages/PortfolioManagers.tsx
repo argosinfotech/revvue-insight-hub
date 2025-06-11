@@ -78,6 +78,30 @@ const portfolioManagers = [
         email: "sarah.w@email.com",
         status: "Active",
         hotelName: "Seaside Resort"
+      },
+      {
+        investorName: "David Chen",
+        phoneNumber: "+1 (555) 111-2222",
+        shareInHotels: "15%",
+        email: "david.chen@email.com",
+        status: "Active",
+        hotelName: "Grand Plaza Hotel"
+      },
+      {
+        investorName: "Lisa Rodriguez",
+        phoneNumber: "+1 (555) 333-4444",
+        shareInHotels: "20%",
+        email: "lisa.r@email.com",
+        status: "Active",
+        hotelName: "Seaside Resort"
+      },
+      {
+        investorName: "James Park",
+        phoneNumber: "+1 (555) 555-6666",
+        shareInHotels: "10%",
+        email: "james.park@email.com",
+        status: "Inactive",
+        hotelName: "Grand Plaza Hotel"
       }
     ]
   },
@@ -120,6 +144,22 @@ const portfolioManagers = [
         shareInHotels: "40%",
         email: "robert.b@email.com",
         status: "Active",
+        hotelName: "Vintage Inn"
+      },
+      {
+        investorName: "Amanda Foster",
+        phoneNumber: "+1 (555) 777-8888",
+        shareInHotels: "25%",
+        email: "amanda.f@email.com",
+        status: "Active",
+        hotelName: "Vintage Inn"
+      },
+      {
+        investorName: "Thomas Lee",
+        phoneNumber: "+1 (555) 999-0000",
+        shareInHotels: "35%",
+        email: "thomas.lee@email.com",
+        status: "Inactive",
         hotelName: "Vintage Inn"
       }
     ]
